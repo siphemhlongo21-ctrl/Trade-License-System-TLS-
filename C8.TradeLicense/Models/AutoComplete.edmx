@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DA_Manual_NewModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MASTER_DA_GIS_DATA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="OBJECTID" Type="float" />
+          <Property Name="REM" Type="nvarchar" MaxLength="100" />
+          <Property Name="PORTION" Type="nvarchar" MaxLength="100" />
+          <Property Name="ERF" Type="nvarchar" MaxLength="50" />
+          <Property Name="FARMTOWNNA" Type="nvarchar" MaxLength="255" />
+          <Property Name="STRNUM" Type="nvarchar" MaxLength="50" />
+          <Property Name="STRNAME" Type="nvarchar" MaxLength="255" />
+          <Property Name="STRTYPE" Type="nvarchar" MaxLength="255" />
+          <Property Name="SUBURB" Type="nvarchar" MaxLength="255" />
+          <Property Name="DISTRICT" Type="nvarchar" MaxLength="255" />
+          <Property Name="CITY" Type="nvarchar" MaxLength="255" />
+          <Property Name="WARDNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="DA_Manual_NewModelStoreContainer">
+          <EntitySet Name="MASTER_DA_GIS_DATA" EntityType="Self.MASTER_DA_GIS_DATA" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DA_Manual_NewModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="MASTER_DA_GIS_DATA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="OBJECTID" Type="Double" />
+          <Property Name="REM" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PORTION" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ERF" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FARMTOWNNA" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="STRNUM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STRNAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="STRTYPE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SUBURB" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DISTRICT" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CITY" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="WARDNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityContainer Name="DA_Manual_NewEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MASTER_DA_GIS_DATA" EntityType="Self.MASTER_DA_GIS_DATA" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DA_Manual_NewModelStoreContainer" CdmEntityContainer="DA_Manual_NewEntities">
+          <EntitySetMapping Name="MASTER_DA_GIS_DATA">
+            <EntityTypeMapping TypeName="DA_Manual_NewModel.MASTER_DA_GIS_DATA">
+              <MappingFragment StoreEntitySet="MASTER_DA_GIS_DATA">
+                <ScalarProperty Name="OBJECTID" ColumnName="OBJECTID" />
+                <ScalarProperty Name="REM" ColumnName="REM" />
+                <ScalarProperty Name="PORTION" ColumnName="PORTION" />
+                <ScalarProperty Name="ERF" ColumnName="ERF" />
+                <ScalarProperty Name="FARMTOWNNA" ColumnName="FARMTOWNNA" />
+                <ScalarProperty Name="STRNUM" ColumnName="STRNUM" />
+                <ScalarProperty Name="STRNAME" ColumnName="STRNAME" />
+                <ScalarProperty Name="STRTYPE" ColumnName="STRTYPE" />
+                <ScalarProperty Name="SUBURB" ColumnName="SUBURB" />
+                <ScalarProperty Name="DISTRICT" ColumnName="DISTRICT" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="WARDNO" ColumnName="WARDNO" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,427 @@
+﻿@model C8.TradeLicense.Models.License
+
+@using C8.TradeLicense.DataAccessLayer;
+@using C8.TradeLicense.Models;
+@{
+    ViewBag.Title = "License Documents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var clientDocs = (IEnumerable<FileUpload>)ViewData["clientDocs"];
+    var BussinessDocs = (IEnumerable<FileUpload>)ViewData["BussinessDocs"];
+    var InspectionRequestDocs = (IEnumerable<FileUpload>)ViewData["InspectionRequestDocs"];
+    var InspectionDocs = (IEnumerable<FileUpload>)ViewData["InspectionDocs"];
+    var RefusalDocs = (IEnumerable<FileUpload>)ViewData["RefusalDocs"];
+    var RefusalsignDocs = (IEnumerable<FileUpload>)ViewData["RefusalsignDocs"];
+    var AppealDocs = (IEnumerable< FileUpload>)ViewData["AppealDocs"];
+    var InspectionRequestData = (IEnumerable<InspectionRequest>)ViewData["InspectionRequestData"];
+    var InspectionData = (IEnumerable<InspectionResponse>)ViewData["InspectionData"];
+    var RefusalData = (IEnumerable<Refusal>)ViewData["RefusalData"];
+    var AppealData = (IEnumerable<InspectionAppeal>)ViewData["AppealData"];
+
+    var db = new TradeLicenseDbContext();
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error</strong> @TempData["Error"].ToString()
+    </div>
+}
+
+<div class="alert alert-danger" hidden="hidden" id="Erroralert">
+    <a class="close" data-dismiss="alert">×</a>
+
+    <strong><p id="error2">error</p></strong>
+</div>
+
+<div id="errorResponse" class="alert alert-warning" style="display:none;">
+</div>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+           .error {
+        color: tomato;
+    }
+    </style>
+</head>
+
+
+<br />
+<br />
+<br />
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <script>
+            $(document).ready(function () {
+
+
+        var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(ViewBag.OustandingDocuments))';
+        var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+        var groupList = [];
+
+        $.each(outstandingDocuments, function (index, value) {
+            groupList.push('<li>' + value + '</li>');
+        });
+
+        if (groupList.length > 0) {
+            $('#outstandingDocumentList').append(groupList.join(''));
+            $('#documentAlert').show();
+        }
+
+    });
+    </script>
+
+    @using (Html.BeginForm("LicenseDocUploads", "Licenses", FormMethod.Post, new { enctype = "multipart/form-data", Id = "Create" }))
+    {
+        @Html.AntiForgeryToken()
+
+
+
+        <div class="content">
+            <br />
+            <legend align="center">License Application Documents</legend>
+
+
+            @if (clientDocs.Any())
+            {
+                <strong>Customer Documents</strong>
+
+                <table class="table-bordered">
+                    <tr>
+                        <th>Document</th>
+                        <th>File Name</th>
+                        <th>Created Date</th>
+                    </tr>
+                    @foreach (var item in clientDocs)
+                    {
+                        <tr>
+                            <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                               <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                            <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                        </tr>
+
+                    }
+                </table>
+            }
+
+            @if (BussinessDocs.Any())
+            {
+                <strong>Business Documents</strong>
+
+                <table class="table-bordered">
+                    <tr>
+                        <th>Document</th>
+                        <th>File Name</th>
+                        <th>Created Date</th>
+                    </tr>
+                    @foreach (var item in BussinessDocs)
+                    {
+                        <tr>
+                            <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                               <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                            <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                        </tr>
+
+                    }
+                </table>
+            }
+            @if (InspectionRequestData.Any())
+            {
+                if (InspectionRequestDocs.Any())
+                {
+
+                    <strong>Inspection Request Documents</strong>
+
+                    <table class="table-bordered">
+                        <tr>
+                            <th>Document</th>
+                            <th>Department Name</th>
+                            <th>File Name</th>
+                            <th>Created Date</th>
+                        </tr>
+                        @foreach (var Request in InspectionRequestData)
+                        {
+                            foreach (var item in InspectionRequestDocs)
+                            {
+                                if (Request.InspectionRequestId == item.referenceId)
+                                {
+                                    <tr>
+
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                        <td style="padding-right: 10px">@Request.Department.DepartmentName </td>
+                                           <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                        <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                                    </tr>
+                                }
+
+                            }
+                        }
+                    </table>
+                }
+            }
+
+            @if (InspectionData.Any())
+            {
+                if (InspectionDocs.Any())
+                {
+
+                    <strong>Inspection Response Documents</strong>
+
+                    <table class="table-bordered">
+                        <tr>
+                            <th>Document</th>
+                            <th>Department Name</th>
+                            <th>File Name</th>
+                            <th>Created Date</th>
+                        </tr>
+                        @foreach (var Response in InspectionData)
+                        {
+                            foreach (var item in InspectionDocs)
+                            {
+                                if (Response.InspectionResponseId == item.referenceId)
+                                {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                        <td style="padding-right: 10px">@Response.InspectionRequest.Department.DepartmentName </td>
+                                           <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                        <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                                    </tr>
+                                }
+
+                            }
+                        }
+                    </table>
+                }
+            }
+            @if (RefusalData.Any())
+            {
+                if (RefusalDocs.Any())
+                {
+
+                    <strong>Refusal Documents</strong>
+
+                    <table class="table-bordered">
+                        <tr>
+                            <th>Document</th>
+                            <th>File Name</th>
+                            <th>Created Date</th>
+                        </tr>
+                        @foreach (var Refusal in RefusalData)
+                        {
+                            foreach (var item in RefusalDocs)
+                            {
+                                if (Refusal.RefusalId == item.referenceId)
+                                {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                           <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                        <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                                    </tr>
+                                }
+
+                            }
+                            foreach (var item in RefusalsignDocs)
+                            {
+                                if (Refusal.RefusalId == item.referenceId)
+                                {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                           <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                        <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                                    </tr>
+                                }
+
+                            }
+                        }
+                    </table>
+                }
+            }
+            @if (AppealData.Any())
+            {
+                if (AppealDocs.Any())
+                {
+
+                    <strong>Appeal Documents</strong>
+
+                    <table class="table-bordered">
+                        <tr>
+                            <th>Document</th>
+                            <th>File Name</th>
+                            <th>Created Date</th>
+                        </tr>
+                        @foreach (var Appeal in AppealData)
+                        {
+                            foreach (var item in AppealDocs)
+                            {
+                                if (Appeal.InspectionAppealId == item.referenceId)
+                                {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                           <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                        <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                                    </tr>
+                                }
+
+                            }
+                        }
+                    </table>
+                }
+            }
+
+            <br />
+            <br />
+        </div>
+
+
+    }
+
+    <script src="~/Scripts/jquery-steps.js"></script>
+
+    <script type="text/javascript">
+        //$('#demo').steps({
+        //    onFinish: function () { document.getElementById("createLicense").click(); }
+        //});
+
+        var form = $("#LicenseDocUploads");
+
+        form.children("div").steps({
+
+            onFinish: function () {
+                debugger;
+                document.getElementById("createLicense").click();
+            },
+            onChange: function (event, currentIndex, newIndex) {
+                if (newIndex < currentIndex) {
+                    return true;
+                }
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid();
+            }
+        });
+
+        $("table").addClass("table table-bordered")
+
+
+
+    </script>
+    @if (ViewBag.Screen == "InspectionResponse")
+    {
+        @Html.ActionLink("Back to List", "Index", "InspectionResponse", null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "DepartmentManagerIndex")
+    {
+        @Html.ActionLink("Back to List", "DepartmentManagerIndex", "ManagerReviews", null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "ManagerIndex")
+    {
+        @Html.ActionLink("Back to List", "Index", "ManagerReviews", null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "AppealReview")
+    {
+        @Html.ActionLink("Back to List", "Index", "InspectionAppeals", null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "AppealReview")
+    {
+        @Html.ActionLink("Back to List", "Index", "InspectionAppeals", null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "LicensePendingResponses")
+    {
+        @Html.ActionLink("Back to List", "LicensePendingResponses", "InspectionResponse", null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "Refusals")
+    {
+        @Html.ActionLink("Back to List", "Refusal", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "Abandoned")
+    {
+        @Html.ActionLink("Back to List", "Abandoned", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "Deleted")
+    {
+        @Html.ActionLink("Back to List", "Deleted", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "RejectedApplications")
+    {
+        @Html.ActionLink("Back to List", "RejectedApplications", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "ApprovedLicenses")
+    {
+        @Html.ActionLink("Back to List", "ApprovedLicenses", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "PendingLicenses")
+    {
+        @Html.ActionLink("Back to List", "Index", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "LicenseRenewal")
+    {
+        @Html.ActionLink("Back to List", "LicenseRenewal", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "NotRenewed")
+    {
+        @Html.ActionLink("Back to List", "NotRenewed", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "RevokedLicenses")
+    {
+        @Html.ActionLink("Back to List", "RevokedLicenses", null, null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "AdministratorReview")
+    {
+        @Html.ActionLink("Back to List", "Index", "AdministratorReviews", null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "ChiefReview")
+    {
+        @Html.ActionLink("Back to List", "Index", "ChiefReviews", null, new { @class = "btn btn-outline-primary" })
+    }
+    @if (ViewBag.Screen == "ApplicationTracker")
+    {
+        @Html.ActionLink("Back", "ApplicationTracker", null, null, new { @class = "btn btn-outline-primary" })
+    }
+</body>
+</html>

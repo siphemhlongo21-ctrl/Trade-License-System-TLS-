@@ -1,0 +1,369 @@
+﻿@model C8.TradeLicense.Models.InspectionAppealsReviews
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "Appeal Review";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+  
+
+    var User = (User)ViewData["Userdata"];
+
+    var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+    var appeal = (InspectionAppeal)ViewData["AppealData"];
+    var InspectorDocs = (IEnumerable<FileUpload>)ViewData["InspectorDocs"];
+    var DepartmentContactlist = (IEnumerable<DepartmentContact>)ViewData["DepartmentContact"];
+    var InspectionResponse = (IEnumerable<InspectionResponse>)ViewData["InspectionResponse"];
+    var client = (Client)ViewData["ClientData"];
+    var business = (Business)ViewData["BusinessData"];
+    var AppealReview = (IEnumerable<InspectionAppealsReviews>)ViewData["AppealsReviews"];
+    var AminReview = (IEnumerable<AdministratorReview>)ViewData["adminpreviousReview"];
+    var ChiefReview = (IEnumerable<ChiefReview>)ViewData["ChiefpreviousReview"];
+    var ManagerReview = (IEnumerable<ManagerReview>)ViewData["ManagerpreviousReview"];
+    var DepartmentContact = (IEnumerable<DepartmentContact>)ViewData["DepartmentContactdata"];
+    var licenseType = (LicenseType)ViewData["LicenseType"];
+    var itemType = (ItemType)ViewData["ItemType"];
+ 
+    var license = (License)ViewData["licenceData"];
+    var db = new TradeLicenseDbContext();
+
+   ;
+}
+
+
+
+<div id="errorResponse" class="alert alert-warning" style="display:none;">
+</div>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+           .error {
+        color: tomato;
+    }
+    </style>
+</head>
+
+
+<br />
+<br />
+<br />
+
+
+<br />
+<br />
+<br />
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+
+
+    @using (Html.BeginForm("Create", "InspectionAppealsReviews", FormMethod.Post, new { @Id = "CreateForm", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @*Success message*@
+        <div>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                    @*<a class="close" data-dismiss="alert">×</a>*@
+                    @*<strong>Success!</strong>@TempData["Success"].ToString()*@
+                    <span class="sr-only">Success: </span>
+                    @TempData["Success"].ToString()
+                </div>
+            }
+        </div>
+        <div>
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    @*<a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Error!</strong> @TempData["Error"].ToString()*@
+                    <span class="sr-only">Error: </span>
+                    @TempData["Error"].ToString()
+                </div>
+            }
+        </div>
+        <div>
+            @if (TempData["Info"] != null)
+            {
+                <div class="alert alert-info">
+                    <a class="close" data-dismiss="alert">×</a>
+                    <strong>Note!</strong>
+                    @TempData["Info"].ToString()
+                </div>
+            }
+        </div>
+
+        @Html.ValidationSummary(true)
+
+
+
+
+
+        <div id="demo">
+            <div class="step-app">
+                <ul class="step-steps">
+                            <li><a href="#step1"><span class="number">1</span>License Holders Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                            <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                            <li><a href="#step3"> <span class="number">3</span>License Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                            <li><a href="#step4"> <span class="number">4</span>Department Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                            <li><a href="#step5"> <span class="number">5</span> Reviews <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+
+                            <li><a href="#step6"> <span class="number">6</span> Appeals Details</a></li>
+
+                        </ul>
+                <div class="step-content">
+                    <div class="step-tab-panel" id="step1" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_ClientPartial.cshtml")
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="step-tab-panel" id="step2" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_BusinessPartial.cshtml")
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step3" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_LicencePartial.cshtml")
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step4" align="center">
+                        <br />
+                        <br />
+                        <br />
+
+                        @Html.Partial("~/Views/Shared/_InspectionResponsePartialList.cshtml")
+
+
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step5" align="center">
+                        <br />
+                        <br />
+                        <br />
+
+                        @Html.Partial("~/Views/Shared/_ReviewPartial.cshtml")
+
+
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+
+                    <div class="step-tab-panel" id="step6" align="center">
+                        <div>
+                            <table>
+                                <legend>Appeallent Information</legend>
+                                <tr>
+                                    <td>Full Name </td>
+                                    <td>: @appeal.Name   @appeal.Surname</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Individual Type</td>
+                                    <td>: @appeal.Individual</td>
+                                </tr>
+                                <tr>
+                                    <td>Nationality</td>
+                                    @if (appeal.Nationality == "Other")
+                                    {
+                                        <td>: @appeal.NationalityOther</td>
+                                    }
+                                    else
+                                    {
+                                        <td>: @appeal.Nationality</td>}
+
+                                </tr>
+                                <tr>
+                                    <td>Identity Or PassportNumber </td>
+                                    <td>: @appeal.IdentityOrPassportNumber</td>
+                                </tr>
+                                <tr>
+                                    <td>Appeal date </td>
+                                    <td>: @appeal.AppealDate</td>
+                                </tr>
+                                <tr>
+                                    <td>Telephone Number</td>
+                                    <td>:@appeal.TelephoneNumber</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Cellphone Number</td>
+                                    <td>:@appeal.CellphoneNumber</td>
+                                </tr>
+                                <tr>
+                                    <td>Email Address</td>
+                                    <td>:@appeal.EmailAddress</td>
+                                </tr>
+                                <tr>
+                                    <td>Residential Address</td>
+                                    <td>:@appeal.ResidentialAddress </td>
+                                </tr>
+                                <tr>
+                                    <td>Postal Address</td>
+                                    <td>:@appeal.PostalAddress </td>
+                                </tr>
+                                <tr>
+                                    <td>Reason for Appeal</td>
+                                    <td>: @appeal.Reason</td>
+                                </tr>
+
+                            </table>
+                        </div>
+
+
+                        <div class="form-group" id="uploadReportGroup">
+
+                            @if (documentsList.Any())
+                            {
+                                <table class="table-bordered">
+                                    <tr>
+                                        <th>Document Type</th>
+                                        <th>FileName</th>
+                                        <th>Uploaded By</th>
+                                        <th>Created Date</th>
+                                    </tr>
+                                    @foreach (var item in documentsList)
+                                    {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                           <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                        <td style="padding-right: 10px">@item.Uploadedby </td>
+                                        <td style="padding-right: 10px">@item.Uploadeddate</td>
+                                    </tr>
+
+                                    }
+                                </table>
+                            }
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="step-footer">
+
+
+                    <div align="left" class="col-lg-3">
+                        @Html.ActionLink("Back to List", "RejectedApplications", "License", null, new { @class = "btn btn-outline-primary" })
+                    </div>
+                    <div align="center" class="col-lg-6">
+                        <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                        <button data-direction="next" class="btn btn-outline-primary">Next</button>
+
+                    </div>
+                    <br />
+                    <br />
+
+                </div>
+            </div>
+        </div>
+    }
+    <!-- Date Picker -->
+
+    <script src="~/Scripts/datepicker/bootstrap-datepicker.js"></script>
+    <link href="~/Scripts/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-steps.js"></script>
+    <script type="text/javascript">
+        //$('#demo').steps({
+        //    onFinish: function () { document.getElementById("Createbtn").click(); }
+        //});
+
+        var form = $("#CreateForm");
+        form.children("div").steps({
+
+            onFinish: function () { document.getElementById("Createbtn").click(); },
+            onChange: function (event, currentIndex, newIndex) {
+                debugger;
+                //submit(currentIndex, newIndex)
+
+                if (newIndex < currentIndex) {
+                    return true;
+                }
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid();
+
+            }
+        });
+
+        $("table").addClass("table table-bordered")
+
+
+
+
+    </script>
+</body>
+
+
+</html>
+
+
+

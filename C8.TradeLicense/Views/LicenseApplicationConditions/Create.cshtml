@@ -1,0 +1,243 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.LicenseApplicationConditions>
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "AddCondition";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+
+
+    var License = (License)ViewData["License"];
+
+    var db = new TradeLicenseDbContext();
+}
+@*<h2>Create</h2>*@
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>Condition</h4>
+            <hr />*@
+        @Html.ValidationSummary(true)
+
+        <div class="panel panel-default">
+           
+            <div class="panel-collapse in">
+                <table class="gvdatatable table-hover visible:" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-1"style="color:black;background-color:cornflowerblue">
+
+                            </th>
+                            <th class="col-sm-0"  style="color:white;background-color:cornflowerblue ;font-size:large">
+                                @Html.Label(" List of Conditions")
+                            </th>
+                            <th class="col-lg-0 " style="color:black;background-color:cornflowerblue">
+                            </th>
+                            <th class="col-sm-2" style="color:white; background-color:cornflowerblue;font-size:large" align="center">
+                                @Html.Label(" Check Required ")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td></td>
+                        @*<td>
+                            <label>Select All</label>
+                        </td>*@
+
+                        <td>
+
+
+                        @*<td class="col-lg-0">
+                            <center>
+                                <input id="SelectAllDepartments" onclick="SelectAllItem(this, 'CheckList')" type="checkbox" class="selectall" />
+                            </center>
+                        </td>*@
+
+
+                        <td></td>
+                    </tr>
+
+                    @foreach (var item in db.Conditions.Where(l => l.IsActive == true && l.IsDeleted == false))
+                    {
+                        <tr>
+                            <td></td>
+                            <td>
+                                <label>@item.ConditionName</label>
+                            </td>
+                            <td></td>
+                            <td>
+                
+                                @if (Model.Where(l => l.IsActive == true && l.IsDeleted == false).Count() > 0)
+                                {
+
+                                    if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator") || User.IsInRole("Licensing Clerk"))
+                                    {
+                                        var LAcondition = Model.Where(l => l.IsActive == true && l.IsDeleted == false && l.ConditionId == item.ConditionId).ToList();
+                                        if (LAcondition.Count() > 0)
+                                        {
+                                <center>
+
+                                    <input id="@item.ConditionName" type="checkbox" checked="@LAcondition.FirstOrDefault().IsSelected" class="individual" onclick="SelectedVal('@item.ConditionName', this,'@License.LicenseId','@item.ConditionId')" @*id="Check@IsSelected.@item.IsSelected"*@>
+                                </center>
+                                        }
+                                        else
+                                        {
+                                            <center>
+
+                                                <input id="@item.ConditionName" type="checkbox" checked="@item.IsLocked" class="individual" onclick="SelectedVal('@item.ConditionName', this,'@License.LicenseId','@item.ConditionId')" @*id="Check@IsSelected.@item.IsSelected"*@>
+                                            </center>
+                                        }
+
+
+
+                                    }
+
+                                    else
+                                    {
+                                        var LAcondition = Model.Where(l => l.IsActive == true && l.IsDeleted == false && l.ConditionId == item.ConditionId).ToList();
+                                        if (LAcondition.Count() > 0)
+                                        {
+                                            <center>
+
+                                                <input disabled="disabled" id="@item.ConditionName" type="checkbox" checked="@LAcondition.FirstOrDefault().IsSelected" class="individual" onclick="SelectedVal('@item.ConditionName', this,'@License.LicenseId','@item.ConditionId')" @*id="Check@IsSelected.@item.IsSelected"*@>
+                                            </center>
+                                        }
+                                        else
+                                        {
+                                            <center>
+
+                                                <input disabled="disabled" id="@item.ConditionName" type="checkbox" checked="@item.IsLocked" class="individual" onclick="SelectedVal('@item.ConditionName', this,'@License.LicenseId','@item.ConditionId')" @*id="Check@IsSelected.@item.IsSelected"*@>
+                                            </center>
+                                        }
+
+
+
+                                    }
+
+
+
+
+                                }
+                                else
+                                {
+                                    <center>
+
+                                        <input id="@item.ConditionName" type="checkbox" checked="@item.IsLocked" class="individual" onclick="SelectedVal('@item.ConditionName', this,'@License.LicenseId','@item.ConditionId')" @*id="Check@IsSelected.@item.IsSelected"*@>
+                                    </center>
+                                }
+                                
+                                
+
+
+                            </td>
+                            <td></td>
+                        </tr>
+                      }
+
+                </table>
+    
+            </div>
+
+
+        </div>
+      
+        <div align="left" class="col-lg-3" style="background-color:white">
+            @Html.ActionLink("Back ", "Details", "License", new { id = License.LicenseId }, new { @class = "btn btn-outline-primary" })
+        </div>
+        @if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator")|| User.IsInRole("Licensing Clerk"))
+        {
+        <div align="center" class="col-lg-6" style="background-color:white">
+
+
+            @Html.ActionLink("Finish ", "Details", "License", new { id = License.LicenseId }, new { @class = "btn btn-outline-success" })
+
+        </div>
+        <div align="right" class="col-lg-3" style="background-color:white">
+            @Html.ActionLink("Add new Conditions ", "Index", "Condition", new { Screen = "Condition", Id = License.LicenseId }, new { @class = "btn btn-outline-primary" })
+        </div>
+        }
+        <br />
+        <br />
+        <br />
+        <br />
+    </div>
+
+}
+
+
+
+<script  type="text/javascript">
+    function SelectAllItem(control, listHolderID)//listHolderID hold a list of selected items to be posted on submit ie->DeptCheckList control
+    {
+        var selectAllItemsList = "";
+                   @{foreach (var item in db.Conditions.Where(l => l.IsActive == true && l.IsDeleted == false))
+                       {
+                           <text>
+        SelectedVal('@item.ConditionName', control, '@License.LicenseId', '@item.ConditionId')
+           </text>
+                       }
+                   }
+
+        document.getElementById(listHolderID).value = selectAllItemsList;
+      
+    }
+    $(".selectall").click(function () {
+        $(".individual").prop("checked", $(this).prop("checked"));
+    });
+    $(".selectalls").click(function () {
+        $(".selected").prop("checked", $(this).prop("checked"));
+
+    });
+  
+    function SelectedVal(ItemName, Cbox, Id, ConditionId) {
+        debugger;
+        if (Cbox.checked)//add item
+        {
+            initLoadHoldOn("adding Condition..Please Wait");
+            $.getJSON("/LicenseApplicationConditions/AddChecklistItem?itemName=" + ItemName + "&itemID=" + ConditionId + "&LicenseId=" + Id,
+               function (result) {
+
+                   if (result == "Success") {
+                       HoldOn.close();
+                   }
+                   else {
+                       swal("", "Error occured while saving item.", "error");
+                       if (Cbox != null && Cbox != undefined)
+                           Cbox.checked = false;
+                       HoldOn.close();
+                   }
+
+               })
+
+
+        }
+        else // remove item
+        {
+            initLoadHoldOn("Removing Condition..Please Wait");
+            $.getJSON("/LicenseApplicationConditions/RemoveChecklistItem?itemID=" + ConditionId + "&LicenseId=" + Id,
+    function (result) {
+
+        if (result == "Success") {
+            if (Cbox != null && Cbox != undefined)
+                Cbox.checked = false;
+            HoldOn.close();
+        }
+        else {
+            swal("", "Error occured while saving item.", "error");
+            if (Cbox != null && Cbox != undefined)
+                Cbox.checked = true;
+            HoldOn.close();
+        }
+
+    })
+
+
+        }
+
+    }
+
+</script>

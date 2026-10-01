@@ -1,0 +1,523 @@
+﻿@model C8.TradeLicense.Models.InspectionResponse
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@{
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+    var InspectiondocumentsList = (IEnumerable<FileUpload>)ViewData["inspectionUploadList"];
+}
+
+@{
+    var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var licence = (License)ViewData["licenceData"];
+
+    var client = (Client)ViewData["ClientData"];
+    var business = (Business)ViewData["BusinessData"];
+    var InspectionRequests = (InspectionRequest)ViewData["InspectionRequestsData"];
+    var InspectionResponse = (InspectionResponse)ViewData["InspectionResponseData"];
+    var DepartmentContact = (DepartmentContact)ViewData["DepartmentContactdata"];
+    var InspectionHistory = (IEnumerable<InspectionHistory>)ViewData["InspectionHistoryData"];
+    var DepartmentContactlist = (IEnumerable<DepartmentContact>)ViewData["DepartmentContact"];
+    var InspectorDocs = (IEnumerable<FileUpload>)ViewData["InspectorDocs"];
+
+    var license = (License)ViewData["LicenseInfo"];
+    var db = new TradeLicenseDbContext();
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error</strong> @TempData["Error"].ToString()
+    </div>
+
+
+}
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+           .error {
+        color: tomato;
+    }
+    </style>
+</head>
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <div id="errorResponse" class="alert alert-warning" style="display:none;">
+    </div>
+
+    <script type="text/javascript">
+        var applicationDate = $.datepicker.formatDate('mm/dd/yy', new Date('@ViewBag.LicenseApplicationDate'));
+        var slaExpiryDate = $.datepicker.formatDate('mm/dd/yy', new Date('@ViewBag.ExpiryDate'));
+        var calendarMinDate = $.datepicker.formatDate('yy/mm/dd', new Date('@ViewBag.LicenseApplicationDate'));
+        var calendarMaxDate = $.datepicker.formatDate('yy/mm/dd', new Date('@ViewBag.ExpiryDate'));
+
+
+
+        $(function () {
+            var responseCreated = '@ViewBag.RequestActive'.toLowerCase();
+            if (responseCreated === "false") {
+                $("#errorResponse").html('<strong>Inspection Response has been created already </strong>');
+                $("#errorResponse").show();
+                $("#panelContent").hide();
+            }
+            $("#chkReport").on('click', function () {
+                if ($(this).is(':checked')) {
+                    $("#uploadReportGroup").show();
+                }
+                else {
+                    $("#uploadReportGroup").hide();
+                }
+            });
+            //$('#datetimepicker').datetimepicker({
+            //    format: 'm/d/Y H:i',
+            //    minDate: calendarMinDate,
+            //    maxDate: calendarMaxDate,
+            //    allowTimes: ['08:00', '09:00', '10:00', '11:00', '12:00',
+            //    '13:00', '14:00', '15:00', '16:00', '17:00'],
+            //    timepicker: true,
+            //    onSelectTime: function (dt, i) {
+            //        if (new Date(dt.dateFormat('m/d/Y')) < new Date(applicationDate) || new Date(dt.dateFormat('m/d/Y')) > new Date(slaExpiryDate)) {
+            //            $('#datetimepicker').val('');
+            //        }
+            //    }
+            //});
+            $(document).ready(function () {
+                var picker = new Pikaday({
+                    field: document.getElementById('datetimepicker'),
+                    format: 'YYYY/MM/DD HH:MM',
+                    maxDate: new Date(),
+                    toString(date, format) {
+                        var today = new Date();
+                        const day = ('0' + (date.getDate())).slice(-2);
+                        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                        const year = date.getFullYear();
+                        const hour = today.getHours();
+                        const min = ('0' + today.getMinutes()).slice(-2);
+             
+                        return `${year}-${month}-${day} ${hour}:${min}`;
+                    }
+                });
+
+            });
+            //TODO: Validating File Types
+            var validFilesTypes = [".bmp", ".gif", ".png", ".jpg", ".jpeg", ".doc", ".xls", ".pdf", ".docx", ".xlsx"];
+            $(document).bind("change", "#file", function (e) {
+                var file = $('input[type=file]').val();
+                var isValidFile = false;
+                if (file) {
+                    var ext = file.substring(file.lastIndexOf("."), file.length).toLowerCase();
+                    for (var i = 0; i < validFilesTypes.length; i++) {
+                        if (ext == validFilesTypes[i]) {
+                            isValidFile = true;
+                            break;
+                        }
+                    }
+                    if (!isValidFile) {
+                        alert("Invalid File. Refer supported file types below:\n\n" + validFilesTypes.join(", "));
+                        $('#file').replaceWith($('#file').clone());
+                    }
+                }
+            });
+        });
+    </script>
+
+
+
+    @using (Html.BeginForm("Edit", "InspectionResponse", FormMethod.Post, new {id= "EditForm", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div id="demo">
+            <div class="step-app">
+                <ul class="step-steps">
+                    <li><a href="#step1"><span class="number">1</span>License Holders Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                    <li><a href="#step3"> <span class="number">3</span>License Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                    <li><a href="#step4"> <span class="number">4</span>Department Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step5"><span class="number">5</span>Inspection History <span class="glyphicon glyphicon-arrow-right"></span> </a></li>
+                    <li><a href="#step6"> <span class="number">6</span>Inspection Details</a></li>
+                </ul>
+
+                <div class="step-content">
+
+                    <div class="step-tab-panel" id="step1" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_ClientPartial.cshtml",client)
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="step-tab-panel" id="step2" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_BusinessPartial.cshtml",business)
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step3" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_LicencePartial.cshtml", licence)
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step4" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_NewInspectionRequestPartial.cshtml")
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                 
+                    <div class="step-tab-panel" id="step5" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">Response Details</legend>
+                        <div>
+
+
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+
+                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+
+
+
+                                            <table class="table">
+
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayName("Inspector Name")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Inspection Date")
+                                                    </th>
+
+                                                    <th>
+                                                        @Html.DisplayName("Inspection Status")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Clerk")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Captured By Clerk")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Adhoc inspection")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Comment")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Report")
+                                                    </th>
+
+
+                                                </tr>
+                                                @if (InspectionHistory.Count() > 0)
+                                                {
+                                                    foreach (var item in InspectionHistory)
+                                                    {
+                                                        <tr>
+                                                            @foreach (var DepartmentCont in DepartmentContactlist)
+                                                            {
+                                                                if (DepartmentCont.DepartmentContactId == item.InspectionRequest.DepartmentContactId)
+                                                                {
+
+                                                                    <td>
+
+                                                                        @DepartmentCont.User.FullName
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            <td>
+                                                                @item.InspectionDateTime
+                                                            </td>
+
+                                                            <td>
+                                                                @item.Status.StatusName
+                                                            </td>
+                                                            <td>
+                                                                @item.Clerk
+                                                            </td>
+                                                            <td>
+                                                                @if (item.CapturedByClerk == false)
+                                                                {
+                                                                    @Html.DisplayName("No")
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.DisplayName("Yes")
+                                                                }
+
+                                                            </td>
+                                                            <td>
+                                                                @if (item.AdhocInspector == false)
+                                                                {
+                                                                    @Html.DisplayName("No")
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.DisplayName("Yes")
+                                                                }
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                @item.Comment
+                                                            </td>
+                                                            <td style="padding-right: 10px">
+                                                                @if (InspectorDocs.Any() || InspectorDocs != null)
+                                                                {
+                                                                    foreach (var Report in InspectorDocs)
+                                                                    {
+                                                                        if (Report.referenceId == item.InspectionResponseId)
+                                                                        {
+
+                                                                            <a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@Report.FilePath">@Report.FileName</a>
+
+
+
+                                                                            break;
+                                                                        }
+
+                                                                    }
+                                                                }
+
+
+
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-danger" id="Erroralert">
+                                                        <a class="close" data-dismiss="alert">×</a>
+
+                                                        <strong><p id="error2">No Previous Records found</p></strong>
+                                                    </div>
+                                                }
+
+                                            </table>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="step-tab-panel" id="step6" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        <div class="form-horizontal">
+
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.InspectionRequestId, new { Value = InspectionRequests.InspectionRequestId })
+                            @Html.HiddenFor(model => model.LicenseId, new { Value = licence.LicenseId })
+                            @Html.HiddenFor(model => model.InspectionResponseId, new { Value = InspectionResponse.InspectionResponseId })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.InspectionDateTime, new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.InspectionDateTime, new { @class = "form-control", @id = "datetimepicker", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.InspectionDateTime)
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StatusId, "Status", new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-10">
+                                    @Html.DropDownList("StatusId", null, "Select Status", new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.StatusId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Comment, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(model => model.Comment, 8, 45, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Comment)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AdhocInspector, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.CheckBoxFor(model => model.AdhocInspector, new { })
+                                    @Html.ValidationMessageFor(model => model.AdhocInspector)
+                                </div>
+                            </div>
+                            <div class="form-group" hidden>
+                                @Html.LabelFor(model => model.CapturedByClerk, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+
+                                    @Html.CheckBoxFor(model => model.CapturedByClerk, htmlAttributes: new { @checked = true })
+
+
+                                    @Html.ValidationMessageFor(model => model.CapturedByClerk)
+                                </div>
+                            </div>
+
+
+                            <div class="form-group" id="uploadReportGroup">
+                                @foreach (var item in @documentTypes)
+                {
+                                    <label class="control-label col-md-2">
+                                        @item.DocumentName
+                                    </label>
+
+                                    <div class="col-md-10">
+                                        <input type="file" name="file" id="file" />
+                                    </div>
+                                }
+                                @if (documentsList.Any())
+                                {
+                                    <table class="table-bordered">
+                                        <tr>
+                                            <th>Document Type</th>
+                                            <th>FileName</th>
+                                            <th>Created Date</th>
+                                        </tr>
+                                        @foreach (var item in documentsList)
+                                        {
+                                            <tr>
+                                                <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                                   <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                                <td style="padding-right: 10px">@item.Uploadeddate</td>
+                                            </tr>
+
+                                        }
+                                    </table>
+                                }
+                            </div>
+
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+
+                    
+                </div>
+              
+                <div class="step-footer">
+                    <div class="form-group" hidden>
+                        <div class="col-md-offset-2 col-md-10">
+                            <input id="btnCreate" type="submit" value="Create" class="btn btn-default" />
+                        </div>
+                    </div>
+                    <div align="left" class="col-lg-3">
+                        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+                    </div>
+                    <div align="center" class="col-lg-6">
+                        <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                        <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                        <button data-direction="finish" class="btn btn-outline-success">Submit</button>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+    }
+
+    <script src="~/Scripts/jquery-steps.js"></script>
+    <script type="text/javascript">
+        //$('#demo').steps({
+        //    onFinish: function () { document.getElementById("btnCreate").click(); }
+        //});
+        var form = $("#EditForm");
+        form.children("div").steps({
+
+            onFinish: function () { $("#EditForm").submit(); },
+            onChange: function (event, currentIndex, newIndex) {
+               
+                //submit(currentIndex, newIndex)
+
+                if (newIndex < currentIndex) {
+                    return true;
+                }
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid();
+
+            }
+        });
+
+        $("table").addClass("table table-bordered")
+
+    </script>
+</body>
+
+</html>
+

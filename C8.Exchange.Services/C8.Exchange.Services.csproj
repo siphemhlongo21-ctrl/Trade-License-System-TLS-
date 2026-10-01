@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BDA1CB25-40C0-4B85-95FD-8ADA00B13EFD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>C8.Exchange.Services</RootNamespace>
+    <AssemblyName>C8.Exchange.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="PrecompiledMvcViewEngineContrib">
+      <HintPath>..\packages\PrecompiledMvcViewEngineContrib.1.0\lib\net40\PrecompiledMvcViewEngineContrib.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorGenerator.Mvc">
+      <HintPath>..\packages\RazorGenerator.Mvc.2.2.3\lib\net40\RazorGenerator.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc.Expressions">
+      <HintPath>..\packages\System.Web.Mvc.Expressions.0.5.0\lib\System.Web.Mvc.Expressions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.3\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommonCoreEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonCoreEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CommonCoreEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CommonCoreEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonCoreEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EmailHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Actions.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_ActiveDirectory.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Applications.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_AppSettings.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_AuthenticationTypes.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_BatchJobs.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Delegations.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailAccounts.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailAttachmentQueue.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailAttachmentQueueProcessed.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailExceptions.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailExceptionTypes.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailLogs.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailQueue.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailQueueProcessed.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailStaticAttachments.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EmailTemplates.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Entities.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EntityActions.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_EventLogs.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_ReadEmailAttachments.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_ReadEmailItems.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_RecurringTypes.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_ReferenceTypes.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_RoleActions.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_RoleEntityActions.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Roles.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Schedules.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_ScheduleTypes.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Scripts.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_ScriptTypes.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UnreadEmailAttachments.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UnreadEmailItems.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UserApplications.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UserDetails.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UserDetails04072013.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UserDetails20130512.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UserDetails20141008.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_userdetails_270513.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UserLogInDetails.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UserRoles.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Users.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Users1.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_UserSubscriptions.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Variables.cs">
+      <DependentUpon>CommonCoreEntities.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="CommonCoreEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CommonCoreEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="CommonCoreEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CommonCoreEntities.edmx</DependentUpon>
+      <LastGenOutput>CommonCoreEntities.Context.cs</LastGenOutput>
+    </None>
+    <None Include="CommonCoreEntities.edmx.diagram">
+      <DependentUpon>CommonCoreEntities.edmx</DependentUpon>
+    </None>
+    <None Include="CommonCoreEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CommonCoreEntities.edmx</DependentUpon>
+      <LastGenOutput>CommonCoreEntities.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Start\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

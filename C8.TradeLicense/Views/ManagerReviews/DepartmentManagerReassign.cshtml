@@ -1,0 +1,316 @@
+﻿@model C8.TradeLicense.Models.InspectionRequest
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "Managers Review";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+
+    var InspectionRequest = (InspectionRequest)ViewData["InspectionRequest"];
+
+    var licence = (License)ViewData["licenceData"];
+    var User = (User)ViewData["Userdata"];
+    var client = (Client)ViewData["ClientData"];
+    var business = (Business)ViewData["BusinessData"];
+
+    var licenseType = (LicenseType)ViewData["LicenseType"];
+    var itemType = (ItemType)ViewData["ItemType"];
+    //var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+
+    var db = new TradeLicenseDbContext();
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+           .error {
+        color: tomato;
+    }
+    </style>
+</head>
+
+
+<br />
+<br />
+<br />
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <script>
+        @*$(document).ready(function () {
+            var currentItemType = $("#ddlItemTypeName option:selected").text();
+            $("#ClientId").val('@client.ClientId');
+            if (currentItemType !== "Item 2") {
+                $("#fingerprint_verification").hide();
+            }
+
+            var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(ViewBag.OustandingDocuments))';
+            var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+            var groupList = [];
+
+            $.each(outstandingDocuments, function (index, value) {
+                groupList.push('<li>' + value + '</li>');
+            });
+
+            if (groupList.length > 0) {
+                $('#outstandingDocumentList').append(groupList.join(''));
+                $('#documentAlert').show();
+            }
+
+        });*@
+    </script>
+
+    @using (Html.BeginForm("DepartmentManagerCreate", "ManagerReviews", FormMethod.Post, new {@id= "CreateForm", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @*Success message*@
+        <div>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                    @*<a class="close" data-dismiss="alert">×</a>*@
+                    @*<strong>Success!</strong>@TempData["Success"].ToString()*@
+                    <span class="sr-only">Success: </span>
+                    @TempData["Success"].ToString()
+                </div>
+            }
+        </div>
+        <div>
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    @*<a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Error!</strong> @TempData["Error"].ToString()*@
+                    <span class="sr-only">Error: </span>
+                    @TempData["Error"].ToString()
+                </div>
+            }
+        </div>
+                <div>
+                    @if (TempData["Info"] != null)
+                    {
+                        <div class="alert alert-info">
+                            <a class="close" data-dismiss="alert">×</a>
+                            <strong>Note!</strong>
+                            @TempData["Info"].ToString()
+                        </div>
+                    }
+                </div>
+
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.License.LicenseId)
+                @Html.HiddenFor(model => model.License.RegionId)
+                @Html.HiddenFor(model => model.License.ApplicationDateTime)
+                @Html.HiddenFor(model => model.License.LicenseTypeId)
+                @Html.HiddenFor(model => model.License.ItemTypeId)
+                @Html.HiddenFor(model => model.License.ItemConditionId)
+                <div>
+                    @Html.HiddenFor(model => model.License.ClientId, new { Value = @client.ClientId })
+                </div>
+                <div>
+                    @Html.HiddenFor(model => model.License.BusinessId, new { Value = @business.BusinessId })
+                </div>
+
+                <div>
+                    @Html.HiddenFor(model => model.InspectionRequestId, new { Value = @InspectionRequest.InspectionRequestId })
+                </div>
+
+                <div id="demo">
+                    <div class="step-app">
+                        <ul class="step-steps">
+                            <li><a href="#step1"><span class="number">1</span>License Holders Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                            <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                            
+                            <li><a href="#step3"> <span class="number">3</span>License Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                            <li><a href="#step4"> <span class="number">4</span>Department Details</a></li>
+
+                           
+
+                        </ul>
+                        <div class="step-content">
+
+                            <div class="step-tab-panel" id="step1" align="center">
+                                <br />
+                                <br />
+                                <br />
+                                @Html.Partial("~/Views/Shared/_ClientPartial.cshtml")
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                            </div>
+                            <div class="step-tab-panel" id="step2" align="center">
+                                <br />
+                                <br />
+                                <br />
+                                @Html.Partial("~/Views/Shared/_BusinessPartial.cshtml")
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                            </div>
+                            <div class="step-tab-panel" id="step3" align="center">
+                                <br />
+                                <br />
+                                <br />
+                                @Html.Partial("~/Views/Shared/_LicencePartial.cshtml")
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                            </div>
+                            <div class="step-tab-panel" id="step4" align="center">
+                                <br />
+                                <br />
+                                <br />
+                                <legend align="center">Add Inspector</legend>
+                                <div class="form-horizontal">
+                                    <table>
+                                     
+                                        <tr>
+                                            <td>Deparment </td>
+                                            <td>: @InspectionRequest.Department.DepartmentName</td>
+                                        </tr>
+                                        <tr>
+                                            <td> Status</td>
+                                            <td>: @InspectionRequest.Status.StatusName</td>
+                                        </tr>
+                                        <tr>
+                                            <td> Comment </td>
+                                            
+                                            <td>: @InspectionRequest.Comment</td>
+                                        </tr>
+                                        @if (documentsList.Any() || documentsList != null)
+                                        {
+                                            foreach (var item in documentsList)
+                                            {
+                                        <tr>
+                                            <td> Document </td>
+
+                                         
+                                               <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                            @*<td style="padding-right: 10px">@item.CreatedDateTime</td>*@
+                                        </tr>
+                                            }
+                                        }
+                                        <tr>
+                                            <td>
+                                                @Html.Label("Inspector:", new { @class = "control-label required-field" })</td>
+                                            <td> @Html.DropDownList("Inspector",null,"--Select Inspector--", new { @class = "form-control " , @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.DepartmentContactId, "", new { @class = "text-danger" })</td>
+                                        </tr>
+
+
+                                    </table>
+
+                                 
+
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </div>
+                            
+                        </div>
+              
+                        <div class="step-footer">
+                            <div class="form-group" hidden>
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" id="Createbtn" value="Create" class="btn btn-default" />
+                                </div>
+                            </div>
+                            <div align="left" class="col-lg-3">
+                                @Html.ActionLink("Back to List", "DepartmentManagerIndex", null, new { @class = "btn btn-outline-primary" })
+                            </div>
+                            <div align="center" class="col-lg-6">
+                                <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                                <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                                <button data-direction="finish" class="btn btn-outline-success">Finish</button>
+                            </div>
+                    
+                        </div>
+              
+                    </div>
+                </div>
+    }
+    <!-- Date Picker -->
+
+    <script src="~/Scripts/datepicker/bootstrap-datepicker.js"></script>
+    <link href="~/Scripts/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-steps.js"></script>
+    <script type="text/javascript">
+        //$('#demo').steps({
+        //    onFinish: function () { document.getElementById("Createbtn").click(); }
+        //});
+        var form = $("#CreateForm");
+
+        form.children("div").steps({
+
+            onFinish: function () {
+                debugger;
+                document.getElementById("Createbtn").click();
+            },
+            onChange: function (event, currentIndex, newIndex) {
+                if (newIndex < currentIndex) {
+                    return true;
+                }
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid();
+            }
+        });
+        $("table").addClass("table table-bordered")
+        $('#DateReviewed').datepicker({
+            format: 'mm/dd/yyyy',
+
+        });
+        
+    </script>
+</body>
+
+
+</html>

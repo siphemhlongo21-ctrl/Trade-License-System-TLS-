@@ -1,0 +1,227 @@
+﻿@model PagedList.IPagedList<InspectionRequest>
+@using System.Collections
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@using PagedList.Mvc;
+@using C8.TradeLicense.Keys;
+
+@{
+    ViewBag.Title = "Index";
+    var Refusal = (IEnumerable<Refusal>)ViewData["Refusallist"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    int id = Convert.ToInt32(ViewContext.RouteData.Values["id"]);
+}
+
+
+<div class="alert alert-warning" id="inspectionRequestAlert" style="display:none;">
+    <strong>Awaiting Inspection Response</strong> from the following department(s):
+    <ul id="outstandingDepartmentList"></ul>
+</div>
+
+<div class="alert alert-danger" id="inspectionResponseAlert" style="display:none;">
+    License has received a negative response from the following department(s):
+    <ul id="failedDepartmentList"></ul>
+</div>
+
+
+@{
+    <script type="text/javascript">
+
+        $(function () {
+            $('#btnSearch').click(function () {
+                var inp = $("#inputSearch").val();
+                var criteria = $("input[name=selectedSearch]:checked").val();
+                $(document).trigger("clear-alert-id.errormsg");
+
+                if (criteria == null) {
+                    alert("Please choose a search criteria!");
+                }
+                else {
+                    if (inp.length <= 0) {
+                        alert("Please enter a value to search for!");
+                    }
+                }
+
+            });
+
+            $('#SelectionSearch-form').submit(function (e) {
+                if (!$('#inputSearch').val()) {
+                    e.preventDefault(); // Prevents Form POST when textbox is empty
+                } else
+                    if ($("input[name=selectedSearch]:checked").val() == null) {
+                        e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                    }
+            });
+        });
+    </script>
+}
+
+
+@using (Html.BeginForm("Index", "Refusal", FormMethod.Get, new { id = "SelectionSearch-form" }))
+{
+
+    <div class="alert alert-info">
+        <h5 style="font-family: italic">Select a search option below.</h5>
+        @Html.RadioButton("selectedSearch", "BusinessName")&nbsp;Business Name
+        @Html.RadioButton("selectedSearch", "ClientName")&nbsp;Client Name
+        @Html.TextBox("inputSearch", ViewBag.FilterValue as string)
+        <input type="submit" value="Search" id="btnSearch" />
+        <a href="@Url.Action("Index")">
+            <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+        </a>
+    </div>
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Inspection Failed - <span class="badge">@ViewBag.LicenseInspectionCount</span></h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayName("License Number")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Client Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Business Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Department")
+                    </th>
+
+                    <th>
+                        @Html.DisplayName("Status")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Appeal Final Date")
+                    </th>
+                    <th>
+
+                        @Html.DisplayName("Actions")
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.License.LicenseNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Client.Fullname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.License.Business.ProposedTradeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.StatusName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AppealFinalDate)
+                        </td>
+                        @if (User.IsInRole("Licensing Administrator") || User.IsInRole("System Admin") || User.IsInRole("Licensing Clerk"))
+                        {
+
+                            var RefusalId = Refusal.Where(b => b.InspectionRequestId == item.InspectionRequestId && b.Status.StatusKey == StatusKeys.AwaitingRefusalReport).ToList();
+
+                            if (RefusalId.Count() > 0)
+                            {
+                                <td>
+                                    @Html.ActionLink(linkText: "Upload Refusal Letter", actionName: "Edit", controllerName: "Refusals", routeValues: new { id = item.InspectionRequestId, refusalId = RefusalId.FirstOrDefault().RefusalId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+
+                                </td>
+                            }
+                            else
+                            {
+                                var allowappeals = Refusal.Where(b => b.InspectionRequestId == item.InspectionRequestId && b.Status.StatusKey == StatusKeys.SignedRefusalReportUploaded && item.Status.StatusKey != StatusKeys.InspectionAppealed && item.Status.StatusKey != StatusKeys.AppealApproved &&  item.Status.StatusKey != StatusKeys.AppealReview).Count();
+                                if (allowappeals > 0)
+                                {
+                                    <td>
+                                        @Html.ActionLink(linkText: "Add Appeal", actionName: "Create", controllerName: "InspectionAppeals", routeValues: new { InspectionRequestId = item.InspectionRequestId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+                                    </td>
+                                }
+                                if (item.Status.StatusKey == StatusKeys.InspectionAppealed)
+                                {
+                                    <td>
+                                        @Html.ActionLink(linkText: "Edit Appeal", actionName: "Edit", controllerName: "InspectionAppeals", routeValues: new { id = item.InspectionRequestId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+
+                                    </td>
+                                }
+                                if (item.Status.StatusKey == StatusKeys.AppealApproved)
+                                {
+                                    <td>
+                                        @Html.ActionLink(linkText: "View Appeal Detail", actionName: "ViewEdit", controllerName: "InspectionAppeals", routeValues: new { id = item.InspectionRequestId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+
+                                    </td>
+                                }
+                                else
+                                {
+                                    var RefusalReportUploaded = Refusal.Where(b => b.InspectionRequestId == item.InspectionRequestId).ToList();
+                                    if (RefusalReportUploaded.Count() == 0)
+                                    {
+                                        <td>
+                                            @Html.ActionLink(linkText: "Add Refusal", actionName: "Create", controllerName: "Refusals", routeValues: new { id = item.InspectionRequestId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+                                            @Html.ActionLink(linkText: "Recirculate", actionName: "Departmentcirculation", controllerName: "License", routeValues: new { id = item.LicenseId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+                                        </td>
+                                    }
+                                }
+                            }
+
+
+                        }
+                        @if (User.IsInRole("Licensing Administrator") || User.IsInRole("System Admin") || User.IsInRole("Chief Inspector"))
+                        {
+                            if (Refusal.Count() > 0)
+                            {
+                                var RefusalId = Refusal.Where(b => b.InspectionRequestId == item.InspectionRequestId && b.Status.StatusKey == StatusKeys.RefusalReportUploaded).ToList();
+                                if (RefusalId.Count() > 0)
+                                {
+                                    <td>
+                                        @Html.ActionLink(linkText: "View Refusal", actionName: "Details", controllerName: "Refusals", routeValues: new { id = item.InspectionRequestId, refusalId = RefusalId.FirstOrDefault().RefusalId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+
+                                    </td>
+                                }
+                            }
+
+
+                        }
+
+                        <td>
+                    </tr>
+                }
+
+            </table>
+
+            <div align="center">
+
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        @Html.ActionLink("Back to List", "Refusal", "License",null, new { @class = "btn btn-outline-primary" })
+    </div>
+}
+
+
+
+

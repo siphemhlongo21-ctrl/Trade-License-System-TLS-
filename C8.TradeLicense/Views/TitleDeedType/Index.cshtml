@@ -1,0 +1,79 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.TitleDeedType>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@*<h2>Index</h2>*@
+
+<p>
+
+    @Html.ActionLink("Add Title Deed", "Create", null, new { @class = "btn btn-outline-warning" })
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Title Deed Types - <span class="badge">@ViewBag.TitleDeedCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.TitleDeedTypeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TitleDeedDescription)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsDeleted)
+                </th>*@
+                @*  <th>
+                    @Html.DisplayNameFor(model => model.IsLocked)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ModifiedDateTime)
+                </th>*@
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TitleDeedTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TitleDeedDescription)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsDeleted)
+                    </td>*@
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.IsLocked)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiedDateTime)
+                    </td>*@
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.TitleDeedTypeId },new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.TitleDeedTypeId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.TitleDeedTypeId }, new { @class = "btn btn-outline-warning" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

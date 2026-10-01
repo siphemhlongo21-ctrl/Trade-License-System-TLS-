@@ -1,0 +1,122 @@
+﻿@model PagedList.IPagedList<C8.TradeLicense.Models.Department>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+            }
+            else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("Index", "Department", FormMethod.Get))
+{
+    <div class="alert alert-info">
+        <h5 style="font-family: italic">Select a search option below.</h5>
+        @Html.RadioButton("selectedSearch", "DepartmentName")&nbsp;Department Name
+        @Html.RadioButton("selectedSearch", "DepartmentKey")&nbsp;Department Key
+        @Html.RadioButton("selectedSearch", "Region")&nbsp;Region
+        @Html.TextBox("inputSearch", ViewBag.FilterValue as string)
+        <input type="submit" value="Search" id="btnSearch" />
+        <a href="@Url.Action("Index")">
+            <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+        </a>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Add Department", "Create",null, new { @class = "btn btn-outline-warning" })
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Departments - <span class="badge">@ViewBag.DepartmentCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DepartmentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DepartmentDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DepartmentKey)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DepartmentStructureType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().RegionId)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartmentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartmentDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartmentKey)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartmentStructureType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Region.RegionName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.DepartmentId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.DepartmentId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.DepartmentId }, new { @class = "btn btn-outline-warning" })
+                    </td>
+                    @* Department Id is sent to Department Contact create view *@
+                    <td>
+                        @Html.ActionLink(linkText: "Add Contact", actionName: "Create", controllerName: "DepartmentContact", routeValues: new { id = item.DepartmentId }, htmlAttributes: null)
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        <div align="center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+    </div>
+</div>
+
+

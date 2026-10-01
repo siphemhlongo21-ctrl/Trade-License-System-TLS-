@@ -1,0 +1,136 @@
+﻿@model PagedList.IPagedList<C8.TradeLicense.Models.InspectionRequest>
+@*@using PagedList;*@
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("Index", "InspectionRequest", FormMethod.Get))
+{
+    <div class="alert alert-info">
+        <h5 style="font-family: italic">Select a search option below.</h5>
+        @Html.RadioButton("selectedSearch", "BusinessName")&nbsp;Business Name
+        @Html.RadioButton("selectedSearch", "ClientName")&nbsp;Client Name
+        @Html.RadioButton("selectedSearch", "ReferenceNo")&nbsp;License Number
+        @Html.TextBox("inputSearch", ViewBag.FilterValue as string)
+        <input type="submit" value="Search" id="btnSearch" />
+        <a href="@Url.Action("Index")">
+            <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+        </a>
+    </div>
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">Inspection Requests - <span class="badge">@ViewBag.InspectionRequestCount</span></h4>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>License Number</th>
+                <th>
+                    @Html.DisplayName("Client Name")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().License.Business.ProposedTradeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().LicenseType.LicenseTypeName)
+                </th>
+                <th>
+                    @Html.DisplayName("Suburb")
+                </th>
+                <th>
+                    @Html.DisplayName("Department")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().SlaExpiryDate)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.License.LicenseNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Client.Fullname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.License.Business.ProposedTradeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LicenseType.LicenseTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.License.Business.OperatorResidentialAddress2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SlaExpiryDate.Date)
+                    </td>
+                    <td>
+                        @{
+                if (ViewBag.DepartmentId > 1)
+                {
+                    @Html.ActionLink(linkText: "Generate Inspection Report", actionName: "GenerateInspectionReport", controllerName: "InspectionRequest", routeValues: new {id = item.InspectionRequestId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+                    @Html.Raw(" ")@Html.Raw(" ")<br/>
+                    @Html.ActionLink(linkText: "Create Response", actionName: "Create", controllerName: "InspectionResponse", routeValues: new { id = item.InspectionRequestId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+                     
+                }
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        <div align="center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+    </div>
+</div>
+
+
+
+

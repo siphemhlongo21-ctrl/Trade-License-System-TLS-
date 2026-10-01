@@ -1,0 +1,91 @@
+﻿@model C8.TradeLicense.Models.TitleDeedType
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@*<h2>Details</h2>*@
+<h4>Create Title Deed Type</h4>
+
+<div>
+    @*<h4>TitleDeedType</h4>*@
+	<hr />
+    <dl class="dl-horizontal">
+        @*<dt>
+            @Html.DisplayNameFor(model => model.CreatedByUser.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedByUser.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedByUser.FirstName)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TitleDeedTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TitleDeedTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TitleDeedDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TitleDeedDescription)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsDeleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsDeleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsLocked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsLocked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedDateTime)
+        </dd>*@
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TitleDeedTypeId }, new { @class = "btn btn-outline-success" }) |
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+</p>

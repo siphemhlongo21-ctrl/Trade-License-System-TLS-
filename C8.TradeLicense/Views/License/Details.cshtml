@@ -1,0 +1,412 @@
+﻿@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.Keys;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+    var client = Model.CustomerDetails;
+    var business = Model.BusinessDetails;
+    var licenseType = Model.LicenseTypeDetails;
+    var itemType = Model.ItemTypeDetails;
+    var documentTypes = Model.BussinessDocuments;
+    var documentsList = Model.BussinessUploadList;
+    var license = Model.LicenseDetails;
+    var db = new TradeLicenseDbContext();
+    License License = db.Licenses.Find(Model.LicenseDetails.LicenseId);
+    var statusRevoke = db.Status.Where(s => s.StatusKey == StatusKeys.LicenseRevoked).Select(s => s.StatusId).FirstOrDefault();
+    var statusPendingInspection = db.Status.Where(s => s.StatusKey == StatusKeys.PendingLicenseInspection).Select(s => s.StatusId).FirstOrDefault();
+    var statusApprovedLicense = db.Status.Where(s => s.StatusKey == StatusKeys.LicenseApproved).Select(s => s.StatusId).FirstOrDefault();
+    var statusAwaitingRecommendation = db.Status.Where(s => s.StatusKey == "LicenseAwaitingRecommendation").Select(s => s.StatusId).FirstOrDefault();
+    var statusNotRenewed = db.Status.Where(s => s.StatusKey == StatusKeys.NotRenewed).Select(s => s.StatusId).FirstOrDefault();
+    var statusLicenseExpired = db.Status.Where(s => s.StatusKey == StatusKeys.PendingRenewal).Select(s => s.StatusId).FirstOrDefault();
+    var terminatedLicense = db.Status.Where(s => s.StatusKey == "LicenseApplicationTerminated").Select(s => s.StatusId).FirstOrDefault();
+
+    Status revokeStatus = db.Status.Find(statusRevoke);
+    Status pendingInspection = db.Status.Find(statusPendingInspection);
+    Status approvedLicense = db.Status.Find(statusApprovedLicense);
+    Status awaitingRecommendation = db.Status.Find(statusAwaitingRecommendation);
+    Status licenseNotRenewed = db.Status.Find(statusNotRenewed);
+    Status licenseExpired = db.Status.Find(statusLicenseExpired);
+    Status terminatedLicenseApplications = db.Status.Find(terminatedLicense);
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+           .error {
+        color: tomato;
+    }
+    </style>
+</head>
+
+
+<br />
+<br />
+<br />
+
+<br />
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <div class="alert alert-danger" hidden="hidden" id="Erroralert">
+        <a class="close" data-dismiss="alert">×</a>
+
+        <strong><p id="error2">error</p></strong>
+    </div>
+    <div class="alert alert-success" hidden="hidden" id="successalert">
+        <a class="close" data-dismiss="alert">×</a>
+
+        <strong><p id="success2">success</p></strong>
+    </div>
+    <div>
+        @if (TempData["Success"] != null)
+            {
+            <div class="alert alert-success">
+                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                <span class="sr-only">Success: </span>
+                @TempData["Success"].ToString()
+            </div>
+        }
+    </div>
+    <div>
+        @if (TempData["Error"] != null)
+            {
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error: </span>
+                @TempData["Error"].ToString()
+            </div>
+        }
+    </div>
+    <div>
+        @if (TempData["Info"] != null)
+            {
+            <div class="alert alert-info">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                <span class="sr-only">Info: </span>
+                @TempData["Info"].ToString()
+            </div>
+        }
+    </div>
+
+    <div id="demo">
+        <div class="step-app">
+            <ul class="step-steps">
+                <li><a href="#step1"><span class="number">1</span>License Holders Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                <li><a href="#step3"> <span class="number">3</span>License Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                @*<li><a href="#step4"> <span class="number">4</span>Application Amendments</a></li>*@
+
+
+
+
+            </ul>
+            <div class="step-content">
+
+                <div class="step-tab-panel" id="step1" align="center">
+                    <br />
+                    <br />
+                    <br />
+                    @Html.Partial("~/Views/Shared/_ClientPartial.cshtml",client)
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    @if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator") || User.IsInRole("Licensing Clerk"))
+                    {
+                    if (License.StatusId == approvedLicense.StatusId)
+                    {
+
+
+                        if (db.LicenseApplicationConditions.Where(l => l.LicenseId == License.LicenseId && l.IsActive == true && l.IsDeleted == false).Count() > 0)
+                        {
+
+                            if (documentsList.Any())
+                            {
+                                <legend align="center"> License Document </legend>
+                                <table class="table-bordered">
+                                    <tr>
+                                        <th>Document Type</th>
+                                        <th>FileName</th>
+                                    
+                                        <th>Created Date</th>
+                                    </tr>
+                                    @foreach (var item in documentsList)
+                                    {
+                                        <tr>
+                                            <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                               <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+
+
+
+
+                                            <td style="padding-right: 10px">@item.Uploadeddate</td>>
+                                        </tr>
+
+                                    }
+                                </table>
+                            }
+
+
+                            <br />
+                            <br />
+                            }
+                        }
+
+                    }
+
+                </div>
+                <div class="step-tab-panel" id="step2" align="center">
+                    <br />
+                    <br />
+                    <br />
+                    @Html.Partial("~/Views/Shared/_BusinessPartial.cshtml",business)
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                </div>
+                <div class="step-tab-panel" id="step3" align="center">
+                    <br />
+                    <br />
+                    <br />
+                    @Html.Partial("~/Views/Shared/_LicencePartial.cshtml",license)
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                </div>
+        
+               
+
+            </div>
+
+            <div class="step-footer">
+
+                <div class="col-lg-3" align="left">
+                    @{
+                        /*TG20141126 - Enables the edit button when status != LicenseRevoked*/
+
+
+
+                        if (License.StatusId == revokeStatus.StatusId || License.StatusId == pendingInspection.StatusId || License.StatusId == awaitingRecommendation.StatusId || License.StatusId == terminatedLicenseApplications.StatusId)
+                        {
+
+                        }
+                        if (Model.Screen == "Deleted")
+                        {
+                            @Html.ActionLink("Back to List", "Deleted", null, null, new { @class = "btn btn-outline-primary" })
+                        }
+                        if (Model.Screen == "PendingLicenses")
+                        {
+                            @Html.ActionLink("Back to List", "Index", null, null, new { @class = "btn btn-outline-primary" })
+                        }
+                        @*if (User.IsInRole("Licensing Manager"))
+            {
+
+                @Html.ActionLink("Back to List", actionName: "LicensePendingResponses", controllerName: "InspectionResponse")
+            }*@
+                        else if (License.StatusId == terminatedLicenseApplications.StatusId)
+                        {
+                            @Html.ActionLink("Back to List", "TerminatedLicenses", null, new { @class = "btn btn-outline-primary" })
+                        }
+                        else if (License.StatusId == approvedLicense.StatusId)
+                        {
+                            @Html.ActionLink("Back to List", "ApprovedLicenses", null, new { @class = "btn btn-outline-primary" })
+
+                        }
+                        else if (License.StatusId == revokeStatus.StatusId)
+                        {
+                            @Html.ActionLink("Back to List", "RevokedLicenses", null, new { @class = "btn btn-outline-primary" })
+                        }
+
+                        else if (License.StatusId == pendingInspection.StatusId)
+                        {
+                            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+                    }
+                    if (License.StatusId == approvedLicense.StatusId)
+                    {
+                        if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator") || User.IsInRole("Licensing Clerk"))
+                        {
+                            <a class="btn btn-outline-primary" href="@Url.Action("Create", "LicenseApplicationConditions", new { id = Model.LicenseDetails.LicenseId })">
+                                <i style="color:cornflowerblue" class="glyphicon glyphicon-list" title="Add Conditions to Licence"> </i> Add Conditions
+                                <span class="sr-only">Add Conditions</span>
+                            </a>
+                                if (db.LicenseApplicationConditions.Where(l => l.LicenseId == License.LicenseId && l.IsActive == true && l.IsDeleted == false).Count() > 0)
+                                {
+
+                            <a class="btn btn-outline-primary" href="@Url.Action("Uploadlicense", "License", new { Id = Model.LicenseDetails.LicenseId })">
+                                <i style="color:cornflowerblue" class="glyphicon glyphicon-upload" title="Upload license"> </i> Upload license
+                                <span class="sr-only">Upload license</span>
+                            </a>
+                                <a class="btn btn-outline-success" href="@Url.Action("GeneratePDF", new { id = Model.LicenseDetails.LicenseId })" onclick="window.open(this.href, 'windowName', 'width=1000, height=700, left=24, top=24, scrollbars, resizable'); return false;">
+                                    <i style="color:green" class="glyphicon glyphicon-print" title="Print Licence"> </i> Print Licence
+                                    <span class="sr-only">Print</span>
+                                </a>
+
+
+
+                                }
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-primary" href="@Url.Action("Create", "LicenseApplicationConditions", new { id = Model.LicenseDetails.LicenseId })">
+                                    <i style="color:cornflowerblue" class="glyphicon glyphicon-list" title="Add Conditions to Licence"> </i> View Conditions
+                                    <span class="sr-only">View Conditions</span>
+                                </a>
+                            }
+
+
+                        }
+                        else if (License.StatusId == licenseExpired.StatusId)
+                        {
+                            @Html.ActionLink("Back to List", "LicenseRenewal", null, null, new { @class = "btn btn-outline-primary" })
+
+
+                            <a class="btn btn-outline-success" id="Renew" onclick="Renew(@Model.LicenseDetails.LicenseId)">
+                                <i style="color:green" class="glyphicon glyphicon-print" title="Renew"> </i> Renew
+                                <span class="sr-only">Renew</span>
+                            </a>
+
+                        }
+                        else if (License.StatusId == licenseNotRenewed.StatusId)
+                        {
+                            @Html.ActionLink("Back to List", "NotRenewed", null, null, new { @class = "btn btn-outline-primary" })
+                            <a class="btn btn-outline-success" id="Renew" onclick="Renew(@Model.LicenseDetails.LicenseId)">
+                                <i style="color:green" class="glyphicon glyphicon-print" title="Renew"> </i> Renew
+                                <span class="sr-only">Renew</span>
+                            </a>
+                        }
+
+
+
+                    }
+                </div>
+
+
+                <div align="center" class="col-lg-6">
+                    <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                    <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                    @*<button data-direction="finish" class="btn btn-outline-success">Finish</button>*@
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+
+            </div>
+
+        </div>
+      
+    </div>
+  
+            
+        
+    
+    <script src="~/Scripts/datepicker/bootstrap-datepicker.js"></script>
+    <link href="~/Scripts/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-steps.js"></script>
+    <script type="text/javascript">
+    $('#demo').steps({
+    onFinish: function () { document.getElementById("Createbtn").click(); }
+    });
+
+    function Renew(Id) {
+        debugger;
+        initLoadHoldOn("..Please Wait");
+      
+
+        var licenseId = Id;
+
+        $.ajax
+({
+
+    url: '/License/renewedStatus',
+    data: JSON.stringify({ id: licenseId }),
+    method: 'post',
+    dataType: 'json',
+    contentType: 'application/json;charset=utf-8',
+    success: function (result) {
+        if (result != "Error" ) {
+            document.getElementById("Erroralert").hidden = true;
+           
+            document.getElementById("successalert").hidden = false;
+            document.getElementById("success2").innerHTML = "License Renewed";
+            HoldOn.close();
+       
+            window.open("/License/GeneratePDF?id=" + @Model.LicenseDetails.LicenseId, 'windowName', 'width=1000, height=700, left=24, top=24, scrollbars, resizable');
+
+
+        }
+        else {
+
+            document.getElementById("Erroralert").hidden = false;
+            document.getElementById("error2").innerHTML = "Please try again";
+            HoldOn.close();
+
+           
+        }
+    },
+    error: function (xhr, textStatus, error) {
+        document.getElementById("Erroralert").hidden = false;
+        document.getElementById("error2").innerHTML = error;
+        HoldOn.close();
+       
+    },
+})
+    };
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="C8.Common.Core">
+  <DataContextMoniker Name="/C8_Common_CoreDataContext" />
+  <nestedChildShapes>
+    <classShape Id="20a3464e-9198-4644-b5ea-be7bf37d45d2" absoluteBounds="0.5, 0.5, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/C8_Common_CoreDataContext/tb_ReferenceType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fd6fdc30-a103-403e-a591-e7c022f40594" absoluteBounds="0.51499999999999968, 0.96, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1e3af92d-7043-4573-97ae-2cb542d44c7e" absoluteBounds="3.625, 0.75, 2, 3.8862125651041666">
+      <DataClassMoniker Name="/C8_Common_CoreDataContext/tb_EmailTemplate" />
+      <nestedChildShapes>
+        <elementListCompartment Id="118a15b1-a5bd-4979-8d87-640b884cfd11" absoluteBounds="3.6399999999999997, 1.21, 1.9700000000000002, 3.3262125651041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

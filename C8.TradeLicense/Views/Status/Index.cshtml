@@ -1,0 +1,55 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.Status>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@*<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Status - <span class="badge">@ViewBag.StatusCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StatusName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StatusDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StatusType.StatusTypeName)
+                </th>
+
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StatusName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StatusDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.StatusId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.StatusId }, new { @class = "btn btn-outline-warning" }) |
+                        @*@Html.ActionLink("Delete", "Delete", new { id = item.StatusId }, new { @class = "btn btn-outline-warning" })*@
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

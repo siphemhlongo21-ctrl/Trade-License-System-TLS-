@@ -1,0 +1,90 @@
+﻿@model C8.TradeLicense.Models.Department
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapseOne">Department Details</a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse collapse in">
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.LabelFor(model => model.DepartmentName, "Name")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DepartmentName)
+                    </dd>
+
+                    <dt>
+                        @Html.LabelFor(model => model.DepartmentDescription, "Description")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DepartmentDescription)
+                    </dd>
+
+                    <dt>
+                        @Html.LabelFor(model => model.DepartmentKey, "Key")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DepartmentKey)
+                    </dd>
+
+                    <dt>
+                        @Html.LabelFor(model => model.DepartmentStructureType, "Department Structure")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DepartmentStructureType)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreatedDateTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreatedDateTime)
+                    </dd>
+
+                    <dt>
+                        @Html.LabelFor(model => model.CreatedByUser.FirstName, "Created By")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreatedByUser.FirstName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ModifiedDateTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ModifiedDateTime)
+                    </dd>
+
+                    <dt>
+                        @Html.LabelFor(model => model.ModifiedByUser.FirstName, "Modified By")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ModifiedByUser.FirstName)
+                    </dd>
+
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.DepartmentId }, new { @class = "btn btn-outline-warning" }) |
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-warning" })
+</p>

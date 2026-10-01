@@ -1,0 +1,117 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.Condition>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<p>
+    @Html.ActionLink("Add Condition", "Create",null, new { @class = "btn btn-outline-warning" })
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Conditions - <span class="badge">@ViewBag.ConditionCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.CreatedByUser.FirstName)
+                </th>*@
+                @*<th>
+                    @Html.DisplayName("Item Type")
+                </th>*@
+                @*<th>
+                    @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.ConditionName)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.ConditionDescription)
+                </th>*@
+                @*<th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsDeleted)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsLocked)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ModifiedDateTime)
+                </th>*@
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.CreatedByUser.FirstName)
+                    </td>*@
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.ItemCondition.ItemConditionName)
+                    </td>*@
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.ModifiedByUser.FirstName)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConditionName)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.ConditionDescription)
+                    </td>*@
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsDeleted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsLocked)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiedDateTime)
+                    </td>*@
+                    <td>
+                        <a href="@Url.Action("Edit", new { id = item.ConditionId })" >
+                            <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+                            <span class="sr-only">Edit</span>
+                        </a>
+                     
+                        <a href="@Url.Action("Details", new { id = item.ConditionId })">
+                            <i class="glyphicon glyphicon-list" title="View Details"></i>
+                            <span class="sr-only">Details</span>
+                        </a>
+                        <a href="@Url.Action("Delete", new { id = item.ConditionId })" style="color:red">
+                            <i class="glyphicon glyphicon-remove" title="Delete"></i>
+                        </a>
+                        <span class="sr-only">Delete </span>
+                        
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <br />
+    @if (ViewBag.Screen == "Condition")
+    {
+    <div align="left" class="col-lg-3" style="background-color:white">
+        @Html.ActionLink("Back to Details ", "Details", "License", new { id = ViewBag.Id}, new { @class = "btn btn-outline-primary" })
+    </div>
+    }
+    <br />
+    <br />
+</div>

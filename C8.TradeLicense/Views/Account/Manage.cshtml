@@ -1,0 +1,33 @@
+﻿@using System.Web.Optimization
+@using C8.TradeLicense.ViewModels;
+@using Microsoft.AspNet.Identity;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Manage Account";
+}
+
+<h2>@ViewBag.Title.</h2>
+@{
+    if (ViewBag.StatusMessage != null)
+    {
+    <div class="alert alert-success">
+        <a class="close" data-dismiss="alert">×</a>
+        @ViewBag.StatusMessage
+    </div>
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.HasLocalPassword)
+        {
+            @Html.Partial("_ChangePasswordPartial")
+        }
+        else
+        {
+            @Html.Partial("_SetPasswordPartial")
+        }
+    </div>
+</div>
+
+

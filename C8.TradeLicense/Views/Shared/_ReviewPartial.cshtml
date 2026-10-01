@@ -1,0 +1,153 @@
+﻿@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.Models
+
+@{
+
+    IEnumerable<AdministratorReview> AminReview = Model.AdministratorReviews;
+    IEnumerable<ChiefReview> ChiefReview =Model.ChiefReviews;
+    IEnumerable<ManagerReview> ManagerReview =Model.ManagerReviews;
+    IEnumerable<InspectionAppealsReviews> AppealReview = Model.InspectionAppealsReviews;
+
+    var isrecord = false;
+}
+<div>
+   
+
+    @if (AppealReview != null && AppealReview.Any())
+    {
+        isrecord = true;
+
+        <table>
+            <legend>Appeal Review</legend>
+            <tr>
+                <td>Name</td>
+                <td>Date</td>
+                <td>Decision</td>
+                <td>Comment</td>
+            </tr>
+            @foreach (var record in AppealReview)
+            {
+                <tr>
+                    <td>@record.User.FullName</td> <!-- Use null-conditional operator for nested properties -->
+                    <td>@record.DateReviewed</td>
+                    <td>@record.Decision</td>
+                    <td>@record.Comment</td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p>No appeal review data available.</p>
+    }
+
+
+
+
+    @if (AminReview != null && AminReview.Any())
+    {
+        isrecord = true;
+        <table>
+            <legend>Administrator Review</legend>
+            <tr>
+                <td>Name</td>
+                <td>Date</td>
+                <td>Decision</td>
+                <td>Comment</td>
+
+            </tr>
+            @foreach (var record in AminReview)
+            {
+                <tr>
+
+                    <td>@record.User.FullName</td>
+                    <td>@record.DateReviewed</td>
+                    <td>@record.Decision</td>
+
+                    <td>@record.Comment</td>
+
+
+                </tr>
+            }
+
+
+        </table>
+
+    }
+  
+    @if (ChiefReview != null && ChiefReview.Any())
+    {
+        isrecord = true;
+        <table>
+            <legend>Chief Review</legend>
+            <tr>
+                <td>Name</td>
+                <td>Date</td>
+                <td>Decision</td>
+                <td>Comment</td>
+
+            </tr>
+            @foreach (var record in ChiefReview)
+            {
+                <tr>
+
+                    <td>@record.User.FullName</td>
+                    <td>@record.DateReviewed</td>
+                    <td>@record.Decision</td>
+
+                    <td>@record.Comment</td>
+
+
+                </tr>
+            }
+
+
+        </table>
+
+    }
+    @*@if (ManagerReview.Count() > 0)*@
+        @if (ManagerReview != null && ManagerReview.Any())
+        {
+            isrecord = true;
+            <table>
+                <legend>Manager Review</legend>
+                <tr>
+                    <td>Name</td>
+                    <td>Date</td>
+                    <td>Decision</td>
+                    <td>Comment</td>
+
+                </tr>
+                @foreach (var record in ManagerReview)
+                {
+                    <tr>
+
+                        <td>@record.User.FullName</td>
+                        <td>@record.DateReviewed</td>
+                        <td>@record.Decision</td>
+
+                        <td>@record.Comment</td>
+
+
+                    </tr>
+                }
+
+
+            </table>
+
+        }
+        @if (isrecord == false)
+        {
+
+            <div class="alert alert-danger" id="Erroralert">
+                <a class="close" data-dismiss="alert">×</a>
+
+                <strong><p id="error2">No Records found</p></strong>
+            </div>
+
+        }
+
+    </div>
+
+
+

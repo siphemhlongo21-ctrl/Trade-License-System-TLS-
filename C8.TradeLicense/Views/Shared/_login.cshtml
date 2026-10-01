@@ -1,0 +1,328 @@
+﻿
+@{
+    ViewBag.Title = "Home Page";
+    Layout = null;
+}
+<!doctype html>
+<html class="login-html" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Simple login page template. Bootstrap 4 Admin HTML Theme is a material design and bootstrap 4 based responsive dashboard template by propeller created mainly for admin and backend applications.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Trading License</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/themes/base/images/eThekwiniLogo.png">
+
+    <!-- Google icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Rubik Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet">
+
+    <!-- build:remove -->
+    <!--Admin css-->
+    <link rel="stylesheet" type="text/css" href="/Content/themes/css/bootstrap4-admin-compress.min.css">
+    <!-- /build -->
+    <!-- build:include snippets/css-files-404.html -->
+    <!-- /build -->
+    <!-- build:remove -->
+    <!--Google Analytics code-->
+    <!-- Canonical Tag -->
+    <link rel="canonical" href="login.html" />
+    <!-- build:include snippets/js-files-404.html -->
+    <!-- /build -->
+    <!-- build:remove -->
+    <!--Admin js-->
+    <script type="text/javascript" src="/Content/themes/js/bootstrap4-admin-compress.min.js"></script>
+    <script type="text/javascript" src="/Content/themes/js/jquery.session.js"></script>
+    <!-- /build -->
+    <!-- /build -->
+    <style>
+        .mytheme {
+            background: #33338B;
+            background-color: #33338B;
+        }
+
+        .alert {
+            min-width: 150px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            /*extend:shadow-1;*/
+            /*hover{
+          extend .shadow-2;
+        */
+        }
+        /*.success{
+          background-color: lighten(#5cb85c, 15%);
+          border-color: lighten(#5cb85c, 10%);
+          color: darken(#5cb85c, 15%);
+        }
+        warning{
+          background-color: lighten(#E2A41F, 15%);
+          border-color: lighten(#E2A41F, 10%);
+          color: darken(#E2A41F, 15%);
+        }
+        danger{
+          background-color: lighten(#d43f3a, 15%);
+          border-color: lighten(#d43f3a, 10%);
+          color: darken(#d43f3a, 15%);
+        }*/
+        p {
+            padding: 0;
+            margin: 0;
+        }
+
+        i {
+            padding-right: 5px;
+            vertical-align: middle;
+            font-size: 24px;
+        }
+
+        .close-alert {
+            -webkit-appearance: none;
+            position: relative;
+            float: right;
+            padding: 0;
+            border: 0;
+            cursor: pointer;
+            color: inherit;
+            background: 0 0;
+            font-size: 21px;
+            line-height: 1;
+            font-weight: bold;
+            text-shadow: 0 1px 0 rgba(255,255,255,.7);
+            filter: alpha(opacity=40);
+            opacity: .4;
+            &:hover;
+
+        {
+            filter: alpha(opacity=70);
+            opacity: .7;
+        }
+
+        }
+        }
+
+        .shadow-1 {
+            box-shadow: 0 1px 3px rgba(#000, .12), 0 1px 2px rgba(#000, .24);
+        }
+
+        .shadow-2 {
+            box-shadow: 0 3px 6px rgba(#000, .16), 0 3px 6px rgba(#000, .23);
+        }
+
+        .user-onboarding {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            background-image: url(../../Content/themes/images/login-new.png);
+        }
+    </style>
+</head>
+
+<body class="body-custom mb-0">
+    <div class="user-onboarding">
+        <div class="container">
+            <div class="container body-content">
+                @RenderBody()
+                
+             
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        $(document).ready(function () {
+
+            if ('@Session["Message"]' == "Email Sent Successfully") {
+                alert("Email Sent Successfully");
+            }
+            var sPath = window.location.pathname;
+            var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+            $(".pmd-sidebar-nav").each(function () {
+                $(this).find("a[href='" + sPage + "']").parents(".collapse").addClass("show");
+                $(this).find("a[href='" + sPage + "']").parents(".collapse").prev('a.nav-link').addClass("active");
+                $(this).find("a[href='" + sPage + "']").addClass("active");
+            });
+
+            $(".auto-update-year").html(new Date().getFullYear());
+        });
+    </script>
+    <!-- login page sections show hide -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+     
+            $('.app-list-icon li a').addClass("active");
+            $(".login-for").click(function () {
+                $('.login-card').hide()
+                $('.forgot-password-card').show();
+            });
+            $(".signin").click(function () {
+                $('.login-card').show()
+                $('.forgot-password-card').hide();
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".login-register").click(function () {
+                $('.login-card').hide()
+                $('.forgot-password-card').hide();
+                $('.register-card').show();
+            });
+
+            $(".register-login").click(function () {
+                $('.register-card').hide()
+                $('.forgot-password-card').hide();
+                $('.login-card').show();
+            });
+            $(".forgot-password").click(function () {
+                $('.login-card').hide()
+                $('.register-card').hide()
+                $('.forgot-password-card').show();
+            });
+            if("@ViewBag.IsError" == "1")
+            {
+                $('.login-card').hide()
+                $('.forgot-password-card').hide();
+                $('.register-card').show();
+             
+            }
+        });
+    </script>
+    <!-- Scripts Ends -->
+    <script>
+        var FullName = null;
+        var Email = null;
+        var Phonenumber = null;
+        var Password = null;
+        $(document).ready(function () {
+    
+            $("#animat").hide();
+            $("#alert").hide();
+            $(".dropdown").hover(
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+                    $(this).toggleClass('open');
+                },
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideUp("fast");
+                    $(this).toggleClass('open');
+                }
+            );
+
+
+
+            $("#CreateAccount").click(function () {
+
+                $("#animat").show();
+                $("#CreateAccount").hide();
+                FullName = $("#FullName").val();
+                Email = $("#Email").val();
+                Phonenumber = "0000000000";
+                Password = $("#Password").val();
+
+                var obj = {
+                    "FullName": FullName,
+                    "Email": Email,
+                    "CellNo": Phonenumber,
+                    "Password": Password
+
+                };
+
+                var settings = {
+                    'cache': false,
+                    'dataType': "jsonp",
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "http://10.10.7.14/GENERIC/configs/AddCustomerAccount.php",
+                    "data": obj,
+                    "method": "GET",
+                    "headers": {
+                        "accept": "application/json",
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                }
+
+                $.ajax(settings).done(function (response) {
+                    if (response == 1) {
+                        $("#alert").show();
+                        //$("#animat").hide();
+                        //$("#CreateAccount").show();
+                        //alert(response);
+                    }
+                });
+
+
+            });
+        });
+    </script>
+    <script>
+        var Email = null;
+        var Password = null;
+
+        $(document).ready(function () {
+         
+            $("#animat").hide();
+            $(".dropdown").hover(
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+                    $(this).toggleClass('open');
+                },
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideUp("fast");
+                    $(this).toggleClass('open');
+                }
+            );
+
+
+            $("#Login").click(function () {
+                Email = $("#Email").val();
+                Password = $("#Password").val();
+                $("#animat").show();
+                $("#Login").hide();
+                var obj = {
+                    "Email": Email,
+                    "Password": Password
+
+                };
+
+                var settings = {
+                    'cache': false,
+                    'dataType': "jsonp",
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "http://10.10.7.14/GENERIC/configs/GetCustomerAccount.php",
+                    "data": obj,
+                    "method": "GET",
+                    "headers": {
+                        "accept": "application/json",
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                }
+
+                $.ajax(settings).done(function (response) {
+                    //alert(JSON.stringify(response));
+                    if (response[0]) {
+                        $.session.set('FullName', response[0].FullName);
+                        $.session.set('Email', response[0].Email);
+                        $.session.set('CellNo', response[0].CellNo);
+                        $.session.set('USERID', response[0].id);
+                        window.location.href = "USER/index.html";
+                    } else {
+                        $("#animat").hide();
+                        $("#Login").show();
+                    }
+                    //$.session.set('DepartmentName', response[0].DepartmentName);
+
+                });
+
+            });
+        });
+    </script>
+</body>
+</html>

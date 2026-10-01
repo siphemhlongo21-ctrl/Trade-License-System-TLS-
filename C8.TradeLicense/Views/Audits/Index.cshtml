@@ -1,0 +1,148 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@using PagedList.Mvc;
+@model PagedList.IPagedList<C8.TradeLicense.Models.Audit>
+
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $('#inputSearch').prop('disabled', true);
+    //    $('#btnSearch').prop('disabled', true);
+    //});
+
+    $(function () {
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+           
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            }
+        });
+    });
+</script>
+
+@{
+    ViewBag.Title = "Index";
+    var db = new TradeLicenseDbContext();
+}
+
+@using (Html.BeginForm("Index", "Audits", FormMethod.Get, new { id = "SelectionSearch-form" }))
+{
+    <div class="alert alert-info">
+
+        <h5>Search by License Number:</h5>
+        <div id="SelectionSearch" class="form-group " align="left">
+
+           
+            @Html.TextBox("inputSearch", ViewBag.FilterValue as string)
+            <input type="submit" value="Search" id="btnSearch" />
+            <a href="@Url.Action("Index")">
+                <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+            </a>
+        </div>
+      
+    </div>
+    <div class="table-responsive">
+        <table id="tblAudit" class="table">
+            <tr>
+                <th>
+                    @Html.DisplayName("Action")
+                </th>
+              
+                @*<th>
+                    @Html.DisplayName("LicenseId")
+                </th>*@
+                <th>
+                    @Html.DisplayName("TableName")
+                </th>
+                <th>
+                    @Html.DisplayName("ColumnName")
+                </th>
+                <th>
+                    @Html.DisplayName("OriginalValue")
+                </th>
+                <th>
+                    @Html.DisplayName("CurrentValue")
+                </th>
+                <th>
+                    @Html.DisplayName("AuditByUserId")
+                </th>
+                <th>
+                    @Html.DisplayName("AuditDateTime")
+                </th>
+                @*<th></th>*@
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Action)
+                    </td>
+                   
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.LicenseId)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TableName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ColumnName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OriginalValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrentValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AuditByUserId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AuditDateTime)
+                    </td>
+                    @*<td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.AuditId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.AuditId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.AuditId })
+                    </td>*@
+                </tr>
+        
+            }
+            
+
+            </table>
+        <div align="center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, inputSearch = ViewBag.inputSearch }))
+        </div>
+        </div>
+}
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        $('#tblAudit').DataTable({
+
+         
+            "order": [],
+            "scrollCollapse": true,
+            "searching": true,
+            "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]],
+            "columnDefs": [{ "orderable": false, "targets": 0 }]
+
+        });
+    })
+    </script>

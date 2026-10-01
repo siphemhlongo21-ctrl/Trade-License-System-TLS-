@@ -1,0 +1,115 @@
+﻿@model C8.TradeLicense.ViewModels.DepartmentCirculationHistoryVM
+@using C8.TradeLicense.Models
+
+
+
+@{
+    var DepartmentRequest = Model.InspectionRequests;
+    var DepartmentContact = Model.DepartmentContacts;
+    var InspectiondocumentsList = Model.InspectionRequestUploadList;
+ 
+
+
+}
+<div>
+    @if (DepartmentRequest.Count() > 0)
+    {
+
+
+        <table>
+            <legend align="center">list of Departments</legend>
+            <tr>
+                <td>Deparment</td>
+                @*<td>Deparment Manager</td>*@
+                <td>Allocated Date</td>
+                <td>Status</td>
+                <td>Comment</td>
+                <td>Assigned Inspector</td>
+                <td> Document </td>
+
+
+            </tr>
+            @foreach (var record in DepartmentRequest)
+            {
+                int count = 0;
+                <tr>
+
+                    <td>@record.Department.DepartmentName</td>
+                    @*<td>
+                        @foreach (var depmanager in deparmentmanager)
+                        {
+                            if (depmanager.DepartmentId == record.DepartmentId)
+                            {
+
+
+
+                                if (count > 0)
+                                {
+                                    @Html.DisplayName(" | "+depmanager.User.FullName )
+                                }
+                                else
+                                {
+                                    @Html.DisplayName(depmanager.User.FullName )
+                                }
+                                count++;
+
+
+
+                            }
+                        }</td>*@
+                    <td>
+                        @Html.DisplayName(record.AllocatedDate.ToString("dd/MM/yyyy"))
+                    </td>
+                    <td>@record.Status.StatusName</td>
+                    <td>@record.Comment</td>
+                    <td>
+                        @foreach (var DepartmentCont in DepartmentContact)
+                        {
+                            if (DepartmentCont.DepartmentContactId == record.DepartmentContactId)
+                            {
+
+
+
+                                @DepartmentCont.User.FullName
+
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (InspectiondocumentsList.Any() || InspectiondocumentsList != null)
+                        {
+                            foreach (var item in InspectiondocumentsList)
+                            {
+
+
+                                if (item.referenceId == record.InspectionRequestId)
+                                {
+
+                                   <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+
+
+                            }
+
+                        }
+                    }
+
+
+                        </td>
+                    </tr>
+                }
+
+
+        </table>
+
+    }
+    else
+    {
+        <div class="alert alert-danger" id="Erroralert">
+            <a class="close" data-dismiss="alert">×</a>
+
+            <strong><p id="error2">No Previous Records found</p></strong>
+        </div>
+    }
+
+</div>
+

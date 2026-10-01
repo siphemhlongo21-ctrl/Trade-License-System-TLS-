@@ -1,0 +1,170 @@
+﻿@model PagedList.IPagedList<C8.TradeLicense.Models.License>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "ResponsesForLicense";
+}
+<script type="text/javascript">
+
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("LicensePendingResponses", "InspectionResponse", FormMethod.Get))
+{
+    <div class="alert alert-info">
+        <h5 style="font-family: italic">Select a search option below.</h5>
+        @Html.RadioButton("selectedSearch", "BusinessName")&nbsp;Business Name
+        @Html.RadioButton("selectedSearch", "ClientName")&nbsp;Customer Name
+        @Html.RadioButton("selectedSearch", "ReferenceNo")&nbsp;License Number
+        @Html.TextBox("inputSearch", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" id="btnSearch" />
+        <a href="@Url.Action("LicensePendingResponses")">
+            <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+        </a>
+    </div>
+	if (TempData["successsful"] != null) { 
+        <div class="alert alert-success" id="success">
+	        <a class="close" data-dismiss="alert">×</a>
+
+	        <strong><p id="error2">@TempData["successsful"]</p></strong>
+        </div>
+    }
+}
+
+
+<div class="panel panel-default">
+    @{
+        if ((User.IsInRole("Licensing Administrator")) || (User.IsInRole("Licensing Clerk")) || (User.IsInRole("System Admin")))
+        {
+            <div class="panel-heading" id="panelTitle">
+                <h3 class="panel-title">Licenses Pending Inspection Responses - <span class="badge">@ViewBag.PendingLicenseResponses</span></h3>
+            </div>
+        }
+        else
+        {
+            <div class="panel-heading" id="panelTitle">
+                <h3 class="panel-title">Licenses Awaiting Approval - <span class="badge">@ViewBag.PendingLicenseResponses</span></h3>
+            </div>
+        }
+    }
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                   License Number
+				</th>
+                <th>
+
+					@Html.DisplayNameFor(model => model.FirstOrDefault().Business.ProposedTradeName)
+                </th>
+                <th>
+                    @Html.DisplayName("Client Name")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().LicenseType.LicenseTypeName)
+                </th>
+                <th>
+                    @Html.DisplayName("Status")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ApplicationDateTime)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+{
+
+			<tr>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.LicenseNumber)
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.Business.ProposedTradeName)
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.Client.Fullname)
+
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.LicenseType.LicenseTypeName)
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.Status.StatusName)
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.ApplicationDateTime)
+				</td>
+                @*<td>
+        @Html.ActionLink(linkText: "Inspection Responses", actionName: "ApproveLicense", controllerName: "InspectionResponse", routeValues: new { id = item.LicenseId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+    </td>*@
+                <td>
+                    @if ((User.IsInRole("Licensing Clerk")) || (User.IsInRole("System Admin")))
+                    {
+                        <a href="@Url.Action("Outstanding","InspectionRequest", new {  id = item.LicenseId  })">
+                            <i class="glyphicon glyphicon-plus" title="Add Responses"></i>
+                            <span class="sr-only">Add Responses</span>
+                        </a>
+                        @*@Html.ActionLink(linkText: "Add Responses", actionName: "Outstanding", controllerName: "InspectionRequest", routeValues: new { id = item.LicenseId }, htmlAttributes: new { @class = "btn btn-outline-warning" })*@
+                    }
+
+                </td>
+              
+                @if (User.IsInRole("Licensing Manager"))
+        {
+                <td>
+                    @Html.ActionLink(linkText: "Details", actionName: "Details", controllerName: "License", routeValues: new { id = item.LicenseId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+                </td>
+                }
+                <td>
+                    <a href="@Url.Action("LicenseDocUploads","License", new { licenseId = item.LicenseId ,Screen ="LicensePendingResponses" })">
+                        <i class="glyphicon glyphicon-briefcase" title="View Documents"></i>
+                        <span class="sr-only">Documents</span>
+                    </a>
+                </td>
+
+</tr>
+            }
+
+
+        </table>
+        <div align="center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("LicensePendingResponses",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+    </div>
+</div>

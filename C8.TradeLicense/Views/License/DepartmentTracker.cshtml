@@ -1,0 +1,349 @@
+﻿@model PagedList.IPagedList<C8.TradeLicense.Models.InspectionRequest>
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.DataAccessLayer
+@using PagedList.Mvc;
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ("@ViewBag.showTable" == "1")
+        {
+            debugger;
+            document.getElementById("accordion").hidden = false;
+
+        }
+    })
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+
+</script>
+@{
+    ViewBag.Title = "Application Tracker";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+    var db = new TradeLicenseDbContext();
+    var DepartmentContact = (IEnumerable<DepartmentContact>)ViewData["DepartmentContactdata"];
+    var InspectionResponse = (IEnumerable<InspectionResponse>)ViewData["InspectionResponsedata"];
+}
+
+<style>
+    .btn-outline-info {
+        border: 1px solid white;
+        background-color: white;
+        color: black;
+    }
+</style>
+@using (Html.BeginForm("DepartmentTracker", "License", FormMethod.Get))
+{
+
+    <div class="alert alert-info">
+        <h4 style="font-family:Arial;color:white" align="center">Track an Application by Selecting a search option below.</h4>
+        @Html.RadioButton("selectedSearch", "Department")&nbsp;Department
+        @Html.RadioButton("selectedSearch", "ReferenceNo")&nbsp;License Number
+
+        @Html.TextBox("inputSearch", ViewBag.CurrentFilter as string, new { @class = "myText" })
+        <input type="submit" value="Search" class="btn btn-outline-info" id="btnSearch" />
+        <a href="@Url.Action("DepartmentTracker")">
+            <i class="glyphicon glyphicon-refresh" style="color:white" title="Refresh"></i>
+        </a>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert-danger">
+        <a class="close" data-dismiss="alert">×</a>
+        @TempData["Error"].ToString()
+    </div>
+}
+<div class="panel-group" id="accordion" hidden="hidden">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"> Applications - <span class="badge">@ViewBag.LicenseCount</span></h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                @if (@Model.Count() > 0)
+                {
+
+                    <table class="table">
+                        <tr>
+                            <th>License Number</th>
+                            <th>Trading Name</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().License.Region.RegionName)
+                            </th>
+                            <th>
+                                @Html.DisplayName("Department")
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().Status.StatusName)
+                            </th>
+                            <th>
+                                @Html.DisplayName("Date Sent (Manager)")
+                            </th>
+                            <th>
+
+                                @Html.DisplayName("Assigned Manager")
+                            </th>
+                            <th>
+
+                                @Html.DisplayName("Day Count (Manager)")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Date Sent (Inspector)")
+                            </th>
+                            <th>
+
+                                @Html.DisplayName("Assigned Inspector")
+                            </th>
+                            <th>
+
+                                @Html.DisplayName("Day Count (Inspector)")
+                            </th>
+                            <th>@Html.Display("Actions")</th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.LicenseNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.Business.ProposedTradeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.Region.RegionName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status.StatusName)
+                                </td>
+                                <td>
+
+
+                                    @Html.DisplayName(DateTime.Parse(item.AllocatedDate.ToString()).ToString("dd/MM/yyyy"))
+                                </td>
+
+                                <td>
+
+                                    @foreach (var DepartmentCont in DepartmentContact)
+                                    {
+
+                                        if (DepartmentCont.DepartmentId == item.DepartmentId)
+                                        {
+                                            if (DepartmentCont.IsPrinciple == true)
+                                            {
+
+                                                @Html.DisplayName(DepartmentCont.User.FullName + "   ")
+
+
+
+                                            }
+                                        }
+                                    }
+
+
+                                </td>
+                                <td>
+
+                                    @if (item.AllocatedDate != null)
+                                    {
+                                        DateTime AllocatedDate = Convert.ToDateTime(item.AllocatedDate.ToString());
+
+                                        TimeSpan diff = DateTime.Now - AllocatedDate;
+                                        int days = (int)Math.Abs(Math.Round(diff.TotalDays));
+                                        @Html.DisplayName(days.ToString())
+
+                                    }
+                                </td>
+                                <td>
+
+
+
+                                    @if (item.ModifiedDateTime != null)
+                                    {
+                                        @Html.DisplayName(item.ModifiedDateTime.Value.ToString("dd/MM/yyyy"))
+
+                                    }
+
+
+
+
+                                </td>
+                                <td>
+
+                                    @foreach (var DepartmentCont in DepartmentContact)
+                                    {
+
+                                        if (DepartmentCont.DepartmentContactId == item.DepartmentContactId)
+                                        {
+
+
+                                            @Html.DisplayName(DepartmentCont.User.FullName)
+
+
+
+
+                                        }
+                                    }
+
+
+                                </td>
+                                <td>
+
+
+                                    @if (item.ModifiedDateTime != null)
+                                    {
+                                        DateTime modDate = Convert.ToDateTime(item.ModifiedDateTime.ToString());
+
+                                        TimeSpan diff = DateTime.Now - modDate;
+                                        int days = (int)Math.Abs(Math.Round(diff.TotalDays));
+                                        @Html.DisplayName(days.ToString())
+
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        License License = db.Licenses.Find(item.LicenseId);
+
+
+                                    }
+                                </td>
+                                <td>
+                                    @if ((bool)ViewBag.CanAction && !item.IsLocked)
+                                    {
+                                        <button type="button" onclick="reCirculate(@item.InspectionRequestId)" class="btn btn-primary btn-sm">
+                                            Re-Circulate
+                                            <i class="glyphicon glyphicon-repeat" title="Re-circulate"></i>
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+
+
+                    <div align="center">
+
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Html.PagedListPager(Model, page => Url.Action("DepartmentTracker",
+     new { page, selectedSearch = ViewBag.selecetedSearch, Filter_Value = ViewBag.CurrentFilter }))
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade"
+     id="reCirculateModal"
+     tabindex="-1"
+     role="dialog">
+
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Re-Allocate Inspection
+                </h4>
+            </div>
+
+            <div class="modal-body"
+                 id="reCirculateContainer">
+
+                <div class="text-center">
+                    <span class="glyphicon glyphicon-refresh glyphicon-spin"></span>
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).on("submit", "#reCirculateForm", function (e) {
+
+        e.preventDefault();
+
+        $.ajax({
+
+            url: $(this).attr("action"),
+            type: "POST",
+            data: $(this).serialize(),
+
+            success: function (response) {
+
+                if (response.success) {
+
+                    $('#reCirculateModal').modal('hide');
+
+                    location.reload();
+                }
+                else {
+
+                    $("#reCirculateContainer").html(response);
+                }
+            }
+        });
+    });
+    function reCirculate(inspectionRequestId) {
+
+    $('#reCirculateModal').modal('show');
+
+    $("#reCirculateContainer").html(
+        '<div class="text-center">' +
+        '<span class="glyphicon glyphicon-refresh glyphicon-spin"></span> Loading...' +
+        '</div>');
+
+    $.ajax({
+        url: '@Url.Action("ReCirculatePartial", "License")',
+        type: 'GET',
+        data: {
+            inspectionRequestId: inspectionRequestId
+        },
+        success: function (data) {
+
+            $("#reCirculateContainer").html(data);
+        },
+        error: function () {
+
+            $("#reCirculateContainer").html(
+                '<div class="alert alert-danger">' +
+                'Failed to load form.' +
+                '</div>');
+        }
+    });
+}
+</script>

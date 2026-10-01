@@ -1,0 +1,292 @@
+﻿@model C8.TradeLicense.Models.Business
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "Details";
+}
+
+@{
+    ViewBag.Title = "Edit";
+    var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+    var license = (License)ViewData["LicenseInfo"];
+    var issueDate = "None";
+    var expiryDate = "None";
+    var BusinessManager = (IEnumerable<BusinessManger>)ViewData["BusinessManger"];
+    var BusinessEmployee = (IEnumerable<BusinessEmployee>)ViewData["BusinessEmployee"];
+    var db = new TradeLicenseDbContext();
+    if (license != null)
+    {
+        issueDate = license.LicenseIssueDateTime != null ? Convert.ToDateTime(license.LicenseIssueDateTime).ToShortDateString() : "Not issued";
+        expiryDate = license.LicenseExpiryDate != null ? Convert.ToDateTime(license.LicenseExpiryDate).ToShortDateString() : "----";
+    }
+
+}
+
+
+@using (Html.BeginForm("Details", "Business", FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
+     @Html.HiddenFor(model => model.BusinessId)
+
+    <div class="panel panel-default" id="accordionBusiness">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-parent="#accordionBusiness" href="#collapseTwo">Business Information
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="form-horizontal" align="left">
+                    <div style="float: left">
+                        <table>
+                            <tr>
+                                <td>Proposed Trade Name</td>
+                                <td>: @Model.ProposedTradeName</td>
+                            </tr>
+                            <tr>
+                                <td>Business Type</td>
+                                <td>: @Model.BusinessType.BusinessTypeName</td>
+                            </tr>
+                            <tr>
+                                <td>Business Postal Address</td>
+                                <td>: @Model.PostalAddress</td>
+                            </tr>
+                            <tr>
+                                <td>Residential Address</td>
+                                <td>: @Model.ResidentialAddress</td>
+                            </tr>
+                            <tr>
+                                <td>Shop/Unit No.</td>
+                                <td>: @Model.ResidentialShopOrUnitNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Telephone No.</td>
+                                <td>: @Model.TelephoneNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Cellphone No.</td>
+                                <td>: @Model.CellphoneNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Alternative Cellphone No.</td>
+                                <td>: @Model.AltCellphoneNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Fax No.</td>
+                                <td>: @Model.FaxNumber</td>
+                            </tr>
+                        </table>
+                        <table>
+                            <legend></legend>
+                            @if(Model.TitleDeedType != null)
+                                {
+                            <tr style="display:none;">
+                                <td>Title Deed</td>
+                                <td>: @Model.TitleDeedType.TitleDeedTypeName</td>
+                            </tr>
+    }
+
+                            <tr>
+                                <td>Item Type</td>
+                                <td>: @Model.ItemType.ItemTypeName</td>
+                            </tr>
+                            <tr>
+                                <td>Operation Structure Type</td>
+                                <td>: @Model.OperationStructureType.OperationStructureTypeName</td>
+                            </tr>
+                            <tr style="display:none;">
+                                <td>Rates Account No.</td>
+                                <td>: @Model.RatesAccountNumber</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                </div>
+                </div>
+        </div>
+    </div>
+    
+    <div class="panel-group" id="accordion1">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-parent="#accordionClient" href="#collapseThree">
+                        Business Operator
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse in">
+                <div class="panel-body">
+
+                  @if (BusinessManager.Count() > 0)
+                  {
+
+
+                    <table class="table-bordered">
+
+                        <tr>
+                            <th style="padding-right: 10px">Business Operator Type</th>
+                            <th style="padding-right: 10px">Business Operator</th>
+                            <th style="padding-right: 10px">Operator Identity Or PassportNumber </th>
+                            <th style="padding-right: 10px">Operator Residential Address </th>
+                      
+
+
+                        </tr>
+                        @foreach (var record in BusinessManager)
+                    {
+
+                            <tr>
+
+                                <td style="padding-right: 10px">@record.BusinessOperator.BusinessOperatorName</td>
+
+                                <td style="padding-right: 10px">
+                                    @Html.DisplayName(record.NameOfBusinessOperator)
+                                </td> 
+                                <td style="padding-right: 10px">@record.OperatorIdentityOrPassportNumber </td>
+                                <td style="padding-right: 10px">@record.OperatorResidentialAddress</td>
+
+
+                            </tr>
+                        }
+
+
+                    </table>
+
+                  }
+
+                  else
+                  {
+                        <label style="font-style: italic; font-family: sans-serif; color: red">No Business Operator to display.</label>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="panel-group" id="accordion1">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-parent="#accordionClient" href="#collapseThree">
+                        Business Employee
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse in">
+                <div class="panel-body">
+
+                    @if (BusinessEmployee.Count() > 0)
+                    {
+
+
+                        <table class="table-bordered">
+
+                            <tr>
+                              
+                                <th style="padding-right: 10px">Employee Name</th>
+                                <th style="padding-right: 10px">Employee Address</th>
+                                <th style="padding-right: 10px">City</th>
+                                <th style="padding-right: 10px">Suburb </th>
+                                <th style="padding-right: 10px">Code </th>
+
+
+                            </tr>
+                            @foreach (var record in BusinessEmployee)
+                    {
+
+                                <tr>
+
+                                 
+
+
+                                    <td style="padding-right: 10px">@record.NameOfEmployer</td>
+
+                                    <td style="padding-right: 10px">
+                                        @Html.DisplayName(record.EmployerResidentialAddress1)
+                                    </td>
+                                    <td style="padding-right: 10px">@record.EmployerResidentialAddress3 </td>
+                                    <td style="padding-right: 10px">@record.EmployerResidentialAddress2</td>
+                                    <td style="padding-right: 10px">@record.EmployerResidentialAddressCode</td>
+
+                                </tr>
+                            }
+
+
+                        </table>
+
+                    }
+
+                    else
+                    {
+                        <label style="font-style: italic; font-family: sans-serif; color: red">No Business Employee to display.</label>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="panel-group" id="accordion1">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-parent="#accordionClient" href="#collapseThree">Documentation
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse in">
+                <div class="panel-body">
+
+                    @if (documentsList.Any())
+                    {
+
+                        <table class="table-bordered">
+                            <tr>
+                                <th>Document Type</th>
+                                <th>FileName</th>
+                                <th>Created Date</th>
+                            </tr>
+                            @foreach (var item in documentsList)
+                            {
+                                <tr>
+                                    <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                       <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                    <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                                  @*  @if (Model.BusinessStatusId == db.Status.Where(s => s.StatusKey == "BusinessApproved").Select(s => s.StatusId).FirstOrDefault())
+                                    {
+                                        <td style="padding-right: 10px">
+                                            @Html.ActionLink("Remove", "DeleteFile", "Business", new {id = @item.FileUploadId, Model.BusinessId})
+                                             <a href="@Html.Action("DeleteFile", "Business", new { id = @item.FileUploadId, Model })">
+                                                <i class="glyphicon glyphicon-remove" title="Delete"></i>
+                                            <span class="sr-only">Delete</span>
+                                        </a>
+
+
+                                        </td>
+                                    }*@
+
+                                </tr>
+
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <label style="font-style: italic; font-family: sans-serif; color: red">No documents to display.</label>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+}
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BusinessId }, new { @class = "btn btn-outline-warning" }) |
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+</p>

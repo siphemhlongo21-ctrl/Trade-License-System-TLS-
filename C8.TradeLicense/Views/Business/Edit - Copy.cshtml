@@ -1,0 +1,492 @@
+﻿@using C8.TradeLicense.Models
+@using Microsoft.Ajax.Utilities
+@model C8.TradeLicense.Models.Business
+@using C8.TradeLicense.DataAccessLayer;
+
+
+<script type="text/javascript">
+
+    //$(function () {
+    //    $('#isSame').change(function () {
+    //        var isChecked = $(this).is(':checked');
+    //        if (isChecked) {
+    //            $("#ResidentialAddress1").val($("#PostalAddress1").val());
+    //            $("#ResidentialAddress2").val($("#PostalAddress2").val());
+    //            $("#ResidentialAddress3").val($("#PostalAddress3").val());
+    //            $("#ResidentialAddressCode").val($("#PostalAddressCode").val());
+    //        }
+    //        else {
+    //            $('#postalAddress').show();
+    //        }
+    //    });
+    //});
+
+    $(document).ready(function () {
+        var currentItemType = $("#ddlItemTypeName option:selected").text();
+        if (currentItemType !== "Item 2") {
+            $("#fingerprint_verification").hide();
+        }
+
+        var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(ViewBag.OustandingDocuments))';
+        var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+        var groupList = [];
+
+        $("#ItemTypeId").change(function () {        
+            var itemType = $("#ItemTypeId option:selected").text();
+
+            if (itemType === "Item 2") {
+                $("#fingerprint_verification").show();
+                $("#itemTypeValue").val("Item2");
+            }
+            else {
+                $("#fingerprint_verification").hide();
+                $("#itemTypeValue").val("Item1");
+            }
+        });
+
+        $.each(outstandingDocuments, function (index, value) {
+            groupList.push('<li>' + value + '</li>');
+        });
+
+        if (groupList.length > 0) {
+            $('#outstandingDocumentList').append(groupList.join(''));
+            $('#documentAlert').show();
+        }
+
+    });
+</script>
+@{
+    ViewBag.Title = "Edit";
+    var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+    var license = (License)ViewData["LicenseInfo"];
+    var issueDate = "None";
+    var expiryDate = "None";
+    var db = new TradeLicenseDbContext();
+    if (license != null)
+    {
+        issueDate = license.LicenseIssueDateTime != null ? Convert.ToDateTime(license.LicenseIssueDateTime).ToShortDateString() : "Not issued";
+        expiryDate = license.LicenseExpiryDate != null ? Convert.ToDateTime(license.LicenseExpiryDate).ToShortDateString() : "----";
+    }
+   
+}
+
+@if (license == null || license.LicenseExpiryDate < DateTime.Now.AddDays(1))
+{
+    <div class="alert-warning">
+        <p>
+            <h2>No business license or license may be expired!</h2>
+        </p>
+    </div>
+}
+else
+{
+   
+    <div class="alert alert-info">
+        <p>
+            License Type:  @license.LicenseType.LicenseTypeName
+            <br />
+            License Issue Date: @issueDate
+
+            <br />
+            Next Renewal Date: @expiryDate
+
+        </p>
+    </div>
+}
+
+
+@using (Html.BeginForm("Edit", "Business", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <span class="form-horizontal">
+        <div>
+            @if (Request.HttpMethod == "POST")
+            {
+                if (TempData["Success"] != null)
+                {
+                <div class="alert alert-success">
+                    <a class="close" data-dismiss="alert">×</a>
+                    <strong>@TempData["Success"].ToString()</strong>
+                    <ul id="outstandingDocumentList"></ul>
+                </div>
+                }
+            }
+            else
+            {
+                if (ViewBag.OustandingDocuments.Count > 0)
+                {
+                <div class="alert alert-warning">
+                    <a class="close" data-dismiss="alert">×</a>
+                    <strong>Outstanding Documents</strong>
+                    <ul id="outstandingDocumentList"></ul>
+                </div>
+                }
+
+
+            }
+        </div>
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-warning">
+                <a class="close" data-dismiss="alert">×</a>
+                <h4 class="alert-heading">Warning!</h4>
+                @TempData["Error"].ToString()
+            </div>
+        }
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.ItemType.ItemTypeName)
+        @Html.HiddenFor(model => model.BusinessId)
+        @Html.HiddenFor(model => model.ClientId)
+        @Html.HiddenFor(model => model.BusinessStatusId)
+        @Html.HiddenFor(model => model.IsActive)
+        @Html.HiddenFor(model => model.IsDeleted)
+        @Html.HiddenFor(model => model.IsLocked)
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordionClient" href="#collapseTwo">Business Information
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    @*  <fieldset class="table table-responsive">*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ProposedTradeName, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.ProposedTradeName, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.ProposedTradeName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BusinessTypeId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @*@Html.DropDownList("BusinessTypeId", "BusinessTypeName")*@
+                            @Html.DropDownList("BusinessTypeId",null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.BusinessTypeId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PostalAddress1, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.PostalAddress1, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PostalAddress1)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PostalAddress2, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.PostalAddress2, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PostalAddress2)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PostalAddress3, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.PostalAddress3, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PostalAddress3)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PostalAddressCode, new { @class = "control-label col-md-2" })
+                        <div class="col-md-1">
+                            @Html.TextBoxFor(model => model.PostalAddressCode, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PostalAddressCode)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ResidentialShopOrUnitNumber, new { @class = "control-label col-md-2" })
+                        <div class="col-md-1">
+                            @Html.TextBoxFor(model => model.ResidentialShopOrUnitNumber, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ResidentialShopOrUnitNumber)
+                        </div>
+                    </div>
+
+                    <div id="postalAddress">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ResidentialAddress1, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.ResidentialAddress1, new { @class = "form-control" })
+
+                                @Html.ValidationMessageFor(model => model.ResidentialAddress1)
+                            </div>
+                            @*<div>
+                                @Html.Label("Same as postal address", new { style = "font-style: italic; font-weight: normal; color: Red" })
+                                @Html.CheckBox("isSame", new { id = "isSame", title = "Check if residential address is same as postal address" })
+                            </div>*@
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ResidentialAddress2, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.ResidentialAddress2, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ResidentialAddress2)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ResidentialAddress3, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.ResidentialAddress3, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ResidentialAddress3)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ResidentialAddressCode, new { @class = "control-label col-md-2" })
+                            <div class="col-md-1">
+                                @Html.TextBoxFor(model => model.ResidentialAddressCode, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ResidentialAddressCode)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TelephoneNumber, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.TelephoneNumber, new { @class = "form-control", maxlength = 13 })
+                            @Html.ValidationMessageFor(model => model.TelephoneNumber)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CellphoneNumber, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.CellphoneNumber, new { @class = "form-control", maxlength = 13 })
+                            @Html.ValidationMessageFor(model => model.CellphoneNumber)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FaxNumber, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.FaxNumber, new { @class = "form-control", maxlength = 13 })
+                            @Html.ValidationMessageFor(model => model.FaxNumber)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TitleDeedTypeId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @*@Html.DropDownList("TitleDeedTypeId", "TitleDeedTypeName")*@
+                            @Html.DropDownList("TitleDeedTypeId",null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.TitleDeedTypeId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RatesAccountNumber, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.RatesAccountNumber, new { @class = "form-control", required = true })
+                            @Html.ValidationMessageFor(model => model.RatesAccountNumber)
+                        </div>
+                    </div>
+                    @*</fieldset>
+                    <fieldset class="table-responsive">*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BusinessOperatorId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("BusinessOperatorId",null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.BusinessOperatorId)
+                        </div>
+                      
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NameOfBusinessOperator, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.NameOfBusinessOperator, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.NameOfBusinessOperator)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OperatorIdentityOrPassportNumber, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.OperatorIdentityOrPassportNumber, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OperatorIdentityOrPassportNumber)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OperatorResidentialAddress1, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.OperatorResidentialAddress1, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OperatorResidentialAddress1)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OperatorResidentialAddress2, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.OperatorResidentialAddress2, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OperatorResidentialAddress2)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OperatorResidentialAddress3, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.OperatorResidentialAddress3, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OperatorResidentialAddress3)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OperatorResidentialAddressCode, new { @class = "control-label col-md-2" })
+                        <div class="col-md-1">
+                            @Html.TextBoxFor(model => model.OperatorResidentialAddressCode, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OperatorResidentialAddressCode)
+                        </div>
+                    </div>
+                    @*  </fieldset>
+                    <fieldset class="table-responsive">*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ItemTypeId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("ItemTypeId",null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ItemTypeId)
+                            @Html.Hidden("itemTypeValue")
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NameOfEmployer, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.NameOfEmployer, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.NameOfEmployer)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmployerResidentialAddress1, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.EmployerResidentialAddress1, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.EmployerResidentialAddress1)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmployerResidentialAddress2, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.EmployerResidentialAddress2, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.EmployerResidentialAddress2)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmployerResidentialAddress3, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.EmployerResidentialAddress3, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.EmployerResidentialAddress3)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmployerResidentialAddressCode, new { @class = "control-label col-md-2" })
+                        <div class="col-md-1">
+                            @Html.TextBoxFor(model => model.EmployerResidentialAddressCode, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.EmployerResidentialAddressCode)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OperationStructureTypeId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("OperationStructureTypeId",null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OperationStructureTypeId)
+                        </div>
+                    </div>
+                    @* </fieldset>*@
+                </div>
+            </div>
+        </div>
+        <div class="panel-group" id="accordion1">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordionClient" href="#collapseThree">Document Upload
+                        </a>
+                        @*   @Html.Label("Recieved?", new { style = "font-style: italic; font-weight: normal; font-size:10; align: right" })
+                        @Html.CheckBox("isRecieved", new { id = "isRecieved" })*@
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse in">
+                    <div class="panel-body">
+
+                        @if (documentTypes.Count() > 0)
+                        {
+                            @Html.Partial("~/Views/Shared/_UploadPartial.cshtml", documentTypes)
+                        }
+
+
+                        @if (documentsList.Any())
+                        {
+
+                            <table class="table-bordered">
+                                <tr>
+                                    <th>Document Type</th>
+                                    <th>FileName</th>
+                                    <th>Created Date</th>
+                                </tr>
+                                @foreach (var item in documentsList)
+                                {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                        <td style="padding-right: 10px">@Html.ActionLink(item.FileName, "Download", "Client", new { id = item.FileUploadId, file = item.FileName, clientId = Model.ClientId }, htmlAttributes: null)</td>
+                                        <td style="padding-right: 10px">@item.CreatedDateTime</td>
+
+                                        @*@if (Model.BusinessStatusId == db.Status.Where(s => s.StatusKey == "BusinessApproved").Select(s => s.StatusId).FirstOrDefault())
+                                        {
+                                            <td style="padding-right: 10px">
+                                                <a href="@Html.Action("DeleteFile", "Business", new { id = @item.FileUploadId, Model })">
+                                                    <i class="glyphicon glyphicon-remove" title="Delete"></i>
+                                                    <span class="sr-only">Delete</span>
+                                                </a>
+                                            </td>
+                                        }*@
+
+                                    </tr>
+
+                                }
+                            </table>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10" align="right">
+                <input type="submit" value="Save" class="btn btn-default" />
+                &nbsp;
+                @{
+                        var hasLicense = db.Licenses.Where(l => l.BusinessId == Model.BusinessId && l.LicenseExpiryDate > DateTime.Now).Select(l => l.BusinessId).FirstOrDefault();
+                        if (Model.BusinessStatusId == db.Status.Where(s => s.StatusKey == "BusinessApproved").Select(s => s.StatusId).FirstOrDefault()
+                            && hasLicense == null)
+                        {
+                    <a class="btn btn-default" href="@Url.Action("Create", "License", new { id = Model.BusinessId })">
+                        <span class="font-icon-group"></span>Add License 
+                    </a>
+                        }
+
+
+                }
+
+
+            </div>
+        </div>
+    </span>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index",null,new { @class= "btn btn-outline-primary" })
+</div>

@@ -1,0 +1,118 @@
+﻿@model C8.TradeLicense.Models.Condition
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Create</h2>*@
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @*<h4>Condition</h4>
+        <hr />*@
+        @Html.ValidationSummary(true)
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">New Condition</h3>
+            </div>
+            <div class="panel-collapse in">
+                <div class="panel-body">
+                    @*<div class="form-group">
+                        @Html.LabelFor(model => model.ItemConditionId, "ItemCondition", new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("ItemConditionId", null, "Select Condition", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.ItemConditionId)
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        @Html.Label("Condition Name (displays on list)", new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.ConditionName,5, 45, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.ConditionName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ConditionDescription, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.ConditionDescription, 5, 45, new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.ConditionDescription)
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.IsActive)
+                            @Html.ValidationMessageFor(model => model.IsActive)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsDeleted, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.IsDeleted)
+                            @Html.ValidationMessageFor(model => model.IsDeleted)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsLocked, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.IsLocked)
+                            @Html.ValidationMessageFor(model => model.IsLocked)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CreatedByUserId, "CreatedByUserId", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("CreatedByUserId", String.Empty)
+                            @Html.ValidationMessageFor(model => model.CreatedByUserId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CreatedDateTime, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CreatedDateTime)
+                            @Html.ValidationMessageFor(model => model.CreatedDateTime)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ModifiedByUserId, "ModifiedByUserId", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("ModifiedByUserId", String.Empty)
+                            @Html.ValidationMessageFor(model => model.ModifiedByUserId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ModifiedDateTime, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ModifiedDateTime)
+                            @Html.ValidationMessageFor(model => model.ModifiedDateTime)
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Submit" class="btn btn-outline-success" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+</div>

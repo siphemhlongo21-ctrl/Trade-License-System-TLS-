@@ -1,0 +1,91 @@
+﻿@model C8.TradeLicense.Models.DepartmentContact
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapseOne">Delete Department Contact</a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse collapse in">
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model._DepartmentId.DepartmentName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model._DepartmentId.DepartmentName)
+                    </dd>
+
+                    <dt>
+                        @Html.LabelFor(model => model.User.FullName, "Inspector")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.User.FullName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IsPrinciple)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IsPrinciple)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreatedDateTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreatedDateTime)
+                    </dd>
+
+                    <dt>
+                        @Html.LabelFor(model => model.CreatedByUser.FullName, "Created By")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreatedByUser.FullName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ModifiedDateTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ModifiedDateTime)
+                    </dd>
+
+                    <dt>
+                        @Html.LabelFor(model => model.ModifiedByUser.FullName, "Modified By")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ModifiedByUser.FullName)
+                    </dd>
+
+                </dl>
+            </div>
+        </div>
+    </div>
+
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-outline-success" /> |
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+        </div>
+    }
+</div>

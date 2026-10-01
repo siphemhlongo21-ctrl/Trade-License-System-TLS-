@@ -1,0 +1,67 @@
+﻿@model C8.TradeLicense.Models.LicenseType
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "License Type Details";
+}
+
+@{
+    var documentCheck = (IEnumerable<DocumentCheckList>)ViewData["DocumentCheckData"];
+
+}
+<h4>License Type Details</h4>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        @* <dt>
+                @Html.DisplayNameFor(model => model.CreatedByUser.FirstName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CreatedByUser.FirstName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ModifiedByUser.FirstName)
+            </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseTypeDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseTypeDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+    </dl>
+</div>
+@*<div>
+        @if (documentCheck.Count() != 0)
+        {
+            @Html.Partial("~/Views/Shared/_DocumentCheckListPartial.cshtml", documentCheck)
+            //var checklist = documentCheck;
+        }
+
+
+    </div>*@
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.LicenseTypeId }, new { @class = "btn btn-outline-success" }) |
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+</p>

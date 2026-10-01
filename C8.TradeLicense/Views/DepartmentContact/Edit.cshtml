@@ -1,0 +1,103 @@
+﻿@model C8.TradeLicense.Models.DepartmentContact
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div id="errorNewUsers" class="alert alert-warning" style="display:none;">
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var departmentType = '@ViewBag.DepartmentStructureType';
+        var contactRole = '@ViewBag.DepartmentContactRole';
+
+        if (departmentType == "Flat") {
+            if ('@ViewBag.AvailableChiefInspectors' == 0) {
+                $("#errorNewUsers").html('<strong>Please <a href="@Url.Action("Index","User")">assign new users</a> to the Chief Inspector or Inspector Roles</strong>');
+                showError();
+            }
+        }
+        else if ((contactRole == "Chief Inspector") && ('@ViewBag.AvailableChiefInspectors' == 0)) {
+            $("#errorNewUsers").html('<strong>Please <a href="@Url.Action("Index","User")">assign new users</a> to the Chief Inspector Role</strong>');
+            showError();
+        }
+        else if ((contactRole == "Inspector") && ('@ViewBag.AvailableInspectors' == 0)) {
+            $("#errorNewUsers").html('<strong>Please <a href="@Url.Action("Index","User")">assign new users</a> to the Inspector Role</strong>');
+            showError();
+        }
+        else {
+            hideError();
+
+            if (contactRole === "Inspector") {
+                $("#lblInspector").text("Inspector:");
+                $("#chiefInspectorRadGroup").show();
+                $("#departmentHeadsGroup").show();
+            }
+        }
+
+        function showError() {
+            $("#errorNewUsers").show();
+            $("#btnSubmit").attr("disabled", true);
+        }
+
+        function hideError() {
+            $("#errorNewUsers").html('');
+            $("#errorNewUsers").hide();
+        }
+    });
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(model => model.DepartmentContactId)
+        @Html.HiddenFor(model => model.DepartmentId)
+        @Html.HiddenFor(model => model.IsPrinciple)
+        @Html.HiddenFor(model => model.DepartmentHeadContactId)
+        @Html.HiddenFor(model => model.IsActive)
+        @Html.Hidden("UserRole", (string)ViewBag.DepartmentContactRole)
+        @Html.Hidden("StructureType", (string)ViewBag.DepartmentStructureType)
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseOne">Edit Department Contact</a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.Label("Chief Inspector:", new { @id = "lblInspector", @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("ddlInspectorUserList", new SelectList(ViewBag.InspectorUserList, "UserId", "FullName"), new { @class = "form-control"})
+                        </div>
+                    </div>
+
+                    <div id="departmentHeadsGroup" class="form-group" style="display:none;">
+                        @Html.Label("Chief Inspector:", new {@class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("ddlDepartmentHeadUserList", new SelectList(ViewBag.DepartmentHeads, "DepartmentContactId", "User.FullName"), new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input id="btnSubmit" type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+</div>

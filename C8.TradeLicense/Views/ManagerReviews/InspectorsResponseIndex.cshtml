@@ -1,0 +1,188 @@
+﻿@*@model IEnumerable<C8.TradeLicense.Models.ManagerReview>*@
+@model PagedList.IPagedList<C8.TradeLicense.Models.InspectionRequest>
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.DataAccessLayer
+@using PagedList.Mvc;
+<script type="text/javascript">
+
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+</script>
+@{
+    ViewBag.Title = "Department Manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+    //var pendingLinceseInspection = (PagedList.IPagedList<License>)ViewData["PendingLicenseInpection"];
+    var db = new TradeLicenseDbContext();
+}
+
+<style>
+    .btn-outline-info {
+        border: 1px solid white;
+        background-color: white;
+        color: black;
+    }
+</style>
+@using (Html.BeginForm("InspectorsResponseIndex", "ManagerReviews", FormMethod.Get))
+{
+
+    <div class="alert alert-info">
+        <h4 style="font-family:Arial;color:white" align="center">Select a search option below.</h4>
+        @*License Status : @Html.DropDownList("StatusId", "All License Status") <br/>*@
+        @Html.RadioButton("selectedSearch", "BusinessName")&nbsp;Business Name
+        @Html.RadioButton("selectedSearch", "ClientName")&nbsp;Customer Name
+        @Html.RadioButton("selectedSearch", "ReferenceNo")&nbsp;License Number
+        @Html.RadioButton("selectedSearch", "Region")&nbsp;Region
+        @Html.TextBox("inputSearch", ViewBag.CurrentFilter as string, new { @class = "myText" })
+        <input type="submit" value="Search" class="btn btn-outline-info" id="btnSearch" />
+        <a href="@Url.Action("InspectorsResponseIndex")">
+            <i class="glyphicon glyphicon-refresh" style="color:white" title="Refresh"></i>
+        </a>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert-danger">
+        <a class="close" data-dismiss="alert">×</a>
+        @TempData["Error"].ToString()
+    </div>
+}
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Inspectors Response - <span class="badge">@ViewBag.LicenseCount</span></h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                @if (@Model.Count() > 0)
+                {
+
+                    <table class="table">
+                        <tr>
+                            <th>License Number</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().License.Region)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().License.Business.ProposedTradeName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().License.Client.Fullname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().License.LicenseType.LicenseTypeName)
+                            </th>
+                            <th>
+                                License status
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().Department.DepartmentName)
+                            </th>
+                          
+                            <th>Action</th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.LicenseNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.Region.RegionName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.Business.ProposedTradeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.Client.Fullname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.LicenseType.LicenseTypeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.Status.StatusName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                </td>
+
+                              
+
+                                <td>
+                                    @{
+                                     
+                                            <a href="@Url.Action("ViewDetails", new { Id = item.InspectionRequestId })">
+                                                <i class="glyphicon glyphicon-list" title="View Details"></i>
+                                                <span class="sr-only">View Details</span>
+                                            </a>
+                                         
+                                        
+                                        @*<a href="@Url.Action("LicenseDocUploads","License", new { licenseId = item.LicenseId,Screen ="InspectorsResponseIndex" })">
+                                            <i class="glyphicon glyphicon-briefcase" title="View Documents"></i>
+                                            <span class="sr-only">Documents</span>
+                                        </a>*@
+
+                                    }
+                                </td>
+
+                            </tr>
+                                        }
+                     
+                    </table>
+
+
+                    <div align="center">
+
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Html.PagedListPager(Model, page => Url.Action("InspectorsResponseIndex",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+
+
+
+      
+                    </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger" id="Erroralert">
+                                                <a class="close" data-dismiss="alert">×</a>
+
+                                                <strong><p id="error2">No Records found</p></strong>
+                                            </div>
+                                        }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

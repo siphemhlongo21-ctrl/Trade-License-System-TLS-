@@ -1,0 +1,1591 @@
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.Keys;
+@model C8.TradeLicense.Models.Client
+@{
+    /**/
+
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+
+    var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var client = (Client)ViewData["Client"];
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+}
+
+
+<style>
+    .select-editable {
+        position: relative;
+        background-color: white;
+        border: solid grey 1px;
+        width: 120px;
+        height: 18px;
+    }
+
+        .select-editable select {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            font-size: 14px;
+            border: none;
+            width: 120px;
+            margin: 0;
+        }
+    .modal-xl {
+        width: 1140px;
+    }
+
+    .select-editable input {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100px;
+        padding: 1px;
+        font-size: 12px;
+        border: none;
+    }
+
+        .select-editable select:focus, .select-editable input:focus {
+            outline: none;
+        }
+
+    .number {
+        background-color: transparent !important;
+        border: 1.5px solid white;
+        border-radius: 50px;
+        color: white !important;
+    }
+
+    .step-app > .step-steps > li > a {
+        display: block;
+        padding: 10px;
+        color: white;
+        background-color: #848484;
+        text-decoration: none;
+        border-right: 1px solid #fff;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 20px;
+        font-size: 25px;
+        line-height: inherit;
+        color: #333;
+        border: 0;
+        background-color: aliceblue;
+        border-bottom: 1px solid #00d0ff;
+    }
+
+    .error {
+        color: tomato;
+    }
+
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    }
+</style>
+
+@*<div class="alert alert-warning" id="documentAlert" style="display: none;">
+        <strong>Outstanding Documentation:</strong>
+        <ul id="outstandingDocumentList"></ul>
+    </div>*@
+
+<!-- Date Picker -->
+
+
+
+
+<script src="~/Scripts/datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Scripts/datepicker/datepicker3.css" rel="stylesheet" />
+<script type="text/javascript">
+    function ValidateRSAIDNo() {
+        try {
+
+
+            var id = document.getElementById("IdentityOrPassportNumber").value;
+            if (id.length != 13) {
+                $('#IdentityOrPassportNumber').val('');
+                //alert("Please enter a valid 13 digit ID no.");
+                document.getElementById("Identitynumspan").hidden = false;
+                document.getElementById("IdentityOrPassportNumbererror").innerHTML = "Please enter a valid 13 digit ID no.";
+
+                return false;
+            }
+            var y1o = id.substring(0, 1)
+            var y2e = id.substring(1, 2)
+            var m1o = id.substring(2, 3)
+            var m2e = id.substring(3, 4)
+            var d1o = id.substring(4, 5)
+            var d2e = id.substring(5, 6)
+            var go = id.substring(6, 7)
+            var s1e = id.substring(7, 8)
+            var s2o = id.substring(8, 9)
+            var s3e = id.substring(9, 10)
+            var co = id.substring(10, 11)
+            var ae = id.substring(11, 12)
+            var z = id.substring(12, 13)
+
+            var A = 0;
+            A = parseInt(A) + parseInt(y1o) + parseInt(m1o) + parseInt(d1o) + parseInt(go) + parseInt(s2o) + parseInt(co);
+            var B1 = y2e + m2e + d2e + s1e + s3e + ae;
+            var B2 = B1 * 2;
+            var i = 0;
+            var B3 = 0;
+            var B2string = B2.toString();
+            while (B2string.length > i) {
+                var x = B2string.substring(i, i + 1);
+                B3 = B3 + parseInt(x);
+                i = i + 1;
+            }
+
+            var C = A + B3;
+            var Cstring = C.toString();
+            var secNo = Cstring.substring(1, 2);
+            var D = 10 - parseInt(secNo);
+            while (D >= 10) D = D - 10;
+            if (D == z) {
+                //test for valid date in 1900
+                var valid = true;
+                var bd = new Date('19' + y1o + y2e, parseInt(m1o + m2e) - 1, d1o + d2e);
+                if ((bd == 'NaN') | (bd == 'Invalid Date')) valid = false;
+                else if (bd.getFullYear() != parseInt('19' + y1o + y2e)) valid = false;
+                else if (bd.getMonth() + 1 != parseInt(m1o + m2e)) valid = false;
+                else if (bd.getDate() != parseInt(d1o + d2e)) valid = false;
+                //if invalid test again in 2000
+                valid = true;
+                bd = new Date('20' + y1o + y2e, parseInt(m1o + m2e) - 1, d1o + d2e);
+                if ((bd == 'NaN') | (bd == 'Invalid Date')) valid = false;
+                else if (bd.getFullYear() != parseInt('20' + y1o + y2e)) valid = false;
+                else if (bd.getMonth() + 1 != parseInt(m1o + m2e)) valid = false;
+                else if (bd.getDate() != parseInt(d1o + d2e)) valid = false;
+
+
+                var tempDate = new Date(id.substring(0, 2), id.substring(2, 4) - 1, id.substring(4, 6));
+
+                var id_date = tempDate.getDate();
+                var id_month = tempDate.getMonth();
+                var id_year = tempDate.getFullYear();
+
+                var fullDate = (id_month + 1) + "/" + id_date + "/" + id_year;
+
+                var today_date = new Date();
+                var today_year = today_date.getFullYear();
+                var today_month = today_date.getMonth();
+                var today_day = today_date.getDate();
+                var age = today_year - id_year;
+
+                if (today_month < (id_month - 1)) {
+                    age--;
+                }
+                if (((id_month - 1) == today_month) && (today_day < id_date)) {
+                    age--;
+                }
+
+                if (!((tempDate.getYear() == id.substring(0, 2)) && (id_month == id.substring(2, 4) - 1) && (id_date == id.substring(4, 6)))) {
+                    error.append('<p>ID number does not appear to be authentic - date part not valid</p>');
+                    correct = false;
+                    document.getElementById("Identitynumspan").hidden = false;
+                    document.getElementById("IdentityOrPassportNumbererror").innerHTML = "ID number does not appear to be authentic - date part not valid";
+                }
+                document.getElementById("Identitynumspan").hidden = true;
+                return valid;
+
+            }
+            else {
+                $('#IdentityOrPassportNumber').val('');
+                //alert("Please enter a valid 13 digit ID no.");
+
+                document.getElementById("Identitynumspan").hidden = false;
+                document.getElementById("IdentityOrPassportNumbererror").innerHTML = "Please enter a valid 13 digit ID no.";
+                //swal("Error!", "Please enter a valid 13 digit ID no.", "warning");
+                return false;
+            }
+        }
+        catch (e) {
+            //alert(bd+"Catch");
+            return false;
+        }
+    }
+   
+    function Setstreet(element)
+    {
+
+
+        var options = {};
+        options.url = "/Search/StreetName";
+        options.type = "GET";
+        options.data = { "criteria": $(element).val() };
+        options.dataType = "json";
+        options.success = function (data) {
+
+
+            $("#dataliststreet").empty();
+            for (var i = 0; i < data.length; i++) {
+                $("#dataliststreet").append("<option value='" +
+                data[i].STRNAME + "'></option>");
+
+            }
+        };
+        $.ajax(options);
+
+    }
+   
+    //Propery Address End
+    var addressFor = "";
+    function GetAddress(id) {
+        $.ajax({
+            url: "/Search/GetAddress",
+            type: "POST",
+            dataType: "json",
+            data: { id: id },
+            success: function (data) {
+
+                if (addressFor == "objaddress") {
+                    //document.getElementById("objStreetName").value = data[0].STRNAME;
+                    document.getElementById("PostalAddress1").value = data[0].STRNUM;
+                    //document.getElementById("objStrtype").value = data[0].STRTYPE;
+                    //document.getElementById("objSuburb").value = data[0].SUBURB;
+
+                    document.getElementById("City").value = data[0].CITY;
+                    document.getElementById("PostalAddressCode").value = data[0].PostalCode;
+
+                }
+
+                addressFor = "";
+            }
+        })
+    }
+
+    function emailnotreq(element)
+    {
+        if (element.value.length > 5) {
+            document.getElementById("EmailAddress").required = false;
+            document.getElementById("lblEmailAddress").className = "control-label col-md-2";
+        }
+        else {
+            document.getElementById("EmailAddress").required = true;
+            document.getElementById("lblEmailAddress").className = "control-label col-md-2 required-field";
+        }
+    }
+    function Nationalitychange (element)
+    {
+        $("#IdentityOrPassportNumber").prop("maxLength", 50);
+        if (element.value == "Other")
+        {
+            document.getElementById("DivNationalityOther").hidden = false;
+            document.getElementById("DivExpiryPermit").hidden = false;
+            document.getElementById("ExpiryPermit").value = " ";
+
+            document.getElementById("NationalityOther").required = true;
+            document.getElementById("ExpiryPermit").required = true;
+            document.getElementById("IdentityOrPassportNumber").setAttribute('onfocusout', '');
+
+        }
+       else if(element.value == "South African National")
+       {
+           $("#IdentityOrPassportNumber").prop("maxLength", 13);
+            document.getElementById("DivNationalityOther").hidden = true;
+            document.getElementById("DivExpiryPermit").hidden = true;
+            document.getElementById("NationalityOther").required = false;
+            document.getElementById("ExpiryPermit").required = false;
+            document.getElementById("ExpiryPermit").value = " ";
+			document.getElementById("expLBL").required = false;
+
+            document.getElementById("NationalityOther").value = " ";
+            document.getElementById("IdentityOrPassportNumber").setAttribute('onfocusout', 'ValidateRSAIDNo()');
+            if (document.getElementById("IdentityOrPassportNumber").value != "") {
+                ValidateRSAIDNo();
+            }
+       }
+        else {
+			$("#IdentityOrPassportNumber").prop("maxLength", 13);
+
+           document.getElementById("NationalityOther").required = false;
+			document.getElementById("ExpiryPermit").required = true;
+
+           document.getElementById("DivNationalityOther").hidden = true;
+           if (document.getElementById("CustomerType").value != "Business") {
+               document.getElementById("DivExpiryPermit").hidden = false;
+               document.getElementsByName("ExpiryPermit").required = true;
+           }
+
+           document.getElementById("NationalityOther").value = " ";
+           document.getElementById("IdentityOrPassportNumber").setAttribute('onfocusout', '');
+       }
+    }
+
+
+    $(document).ready(function () {
+        $('#isSame').change(function () {
+            var isChecked = $(this).is(':checked');
+            if (isChecked) {
+
+                var v1 = $("#PostalAddress1").val();
+                if (v1.length != 0) {
+					$("#ResidentialAddress1").val($("#PostalAddress1").val());
+
+                    $('#ResidentialAddress1').prop("disabled", true);
+                    $("#ResidentialAddress1").css("color", "black");
+					$("#ResidentialAddress1-error").attr("hidden", true);
+
+                }
+				var v2 = $("#PostalAddress2").val();
+                if (v2.length != 0) {
+					$("#ResidentialAddress2").val($("#PostalAddress2").val());
+
+					$('#ResidentialAddress2').prop("disabled", true);
+                    $("#ResidentialAddress2").css("color", "black");
+					$("#ResidentialAddress2-error").attr("hidden", true);
+
+                }
+				var v3 = $("#PostalAddress3").val();
+
+                if (v3.length != 0) {
+					$("#ResidentialAddress3").val($("#PostalAddress3").val());
+
+                    $('#ResidentialAddress3').prop("disabled", true);
+                    $("#ResidentialAddress3").css("color", "black");
+					$("#ResidentialAddress3-error").attr("hidden", true);
+
+                }
+				var v4 = $("#PostalAddressCode").val();
+
+                if (v4.length == 4) {
+
+
+					$("#ResidentialAddressCode").val($("#PostalAddressCode").val());
+
+                    $('#ResidentialAddressCode').prop("disabled", true);
+                    $("#ResidentialAddressCode").css("color", "black");
+					$("#ResidentialAddressCode-error").attr("hidden", true);
+				}
+
+            } else {
+                $("#ResidentialAddress1").val("");
+                $("#ResidentialAddress3").val("");
+                $("#ResidentialAddress2").val("");
+                $("#ResidentialAddressCode").val("");
+                document.getElementById("ResidentialAddressCode").defaultValue = "";
+                $('#ResidentialAddress1').prop("disabled", false);
+                $('#ResidentialAddress2').prop("disabled", false);
+                $('#ResidentialAddress3').prop("disabled", false);
+                $('#ResidentialAddressCode').prop("disabled", false);
+
+                $('#postalAddress').show();
+
+                $("#ResidentialAddressCode-error").attr("hidden", false);
+				$("#ResidentialAddress1-error").attr("hidden", false);
+				$("#ResidentialAddress3-error").attr("hidden", false);
+				$("#ResidentialAddress2-error").attr("hidden", false);
+            }
+        });
+
+
+
+    });
+    //Reduce the lenght of the filename
+    $(document).ready(function () {
+        $(".longString").each(function () {
+            var maxwidth = 30;
+            if ($(this).text().length > maxwidth) {
+                $(this).text($(this).text().substring(0, maxwidth));
+                $(this).html($(this).html() + '...');
+            }
+        });
+    });
+
+    $(document).ready(function () {
+
+        Nationalitychange(document.getElementById("Nationality"));
+        CustomerT(document.getElementById("CustomerType"))
+        var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(ViewBag.OustandingDocuments))';
+        var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+        var groupList = [];
+
+        $.each(outstandingDocuments, function (index, value) {
+            groupList.push('<li>' + value + '</li>');
+        });
+
+        if (groupList.length > 0) {
+            $('#outstandingDocumentList').append(groupList.join(''));
+            $('#documentAlert').show();
+        }
+    });
+
+    $(document).ready(function () {
+        Nationalitychange(document.getElementById("Nationality"));
+        var picker = new Pikaday({
+            field: document.getElementById('ExpiryPermit'),
+            format: 'YYYY/MM/DD',
+            maxdate:new Date,
+            toString(date, format) {
+                var today = date;
+                const day = ('0' + (today.getDate())).slice(-2);
+                const month = ('0' + (today.getMonth() + 1)).slice(-2);
+                const year = today.getFullYear();
+
+                return `${year}-${month}-${day} `;
+            }
+        });
+
+    });
+
+    function CustomerT(element) {
+        if (element.value == "Business") {
+
+
+
+
+            document.getElementById("DivBusinessName").hidden = false;
+
+
+
+            document.getElementById("BusinessName").required = true
+
+            document.getElementById("DivRegNumber").hidden = false;
+
+
+            document.getElementById("RegNumber").required = true;
+
+            document.getElementById("DivNationality").hidden = true;
+
+
+            document.getElementById("Nationality").required = false;
+            document.getElementById("DivIdentityOrPassportNumber").hidden = false;
+
+
+            document.getElementById("IdentityOrPassportNumber").required = true;
+            document.getElementById("ExpiryPermit").required = false;
+
+            document.getElementById("DivExpiryPermit").hidden = true;
+        }
+        else {
+            document.getElementById("DivNationality").hidden = false;
+            document.getElementById("BusinessName").value = "";
+
+
+
+            document.getElementById("RegNumber").value = "";
+
+            document.getElementById("Nationality").required = true;
+            document.getElementById("DivIdentityOrPassportNumber").hidden = false;
+
+
+            document.getElementById("IdentityOrPassportNumber").required = true;
+
+            document.getElementById("DivRegNumber").hidden = true;
+
+
+            document.getElementById("RegNumber").required = false;
+
+            document.getElementById("DivBusinessName").hidden = true;
+
+
+            document.getElementById("BusinessName").required = false;
+
+        }
+    }
+
+</script>
+
+@using (Html.BeginForm("Create", "Client", FormMethod.Post, new { enctype = "multipart/form-data", id = "clientInfo-form" }))
+{
+    @Html.AntiForgeryToken()
+    if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <a class="close" data-dismiss="alert">×</a>
+            <strong>@TempData["Success"].ToString()</strong>
+            <ul id="outstandingDocumentList"></ul>
+        </div>
+    }
+    if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            <a class="close" data-dismiss="alert">×</a>
+            <strong>Warning!</strong> @TempData["Error"].ToString()
+            <strong><p id="error2">error</p></strong>
+        </div>
+    }
+    <div class="alert alert-danger" hidden="hidden" id="Erroralert">
+        <a class="close" data-dismiss="alert">×</a>
+
+        <strong><p id="error2">error</p></strong>
+    </div>
+    <hr />
+
+
+    <h2 align="center">New Customer</h2>
+
+    <div id="demo">
+
+        <div class="step-app">
+            <ul class="step-steps">
+                <li><a href="#step1"><span class="number">1</span>Customer Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                <li><a href="#step2"><span class="number">2</span>Address Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                <li><a href="#step3"><span class="number">3</span>Contact Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                <li><a href="#step4"> <span class="number">4</span>Document Upload</a></li>
+            </ul>
+            <div class="step-content">
+                <div class="step-tab-panel" id="step1" align="center">
+                    <legend align="center">Customer Details</legend>
+                    <div class="form-horizontal" align="left" id="DivCustomerDeatils">
+                        @Html.ValidationSummary(true)
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CustomerType, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+
+                                @Html.DropDownList("CustomerType", null, "Select Customer Type", new { @class = "form-control", @required = "required", @Onchange = "CustomerT(this)" })
+                                @Html.ValidationMessageFor(model => model.CustomerType)
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="DivBusinessName" hidden="hidden">
+                            @Html.LabelFor(model => model.BusinessName, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BusinessName)
+                            </div>
+                        </div>
+                        <div class="form-group" id="DivRegNumber" hidden="hidden">
+                            @Html.LabelFor(model => model.RegNumber, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.RegNumber, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RegNumber)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Individual, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+
+                                @Html.DropDownList("IndividualType", null, "Select Individual", new { @class = "form-control", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.Individual)
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="DivNationality" hidden="hidden">
+                            @Html.LabelFor(model => model.Nationality, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+
+                                @Html.DropDownList("Nationality", null, "Select Nationality", new { @Onchange = "Nationalitychange(this)", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Nationality)
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="DivNationalityOther" hidden="hidden">
+                            @Html.LabelFor(model => model.NationalityOther, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+
+                                @Html.TextBoxFor(model => model.NationalityOther, new { @id = "NationalityOther", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.NationalityOther)
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="DivExpiryPermit" , hidden="hidden">
+                            @Html.LabelFor(model => model.ExpiryPermit, new { @class = "control-label col-md-2 required-field", @id = "expLBL" })
+                            <div class="col-md-3">
+
+                                @Html.TextBoxFor(model => model.ExpiryPermit, new { @name = "ExpiryPermit", @class = "form-control", @id = "ExpiryPermit" })
+                                @Html.ValidationMessageFor(model => model.ExpiryPermit)
+
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="DivIdentityOrPassportNumber" hidden="hidden">
+                            @Html.LabelFor(model => model.IdentityOrPassportNumber, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.IdentityOrPassportNumber, new { @class = "form-control", @onkeypress = "return blockSpecialChar(event)" })
+                                @Html.ValidationMessageFor(model => model.IdentityOrPassportNumber)
+                                <span id="Identitynumspan" hidden="hidden"><p id="IdentityOrPassportNumbererror" class="error"></p></span>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.Name)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Surname, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.Surname, new { @class = "form-control", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.Surname)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="step-tab-panel" id="step2" align="center">
+                    <legend align="center">Address Details</legend>
+
+                    <div class="form-horizontal" align="left">
+
+                        @Html.ValidationSummary(true)
+                        <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-primary" style="margin-left:95px;" id="ButtonaddLocationPlus" onclick="ButtonAddLocation()"><i class="glyphicon glyphicon-globe"></i> GIS</button>
+
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.PostalAddress1, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.PostalAddress1, new { @class = "form-control", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.PostalAddress1)
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.PostalAddress3, new { @class = "control-label col-md-2 required-field" })
+
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.PostalAddress3, new { @class = "form-control", @required = "required", name = "datalistCity", list = "datalistCity" })
+                                <datalist id="datalistCity">
+                                    <option value="Select">
+                                </datalist>
+
+
+                                @Html.ValidationMessageFor(model => model.PostalAddress3)
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.PostalAddress2, new { @class = "control-label col-md-2 required-field" })
+
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.PostalAddress2, new { @class = "form-control", @required = "required", name = "datalistsub", list = "datalistsub" })
+
+                                <datalist id="datalistsub">
+                                    <option value="Select">
+                                </datalist>
+
+
+                                @Html.ValidationMessageFor(model => model.PostalAddress3)
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" id="PostCodeOfPdiv">
+                            @Html.LabelFor(model => model.PostalAddressCode, new { @class = "control-label col-md-2 required-field" })
+
+                            <div class="col-md-2">
+                                @Html.TextBoxFor(model => model.PostalAddressCode, new 
+                           { @placeholder = "Postal Code:", 
+                               @class = "form-control",
+                               type = "text",
+                               @required = "required", 
+                               maxlength = 4, 
+                               MinLength = 4, 
+                               @onkeypress = "return blockSpecialCharandnums(event)" })
+                                @Html.ValidationMessageFor(model => model.PostalAddressCode)
+                            </div>
+
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            @Html.Label("Same as postal address", new { style = "font-style: italic; font-weight: normal; color: Red" })
+                            @Html.CheckBoxFor(model => model.SameAs, new { id = "isSame", title = "Check if residential address is same as postal address" })
+
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-primary" style="margin-left:95px;" id="ButtonaddLocationPlusPostal" onclick="ButtonAddLocations()"><i class="glyphicon glyphicon-globe"></i> GIS</button>
+
+                        </div>
+                        <div class="form-group">
+
+
+                            @Html.LabelFor(model => model.ResidentialAddress1, new { @class = "control-label col-md-2 required-field" })
+
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.ResidentialAddress1, new { @class = "form-control", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.ResidentialAddress1)
+                            </div>
+
+                        </div>
+
+                        <div class="form-group" id="selectCityOfRdiv">
+                            @Html.LabelFor(model => model.ResidentialAddress3, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.ResidentialAddress3, new { @class = "form-control", @required = "required", name = "datalistRCity", list = "datalistRCity" })
+
+                                <datalist id="datalistRCity">
+                                    <option value="Select">
+                                </datalist>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="selectSubOfRdiv">
+                            @*Suburb*@
+                            @Html.LabelFor(model => model.ResidentialAddress2, new { @class = "control-label col-md-2 required-field" })
+
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.ResidentialAddress2, new { @class = "form-control", @required = "required", name = "datalistRsub", list = "datalistRsub" })
+
+                                <datalist id="datalistRsub">
+                                    <option value="Select">
+                                </datalist>
+                                @Html.ValidationMessageFor(model => model.ResidentialAddress2)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.ResidentialAddressCode,
+                                new { @class = "control-label col-md-2 required-field" })
+
+                            <div class="col-md-2">
+
+                                @Html.TextBoxFor(model => model.ResidentialAddressCode,
+                                    new
+                                    {
+                                        @onkeypress = "return blockSpecialCharandnums(event)",
+                                        @placeholder = "Postal Code",
+                                        @class = "form-control",
+                                        type = "text",
+                                        @required = "required",
+                                        maxlength = 4,
+                                        MinLength = 4
+                                    })
+
+                                @Html.ValidationMessageFor(model => model.ResidentialAddressCode)
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="step-tab-panel" id="step3">
+                    <legend align="center">Contact Details</legend>
+                    <div class="form-horizontal" align="left">
+                        @Html.ValidationSummary(true)
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TelephoneNumber, new { @class = "control-label col-md-2 ", @style = "padding-top:20px" })
+
+
+                            <div class="col-md-1">
+                                @Html.Label("Code", new { htmlAttributes = new { @class = "control-label" } })
+                                @Html.Editor("TelephoneNumberCode", new { htmlAttributes = new { @class = "form-control", maxlength = 3, MinLength = 3, @onkeypress = "return blockSpecialCharandnumsandnums(event)" } })
+
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Number", new { htmlAttributes = new { @class = "control-label" } })
+                                @Html.Editor("TelephoneNumber", new { htmlAttributes = new { @class = "form-control", maxlength = 7, MinLength = 7, @onkeypress = "return blockSpecialCharandnums(event)" } })
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FaxNumber, new { @class = "control-label col-md-2 ", @style = "padding-top:20px" })
+
+                            <div class="col-md-1">
+                                @Html.Label("Code", new { htmlAttributes = new { @class = "control-label" } })
+                                @Html.Editor("FaxNumbercode", new { htmlAttributes = new { @class = "form-control", maxlength = 3, MinLength = 3, @onkeypress = "return blockSpecialCharandnums(event)" } })
+
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Number", new { htmlAttributes = new { @class = "control-label" } })
+                                @Html.Editor("FaxNumber", new { htmlAttributes = new { @class = "form-control", maxlength = 7, MinLength = 7, @onkeypress = "return blockSpecialCharandnums(event)" } })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CellphoneNumber, new { @class = "control-label col-md-2 required-field " })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.CellphoneNumber, new { @class = "form-control", maxlength = 10, MinLength = 10, @required = "required", @onkeypress = "return blockSpecialCharandnums(event)", onchange = "emailnotreq(this)" })
+                                @Html.ValidationMessageFor(model => model.CellphoneNumber)
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.AltCellphoneNumber, new { @class = "control-label col-md-2 " })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.AltCellphoneNumber, new { @class = "form-control", maxlength = 10, MinLength = 10, @onkeypress = "return blockSpecialCharandnums(event)" })
+                                @Html.ValidationMessageFor(model => model.AltCellphoneNumber)
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.EmailAddress,
+                                new { @class = "control-label col-md-2 required-field" })
+
+                            <div class="col-md-3">
+
+                                @Html.TextBoxFor(model => model.EmailAddress,
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        @type = "email",
+                                        @required = "required"
+                                    })
+
+                                @Html.ValidationMessageFor(model => model.EmailAddress)
+
+                            </div>
+
+                        </div>
+
+
+
+
+                        @*<div class="form-group">
+            @Html.LabelFor(model => model.EmailAddress, new { @class = "control-label col-md-2", id = "lblEmailAddress" })
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", @type = "email" })
+                @Html.ValidationMessageFor(model => model.EmailAddress)
+            </div>
+        </div>*@
+                    </div>
+                </div>
+
+                <div class="step-tab-panel" id="step4">
+                    <br />
+                    <br />
+                    <br />
+                    <legend align="center">Business Documents</legend>
+
+                    @if (documentTypes.Count() > 0)
+                    {
+                        @Html.Partial("~/Views/Shared/_UploadPartial.cshtml", documentTypes)
+                    }
+
+                    @if (Request.HttpMethod == "POST" && documentsList.Any())
+                    {
+
+                        <table class="table-bordered">
+                            <tr>
+                                <th>Document Type</th>
+                                <th>FileName</th>
+                                <th>Created Date</th>
+                                <th>Comments</th>
+                            </tr>
+                            @foreach (var item in documentsList)
+                            {
+                                <tr>
+                                    <td style="padding-right: 10px" class="required-field">@item.Document.DocumentName </td>
+                                       <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                    <td style="padding-right: 10px">@item.Uploadeddate</td>
+                                    <td style="padding-right: 10px">@item.Comments</td>
+                                </tr>
+
+                            }
+                        </table>
+
+                    }
+                    <br />
+                    <br />
+                </div>
+                <br />
+                <br />
+
+            </div>
+
+            <div class="step-footer">
+                <br />
+                <br />
+                <div align="left" class="col-lg-3">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+                </div>
+                <div align="center" class="col-lg-6">
+                    <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                    <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                    <button data-direction="finish" class="btn btn-outline-success">Finish</button>
+
+                </div>
+                <div class="col-lg-3" align="right">
+                    <input type="submit" value="Create" id="btnSubmit" class="btn btn-default" hidden />
+                    &nbsp;
+
+                    @if (client != null)
+                    {
+
+
+                        var db = new TradeLicenseDbContext();
+                        if (client.ClientStatusId == db.Status.Where(s => s.StatusKey == StatusKeys.ClientApproved).Select(s => s.StatusId).
+                                                       FirstOrDefault())
+                        {
+                            <a class="btn btn-default" href="@Url.Action("Create", "Business", new { id = client.ClientId })">
+                                <span class="font-icon-group"></span>Add Business
+                            </a>
+                        }
+
+                    }
+
+
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <div class="modal fade" id="idSearchAddress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content modal-xl" style=" margin: auto">
+                        <div class="modal-header modal-header-info">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <center>
+                                <h1 style="color: black; margin-left: -1300px"><i class="glyphicon glyphicon-search"></i> Search Address</h1>
+                            </center>
+                        </div>
+                        <div class="modal-body" style="padding:10px">
+                            <!--form name="add_name" id="add_name"-->
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-condensed table-hover" width="100%">
+                                    <tr>
+                                        <td>Street Number<input type="text" id="StreetNumber" name="StreetNumber" class="form-control name_list" /></td>
+                                        <td>Street Name<input type="text" id="StreetName" class="form-control name_list" /></td>
+                                        <td>Street Type<input type="text" id="StreetType" class="form-control name_list" /></td>
+                                        <td>Suburb<input type="text" id="Suburb" class="form-control name_list" /></td>
+                                        <td>Portion<input type="number" id="Portion" class="form-control name_list" /></td>
+                                        <td>Erf<input type="number" id="Erf" class="form-control name_list" /></td>
+                                        <td>Farm<input type="text" id="FarmTownship" class="form-control name_list" /></td>
+                                        <td>
+                                            <br /><button type="button" name="add" id="btnidSearchAddress" onclick="addsearch();" class="btn btn-success"><i class="glyphicon glyphicon-search"> Search</i></button>
+                                            <button type="button" class="btn btn-warning" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div id="rippleload"><center><img src="~/Content/images/ripple.gif" alt="Smiley face" height="42" width="42">searching....</center></div>
+                            <div id="AddressStatus"></div>
+                            <div id="ripple">
+                                <div class="table table-striped">
+                                    <table id="AddressSearchTable" style="width:100%" class="display">
+                                        <thead>
+                                            <tr class="bg-primary" style="color:white;">
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Street Number</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Street Name</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Street Type</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Suburb</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Portion</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Erf</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">FarmTownship</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--/form-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="idSearchAddress1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content modal-xl" style="margin:auto">
+                        <div class="modal-header modal-header-info">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <center>
+                                <h1 style="color:black;margin-left:-1300px"><i class="glyphicon glyphicon-search"></i> Search Address</h1>
+                            </center>
+                        </div>
+                        <div class="modal-body" style="padding:10px">
+                            <!--form name="add_name" id="add_name"-->
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-condensed table-hover" width="100%">
+                                    <tr>
+                                        <td>Street Number<input type="text" id="StreetNumber1" name="StreetNumber" class="form-control name_list" /></td>
+                                        <td>Street Name<input type="text" id="StreetName1" class="form-control name_list" /></td>
+                                        <td>Street Type<input type="text" id="StreetType1" class="form-control name_list" /></td>
+                                        <td>Suburb<input type="text" id="Suburb1" class="form-control name_list" /></td>
+                                        <td>Portion<input type="number" id="Portion1" class="form-control name_list" /></td>
+                                        <td>Erf<input type="number" id="Erf1" class="form-control name_list" /></td>
+                                        <td>Farm<input type="text" id="FarmTownship1" class="form-control name_list" /></td>
+                                        <td>
+                                            <br /><button type="button" name="add1" id="btnidSearchAddress1" onclick="addsearch1();" class="btn btn-success"><i class="glyphicon glyphicon-search"> Search</i></button>
+                                            <button type="button" class="btn btn-warning" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="rippleload1"><center><img src="~/Content/images/ripple.gif" alt="Smiley face" height="42" width="42">searching....</center></div>
+                            <div id="AddressStatus1"></div>
+                            <div id="ripple1">
+                                <div class="table table-striped">
+                                    <table id="AddressSearchTable1" style="width:100%" class="display">
+                                        <thead>
+                                            <tr class="bg-primary" style="color:white;">
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Street Number</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Street Name</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Street Type</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Suburb</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Portion</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Erf</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">FarmTownship</th>
+                                                <th style="border-top:1px solid white; border-left:1px solid white;
+                                            border-bottom:1px solid white; border-right:1px solid white;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--/form-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+}
+<script src="~/Scripts/jquery-steps.js"></script>
+
+<script>
+
+    var form = $("#clientInfo-form");
+    form.children("div").steps({
+
+        onFinish: function () {
+
+            $('#ResidentialAddress1').prop("disabled", false);
+            $('#ResidentialAddress2').prop("disabled", false);
+            $('#ResidentialAddress3').prop("disabled", false);
+            $('#ResidentialAddressCode').prop("disabled", false);
+
+
+            var IdentityDoc = $("#UploadTable #identity_document #file").val();
+            var landloadDoc = $("#UploadTable #landlord_consent #file").val();
+            var consetDoc = $("#UploadTable #town_planning_consent #file").val();
+            var telephone = $("#TelephoneNumber").val();
+            var telephonecode = $("#TelephoneNumberCode").val();
+            if (telephone == "" || telephonecode == "") {
+                $("#TelephoneNumber").val("");
+                $("#TelephoneNumberCode").val("");
+            }
+
+            var telephone1 = $("#FaxNumber").val();
+            var telephonecode1 = $("#FaxNumbercode").val();
+            if (telephone1 == "" || telephonecode1 == "") {
+                $("#FaxNumber").val("");
+                $("#FaxNumbercode").val("");
+            }
+            if (IdentityDoc.length != 0 && landloadDoc.length != 0 && consetDoc.length != 0) {
+                initLoadHoldOn("Saving Customer..Please Wait");
+                $("#clientInfo-form").submit();
+            } else {
+                alert("Please make sure that all required documents are uploaded");
+            }
+
+
+        },
+        onChange: function (event, currentIndex, newIndex) {
+            //submit(currentIndex, newIndex)
+
+            if (newIndex < currentIndex) {
+                return true;
+            }
+            form.validate().settings.ignore = ":disabled,:hidden";
+            return form.valid();
+
+        }
+    });
+
+    $("table").addClass("table table-bordered")
+
+
+
+
+    function submit(currentIndex, newIndex) {
+
+        isValid = true;
+        var step = "";
+        if (currentIndex == 1) {
+            step = "DivCustomerDeatils"
+        }
+
+        $('input,select', $("#" + step)).each(
+
+            function () {
+
+                if ($(this).attr('required') == "required" || $(this).attr('required') == true) {
+                    if (document.getElementById($(this).attr('id')).value == "") {
+                        document.getElementById($(this).attr('id')).style.border = '1px solid red'
+                        if (isValid == true) {
+                            isValid = false;
+                            //
+                        }
+                    }
+                    else if (document.getElementById($(this).attr('id')).id == "item_DocumentId") {
+                        isValid = true;
+                    }
+                    else if (document.getElementById($(this).attr('id')).id == "CellphoneNumber") {
+
+
+                        var str = document.getElementById("CellphoneNumber").value;
+
+                        if (str.length != 10) // validates cell No
+                        {
+                            document.getElementById("CellphoneNumber").style.border = '1px solid red'
+                            if (isValid == true) {
+                                isValid = false;
+                                //
+                            }
+                        }
+                    }
+                    else if (document.getElementById($(this).attr('id')).id == "TelephoneNumber") {
+
+
+                        var str = document.getElementById("TelephoneNumber").value;
+
+                        if (str.length != 7) // validates cell No
+                        {
+                            document.getElementById("TelephoneNumber").style.border = '1px solid red'
+                            if (isValid == true) {
+                                isValid = false;
+                                //
+                            }
+                        }
+                    }
+                    else if (document.getElementById($(this).attr('id')).id == "ResidentialAddressCode") {
+
+
+                        var str = document.getElementById("ResidentialAddressCode").value;
+
+                        if (str.length != 4) // validates cell No
+                        {
+                            document.getElementById("ResidentialAddressCode").style.border = '1px solid red'
+                            if (isValid == true) {
+                                isValid = false;
+                                //
+                            }
+                        }
+                    }
+
+                    else if (document.getElementById($(this).attr('id')).id == "PostalAddressCode") {
+
+
+                        var str = document.getElementById("PostalAddressCode").value;
+
+                        if (str.length != 4) // validates cell No
+                        {
+                            document.getElementById("PostalAddressCode").style.border = '1px solid red'
+                            if (isValid == true) {
+                                isValid = false;
+                                //
+                            }
+                        }
+                    }
+                    else {
+                        document.getElementById($(this).attr('id')).style.border = ''
+                    }
+                }
+
+
+                if (isValid == true)//if valid, submit form if button clicked
+                {
+                    if (btn == "Save") {
+
+                        document.getElementById("btnSave2").click()
+                    }
+                    else {
+
+                        if (newIndex < currentIndex) {
+                            return true;
+                        }
+                        var form = $("#clientInfo-form");
+                        form.validate().settings.ignore = ":disabled,:hidden";
+                        return form.valid();
+
+                    }
+
+                }
+                else {
+                    document.getElementById("Erroralert").hidden = false;
+                    document.getElementById("error2").innerHTML = "Please fill in all Required Fields marked with an (*)";
+
+
+
+                }
+
+
+
+
+
+            });
+    }
+
+    $("#Name").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        if (!(e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))) {
+            //display error message
+            //$("#errmsgwork").html("Digits Only").show().fadeOut("slow");
+            return false;
+        }
+    });
+    $("#Surname").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        if (!(e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))) {
+            //display error message
+            //$("#errmsgwork").html("Digits Only").show().fadeOut("slow");
+            return false;
+        }
+    });
+    $("#PostalAddress2").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        if (!(e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))) {
+            //display error message
+            //$("#errmsgwork").html("Digits Only").show().fadeOut("slow");
+            return false;
+        }
+    });
+    $("#PostalAddress3").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+
+        if (!(e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))) {
+            //display error message
+            //$("#errmsgwork").html("Digits Only").show().fadeOut("slow");
+            return false;
+        }
+    });
+
+    $("#ResidentialAddress3").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+
+        if (!(e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))) {
+            //display error message
+            //$("#errmsgwork").html("Digits Only").show().fadeOut("slow");
+            return false;
+        }
+    });
+    $("#ResidentialAddress2").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+
+        if (!(e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))) {
+            //display error message
+            //$("#errmsgwork").html("Digits Only").show().fadeOut("slow");
+            return false;
+        }
+    });
+    $("#IdentityOrPassportNumber").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        var IdNoVal = $("#IdentityOrPassportNumber").val();
+        if (!(IdNoVal.length <= 13)) {
+            return false;
+
+        } else {
+
+            if (IdNoVal.length == 13) {
+                $("#IdentityOrPassportNumbererror").attr("hidden", true);
+            } else {
+                $("#IdentityOrPassportNumbererror").attr("hidden", false);
+            }
+            return true;
+        }
+
+    });
+
+    function ButtonAddLocation() {
+
+        $('#ripple').hide();
+        $('#rippleload').hide();
+        $("#AddressStatus").hide();
+
+        $('#PostalAddress1').val("");
+        $('#PostalAddress3').val("");
+        $('#PostalAddress2').val("");
+
+        $("#AddressSearchTable").find("tr:gt(0)").remove();
+        $("#AddressStatus").empty();
+        $("#idSearchAddress").modal('show');
+
+    }
+
+    function addsearch() {
+
+        $("#AddressStatus").hide();
+        $('#rippleload').show();
+
+        if ((!$('#StreetNumber').val()) && (!$('#StreetName').val()) && (!$('#Suburb').val()) && (!$('#StreetType').val()) && (!$('#Erf').val()) && (!$('#Portion').val()) && (!$('#FarmTownship').val())) {
+
+            $("#AddressSearchTable").find("tr:gt(0)").remove();
+            $('#rippleload').hide();
+            $("#AddressStatus").show();
+            $("#AddressStatus").empty();
+            $("#AddressStatus").append("<center><div class='alert alert-danger'>Please fill in atleast one field.</div></center>");
+
+        } else {
+            $('#rippleload').show();
+            $("#AddressStatus").hide();
+
+        }
+
+        $.get("http://YOUR_HOST:8099/PublicSectorHousing/config/searchAddress.php?StreetNumber=" + $('#StreetNumber').val() + "&StreetName=" + $('#StreetName').val() + "&Suburb=" + $('#Suburb').val() + "&StreetType=" + $('#StreetType').val() + "&Erf=" + $('#Erf').val() + "&Portion=" + $('#Portion').val() + "&FarmTownship=" + $('#FarmTownship').val() + "&rem=", initLoadHoldOnClose(), function (data, status) {
+
+            var AddressResponse = JSON.parse(data);
+
+            if (AddressResponse.AddressData.length == 0) {
+
+                $("#AddressStatus").show();
+                $('#rippleload').hide();
+                $("#AddressStatus").empty();
+                $("#AddressStatus").append("<center><strong><h3>Address Not found</h3></strong></center>");
+            }
+            else {
+
+
+                $("#AddressSearchTable").find("tr:gt(0)").remove();
+                $("#AddressStatus").hide();
+                $('#rippleload').hide();
+                for (var i = 0; i < AddressResponse.AddressData.length; i++) {
+                    drawSearchAddressRow(AddressResponse.AddressData[i]);
+                }
+            }
+        });
+    }
+
+    function drawSearchAddressRow(rowData) {
+        $('#ripple').show();
+        $("#AddressStatus").hide();
+        var row = $("<tr />")
+        $("#AddressSearchTable").append(row);
+        row.append($("<td>" + rowData.STRNUM + "</td>"));
+        row.append($("<td>" + rowData.STRNAME + "</td>"));
+        row.append($("<td>" + rowData.STRTYPE + "</td>"));
+        row.append($("<td>" + rowData.SUBURB + "</td>"));
+        row.append($("<td>" + rowData.PORTION + "</td>"));
+        row.append($("<td>" + rowData.ERF + "</td>"));
+        row.append($("<td>" + rowData.FARMTOWNNA + "</td>"));
+        row.append($("<td class='text-right'><button type='button' class='btn btn-success inputs-addr' id='" + rowData.GISId + ';' + rowData.STRNUM + ';' + rowData.STRNAME + ';' + rowData.STRTYPE + ';' + rowData.SUBURB + ';' + rowData.ERF + ';' + rowData.PORTION + ';' + rowData.FARMTOWNNA + "'> Add</button></td>"));
+
+    }
+
+    var AddressIDarr = [];
+    var Addrobj = {};
+    var aryAddrobj = [];
+
+    $(document).on('click', '.inputs-addr', function () {
+        $("#idSearchAddress").modal('hide');
+        var myString = $(this).attr("id");
+        var arr = myString.split(';');
+        var GISid = arr[0];
+        var strnum = arr[1];
+        var strname = arr[2];
+        var strtype = arr[3];
+        var asuburb = arr[4];
+        var FarmTownship = arr[7];
+
+        var i = AddressIDarr.indexOf(GISid);
+        if (i > -1) {
+            alert('Address Already Exist');
+        }
+        else {
+
+            aryAddrobj.push(Addrobj);
+
+            $('#PostalAddress1').val(strnum + " "+ strname + " " + strtype);
+            $("#PostalAddress1").css("color", "black");
+            $("#PostalAddress1-error").attr("hidden", true);
+
+            $('#PostalAddress2').val(asuburb);
+            $("#PostalAddress2").css("color", "black");
+            $("#PostalAddress2-error").attr("hidden", true);
+
+            $('#PostalAddress3').val(FarmTownship);
+            $("#PostalAddress3").css("color", "black");
+            $("#PostalAddress3-error").attr("hidden", true);
+
+            $('#StreetNumber').val('');
+            $('#StreetName').val('');
+            $('#Suburb').val('');
+            $('#Suburb').val('');
+            $('#StreetType').val('');
+            $('#Erf').val('');
+            $('#Portion').val('');
+            $('#FarmTownship').val('');
+
+
+        }
+
+    });
+
+    function ButtonAddLocations() {
+        $('#ripple1').hide();
+        $('#rippleload1').hide();
+        $("#AddressStatus1").hide();
+        $('#StreetNumber1').val("");
+        $('#StreetName1').val("");
+        $('#Suburb1').val("");
+        $('#Erf1').val("");
+        $('#Portion1').val("");
+        $("#AddressSearchTable1").find("tr:gt(0)").remove();
+        $("#AddressStatus1").empty();
+
+        $("#idSearchAddress1").modal('show');
+    }
+
+    function addsearch1() {
+
+        $("#AddressStatus1").hide();
+        $('#rippleload1').show();
+
+        if ((!$('#StreetNumber1').val()) && (!$('#StreetName1').val()) && (!$('#Suburb1').val()) && (!$('#StreetType1').val()) && (!$('#Erf1').val()) && (!$('#Portion1').val()) && (!$('#FarmTownship1').val())) {
+
+            $("#AddressSearchTable1").find("tr:gt(0)").remove();
+            $('#rippleload1').hide();
+            $("#AddressStatus1").show();
+            $("#AddressStatus1").empty();
+            $("#AddressStatus1").append("<center><div class='alert alert-danger'>Please fill in atleast one field.</div></center>");
+
+        } else {
+            $('#rippleload1').show();
+            $("#AddressStatus1").hide();
+
+        }
+
+
+        $.get("http://YOUR_HOST:8099/PublicSectorHousing/config/searchAddress.php?StreetNumber=" + $('#StreetNumber').val() + "&StreetName=" + $('#StreetName1').val() + "&Suburb=" + $('#Suburb1').val() + "&StreetType=" + $('#StreetType1').val() + "&Erf=" + $('#Erf1').val() + "&Portion=" + $('#Portion1').val() + "&FarmTownship=" + $('#FarmTownship1').val() + "&rem=", initLoadHoldOnClose(), function (data, status) {
+
+
+            var AddressResponse1 = JSON.parse(data);
+
+            if (AddressResponse1.AddressData.length == 0) {
+
+                $("#AddressStatus1").show();
+                $('#rippleload1').hide();
+                $("#AddressStatus1").empty();
+                $("#AddressStatus1").append("<center><strong><h3>Address Not found</h3></strong></center>");
+            }
+            else {
+
+                $("#AddressSearchTable1").find("tr:gt(0)").remove();
+                $("#AddressStatus1").hide();
+
+                $('#rippleload1').hide();
+                for (var i = 0; i < AddressResponse1.AddressData.length; i++) {
+                    drawSearchAddressRow1(AddressResponse1.AddressData[i]);
+                }
+            }
+        });
+    }
+
+    function drawSearchAddressRow1(rowData) {
+        $('#ripple1').show();
+        $("#AddressStatus1").hide();
+        var row1 = $("<tr />")
+        $("#AddressSearchTable1").append(row1);
+        row1.append($("<td>" + rowData.STRNUM + "</td>"));
+        row1.append($("<td>" + rowData.STRNAME + "</td>"));
+        row1.append($("<td>" + rowData.STRTYPE + "</td>"));
+        row1.append($("<td>" + rowData.SUBURB + "</td>"));
+        row1.append($("<td>" + rowData.PORTION + "</td>"));
+        row1.append($("<td>" + rowData.ERF + "</td>"));
+        row1.append($("<td>" + rowData.FARMTOWNNA + "</td>"));
+        row1.append($("<td class='text-right'><button type='button' class='btn btn-success inputs-addr1' id='" + rowData.GISId + ';' + rowData.STRNUM + ';' + rowData.STRNAME + ';' + rowData.STRTYPE + ';' + rowData.SUBURB + ';' + rowData.ERF + ';' + rowData.PORTION + ';' + rowData.FARMTOWNNA + "'> Add</button></td>"));
+
+    }
+
+    var AddressIDarr1 = [];
+    var Addrobj1 = {};
+    var aryAddrobj1 = [];
+
+    $(document).on('click', '.inputs-addr1', function () {
+        $("#idSearchAddress1").modal('hide');
+        var myString1 = $(this).attr("id");
+        var arr1 = myString1.split(';');
+        var GISid1 = arr1[0];
+        var strnum1 = arr1[1];
+        var strname1 = arr1[2];
+        var strtype1 = arr1[3];
+        var asuburb1 = arr1[4];
+        var FarmTownship1 = arr1[7];
+
+        var i = AddressIDarr1.indexOf(GISid1);
+        if (i > -1) {
+            alert('Address Already Exist');
+        }
+        else {
+
+            aryAddrobj1.push(Addrobj1);
+
+            $('#ResidentialAddress1').val(strnum1 +" "+ strname1 + " " + strtype1);
+            $("#ResidentialAddress1").css("color", "black");
+            $("#ResidentialAddress1-error").attr("hidden", true);
+
+            $('#ResidentialAddress2').val(asuburb1);
+            $("#ResidentialAddress2").css("color", "black");
+            $("#ResidentialAddress2-error").attr("hidden", true);
+
+            $('#ResidentialAddress3').val(FarmTownship1);
+            $("#ResidentialAddress3").css("color", "black");
+            $("#ResidentialAddress3-error").attr("hidden", true);
+
+            $('#StreetNumber1').val('');
+            $('#StreetName1').val('');
+            $('#Suburb1').val('');
+            $('#Suburb1').val('');
+            $('#StreetType1').val('');
+            $('#Erf1').val('');
+            $('#Portion1').val('');
+            $('#FarmTownship1').val('');
+
+
+        }
+
+    });
+
+</script>
+

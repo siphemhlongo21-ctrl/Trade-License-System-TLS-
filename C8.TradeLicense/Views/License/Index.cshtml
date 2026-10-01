@@ -1,0 +1,249 @@
+﻿@model PagedList.IPagedList<C8.TradeLicense.Models.License>
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.DataAccessLayer
+@using PagedList.Mvc;
+@using C8.TradeLicense.Keys;
+
+<script type="text/javascript">
+
+    function CancelLicense(id) {
+        initLoadHoldOn("Please Wait");
+
+
+        $.ajax
+            ({
+
+                url: '@Url.Action("CancelLicense", "License")',
+                data: JSON.stringify({ id: id }),
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                success: function (result) {
+
+                    if (result.success) {
+                        HoldOn.close();
+                        location.reload();
+                    }
+                    else {
+                        document.getElementById("Erroralert").hidden = false;
+                        document.getElementById("error2").innerHTML = "Please try again"
+                        HoldOn.close();
+                    }
+                },
+                error: function (xhr, textStatus, error) {
+                    document.getElementById("Erroralert").hidden = false;
+                    HoldOn.close();
+                    document.getElementById("error2").innerHTML = error;
+                },
+            })
+    }
+
+
+
+
+
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+</script>
+@{
+    ViewBag.Title = "Pending Licenses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+    //var pendingLinceseInspection = (PagedList.IPagedList<License>)ViewData["PendingLicenseInpection"];
+    var db = new TradeLicenseDbContext();
+}
+
+<style>
+    .btn-outline-info {
+        border: 1px solid white;
+        background-color: white;
+        color: black;
+    }
+</style>
+@using (Html.BeginForm("Index", "License", FormMethod.Get))
+{
+
+    <div class="alert alert-info">
+        <h4 style="font-family:Arial;color:white" align="center">Select a search option below.</h4>
+        @*License Status : @Html.DropDownList("StatusId", "All License Status") <br/>*@
+        @Html.RadioButton("selectedSearch", "BusinessName")&nbsp;Business Name
+        @Html.RadioButton("selectedSearch", "ClientName")&nbsp;Customer Name
+        @Html.RadioButton("selectedSearch", "ReferenceNo")&nbsp;License Number
+        @Html.RadioButton("selectedSearch", "Region")&nbsp;Region
+        @Html.TextBox("inputSearch", ViewBag.CurrentFilter as string, new { @class = "myText" })
+        <input type="submit" value="Search" class="btn btn-outline-info" id="btnSearch" />
+        <a href="@Url.Action("Index")">
+            <i class="glyphicon glyphicon-refresh" style="color:white" title="Refresh"></i>
+        </a>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert-danger">
+        <a class="close" data-dismiss="alert">×</a>
+        @TempData["Error"].ToString()
+    </div>
+}
+<div class="alert alert-danger" hidden="hidden" id="Erroralert">
+    <a class="close" data-dismiss="alert">×</a>
+
+    <strong><p id="error2">error</p></strong>
+</div>
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Pending License Applications - <span class="badge">@ViewBag.LicenseCount</span></h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                @if (@Model.Count() > 0)
+                {
+
+                    <table class="table">
+                        <tr>
+                            <th>License Number</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().Region.RegionName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().Business.ProposedTradeName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().Client.Fullname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().LicenseType.LicenseTypeName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().ApplicationDateTime)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().Status.StatusName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().migratedLicense)
+                            </th>
+
+                            <th> Action </th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LicenseNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Region.RegionName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Business.ProposedTradeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Client.Fullname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LicenseType.LicenseTypeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApplicationDateTime)
+                                </td>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.Status.StatusName)
+                                </th>
+                                <td align="center">
+                                    @if (item.migratedLicense == false)
+                                    {
+                                        @Html.DisplayName("No")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("Yes")
+                                    }
+
+                                </td>
+
+
+                                <td>
+                                    @{
+                                        License License = db.Licenses.Find(item.LicenseId);
+                                        var statuspendingInspection = db.Status.Where(s => s.StatusKey == "LicensePending").Select(s => s.StatusId).FirstOrDefault();
+                                        if (License.StatusId == statuspendingInspection)
+                                        {
+                                            <a href="@Url.Action("Departmentcirculation", new { id = item.LicenseId })">
+                                                <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+                                                <span class="sr-only">Departmentcirculation</span>
+                                            </a>
+                                            if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator"))
+                                            {
+                                                <a onclick="CancelLicense(@item.LicenseId)" style="color:red">
+                                                    <i class="glyphicon glyphicon-remove" title="Delete"></i>
+                                                </a>
+                                                <span class="sr-only">Delete Application</span>
+                                            }
+                                        }
+                                        <a href="@Url.Action("Details", new { id = item.LicenseId , Screen ="PendingLicenses"})">
+                                            <i class="glyphicon glyphicon-list" title="View Details"></i>
+                                            <span class="sr-only">Details</span>
+                                        </a>
+                                        <a href="@Url.Action("LicenseDocUploads", new { licenseId = item.LicenseId , Screen ="PendingLicenses"})">
+                                            <i class="glyphicon glyphicon-briefcase" title="View Documents"></i>
+                                            <span class="sr-only">Documents</span>
+                                        </a>
+
+
+                                        var enabled = db.ViewSettings.Where(l => l.ItemKey == ViewSettingsKeys.Cancelbutton && l.IsDeleted == false).FirstOrDefault();
+                                        if (enabled.IsActive == true)
+                                        {
+                                            @Html.ActionLink(" Cancel", "RevokeLicence", new { id = item.LicenseId })
+                                        }
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+
+                    </table>
+
+
+                    <div align="center">
+
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

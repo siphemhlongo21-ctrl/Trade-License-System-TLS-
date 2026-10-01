@@ -1,0 +1,203 @@
+﻿ @model C8.TradeLicense.Models.DepartmentContact
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div id="errorNewUsers" class="alert alert-warning" style="display:none;">
+</div>
+
+<div class="alert alert-danger" id="roleAlert" style="display:none;">
+    <a id="roleError" href="#" class="alert-link"></a>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var departmentType = '@ViewBag.DepartmentStructureType';
+        var departmentHeadStatus = false;
+        var inspectorAvailability = false;
+        var chiefInspectorAvailability = false;
+
+        if (departmentType == "Flat") {
+            $("#roleGroup").hide();
+
+            if ('@ViewBag.AvailableChiefInspectors' == 0) {
+                $("#errorNewUsers").html('<strong>Please <a href="@Url.Action("Index","User")">assign new users</a> to the Chief Inspector or Inspector Roles</strong>');
+                showError();
+            }
+        }
+        else {
+            var numberOfDepartmentHeads = '@ViewBag.DepartmentHeadContacts';
+
+            if (numberOfDepartmentHeads >= 1) {
+                departmentHeadStatus = true;
+            }
+
+            if ('@ViewBag.AvailableChiefInspectors' == 0 && '@ViewBag.AvailableInspectors' == 0) {
+                $("#errorNewUsers").html('<strong>Please <a href="@Url.Action("Index","User")">assign new users</a> to the Chief Inspector and Inspector Roles</strong>');
+                showError();
+            }
+            else if ('@ViewBag.AvailableChiefInspectors' == 0) {
+                $("#errorNewUsers").html('<strong>Please <a href="@Url.Action("Index","User")">assign new users</a> to the Chief Inspector Role</strong>'); 
+                showError();
+            }
+            else if ('@ViewBag.AvailableInspectors' == 0) {
+                $("#errorNewUsers").html('<strong>Please <a href="@Url.Action("Index","User")">assign new users</a> to the Inspector Role</strong>');
+                showError();              
+            }
+            else {
+                hideError();
+                inspectorAvailability = true;
+                chiefInspectorAvailability = true;
+            }
+
+            if ('@ViewBag.AvailableInspectors' >= 1) {
+                inspectorAvailability = true;
+                $("#btnCreate").attr("disabled", false);
+            }
+            else
+            {
+                $("#btnCreate").attr("disabled", true);
+            }
+
+            if ('@ViewBag.AvailableChiefInspectors' >= 1) {
+                chiefInspectorAvailability = true;
+                $("#btnCreate").attr("disabled", false);
+            }
+            else
+            {
+                $("#btnCreate").attr("disabled", true);
+            }
+        }
+
+        $("#radbtnChiefInspector").on("click", function () {
+            $("#errorNewUsers").hide();
+            if (!departmentHeadStatus) {
+                $("#roleAlert").hide();                
+            }
+            checkAvailability(chiefInspectorAvailability);
+            $("#inspectorUserIdGroup").hide();
+            $("#chiefInspectorUserIdGroup").show();
+            $("#departmentHeadsUserIdGroup").hide();
+        });
+
+        $("#radbtnInspector").on("click", function () {
+            $("#errorNewUsers").hide();
+            $("#chiefInspectorUserIdGroup").hide();
+
+            if (!departmentHeadStatus) {
+                $("#roleError").html("Please assign a chief inspector to the department before adding inspectors");
+                $("#roleAlert").show();
+                $("#btnCreate").attr("disabled", true);
+            }
+            else {
+                $("#roleError").html("");
+                $("#roleAlert").hide();
+                $("#inspectorUserIdGroup").show();
+                $("#departmentHeadsUserIdGroup").show();
+                checkAvailability(inspectorAvailability);
+            }
+        });
+
+        function showError() {
+            $("#errorNewUsers").show();
+            $("#btnCreate").attr("disabled", true);
+        }
+
+        function hideError() {
+            $("#errorNewUsers").html('');
+            $("#errorNewUsers").hide();
+        }
+
+        function checkAvailability(roleAvailability) {
+            if (roleAvailability) {
+                $("#btnCreate").attr("disabled", false);
+            }
+            else {
+                $("#errorNewUsers").show();
+                $("#btnCreate").attr("disabled", true);
+            }
+        }
+    });
+
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        @{        }
+
+        @Html.LabelFor(model => model.DepartmentId, "Department", new { @class = "control-label col-md-2" })
+        @*@Html.HiddenFor(model => model.DepartmentHeadContactId, new { Value = (object)ViewBag.ChiefInspectorId })*@
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseOne">Create Department Contact</a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div id="departmentIdGroup" class="form-group">
+                        @Html.DropDownListFor(model => model.DepartmentId, new SelectList(ViewBag.UserList, "DepartmentId", "DepartmentName"), new { @class = "form-control" })
+                        <div class="col-md-10">
+                            @Html.ValidationMessageFor(model => model.DepartmentId)
+                            @Html.LabelFor(model => model.UserId, "User", new { @class = "control-label col-md-2" })
+                        </div>
+                    </div>
+
+                    <div id="roleGroup" class="form-group">
+                        @Html.DropDownListFor(model => model.UserId, new SelectList(ViewBag.UserList, "UserId", "FullName"), new { @class = "form-control"})
+                        <div class="col-md-10">
+                            <div>
+                                <label>@*({@id ="radbtnInspector" })*@ Chief Inspector</label>
+                            </div>
+                            <div>
+                                <label>@Html.ActionLink(linkText: "Back to List", actionName: "Index", controllerName: "Department",routeValues: null,htmlAttributes: new { @class = "btn btn-outline-warning" }) Inspector</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="inspectorUserIdGroup" class="form-group" style="display:none;">
+                        @Html.DropDownList("ddlInspector", new SelectList(ViewBag.InspectorList, "UserId", "FullName"), new { @class = "form-control"})
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.UserId, "User", new { @class = "control-label -md-2" })
+                        </div>
+                    </div>
+
+                    <div id="chiefInspectorUserIdGroup" class="form-group">
+                        @Html.DropDownList("ddlChiefInspector", new SelectList(ViewBag.ChiefInspectorList, "UserId", "FullName"), new { @class = "form-control" })
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.UserId, "Department Head", new { @class = "control-label col-md-2" })
+                        </div>
+                    </div>
+
+                    <div id="departmentHeadsUserIdGroup" class="form-group" style="display:none;">
+                        @Html.DropDownList("ddlDepartmentHead", new SelectList(ViewBag.DepartmentHeadContactsList, "UserId", "User.FullName"), new { @class = "form-control" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("ddlDepartmentHead", new SelectList(ViewBag.DepartmentHeadContactsList, "UserId", "User.FullName"), new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input id="btnCreate" type="submit" value="Create" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink(linkText: "Back to List", actionName: "Index", controllerName: "Department",routeValues: null,htmlAttributes: new { @class = "btn btn-outline-warning" })
+</div>

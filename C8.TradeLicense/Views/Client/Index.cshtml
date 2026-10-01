@@ -1,0 +1,252 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@using PagedList.Mvc;
+@model PagedList.IPagedList<C8.TradeLicense.Models.Client>
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.Keys;
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $('#inputSearch').prop('disabled', true);
+    //    $('#btnSearch').prop('disabled', true);
+    //});
+
+    $(function () {
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }   
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+</script>
+@{
+    ViewBag.Title = "Index";
+    var db = new TradeLicenseDbContext();
+
+
+        var businesses = (IEnumerable<Business>)ViewData["ClientBusinessesList"];
+   
+}
+
+
+
+
+@using (Html.BeginForm("Index", "Client", FormMethod.Get, new { id = "SelectionSearch-form" }))
+{
+    <div class="alert alert-info">
+
+        <h5>Select Search Option Below:</h5>
+        <div id="SelectionSearch" class="form-group " align="left">
+
+            @Html.RadioButton("selectedSearch", "ClientName")&nbsp;Customer Name
+            @Html.RadioButton("selectedSearch", "IDPassportNumber")&nbsp;ID/Passport
+            @Html.TextBox("inputSearch", ViewBag.FilterValue as string)
+            <input type="submit" value="Search" id="btnSearch" />
+            <a href="@Url.Action("Index")">
+                <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+            </a>
+        </div>
+        <div style="text-align: right">
+            @*@Html.ActionLink("Create New Client", "Create")*@
+            <a href="@Url.Action("Create", "Client", null)" class="btn btn-primary">Create New Customer</a>
+        </div>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert-danger">
+        <a class="close" data-dismiss="alert">×</a>
+        @TempData["Error"].ToString()
+    </div>
+}
+
+<div class="panel panel-default" id="collapseOne">
+    <div class="panel-heading ">
+        <h3 class="panel-title">
+            Registered Customer - <span class="badge">@ViewBag.CustomerCount</span>
+
+
+        </h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().IdentityOrPassportNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Name)
+                 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ResidentialAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ClientStatus.StatusName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().TelephoneNumber)
+                </th>
+                <th>
+                   @Html.DisplayNameFor(model => model.First().CellphoneNumber)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.First().EmailAddress)
+                </th>
+                <th>Action</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdentityOrPassportNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fullname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResidentialAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientStatus.StatusName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TelephoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CellphoneNumber)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmailAddress)
+                    </td>
+
+                    <td style="width: 20px">
+@{ @*if (businesses.Count() > 0)
+                {
+                    var id = businesses.Where(b => b.ClientId == item.ClientId).Count();
+                    if (id == 0)
+                    {
+                        <a href="@Url.Action("Edit", new { id = item.ClientId })">
+                            <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+                            <span class="sr-only">Edit</span>
+                        </a>
+            }
+
+    }*@
+if (item.ClientStatusId == db.Status.Where(s => s.StatusKey == StatusKeys.ClientApproved).Select(s => s.StatusId).FirstOrDefault())
+{
+    if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator"))
+    {
+        <a href="@Url.Action("Edit", new { id = item.ClientId })">
+            <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+            <span class="sr-only">Edit</span>
+        </a>
+    }
+}
+else
+{
+    <a href="@Url.Action("Edit", new { id = item.ClientId })">
+        <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+        <span class="sr-only">Edit</span>
+    </a>
+}
+}
+
+                        <a href="@Url.Action("Details", new { id = item.ClientId })">
+                            <i class="glyphicon glyphicon-list" title="View Details"></i>
+                            <span class="sr-only">Details</span>
+                        </a>
+                        @{
+                if (ViewBag.CanAction)
+                {
+                    <a href="@Url.Action("Delete", new {id = item.ClientId})">
+                        <i class="glyphicon glyphicon-remove" title="Delete" style="color:red"></i>
+                        <span class="sr-only">Delete</span>
+                    </a>
+                }
+                        }
+
+
+                        @{
+
+                if (item.ClientStatusId == db.Status.Where(s => s.StatusKey == "ClientApproved").Select(s => s.StatusId).
+                    FirstOrDefault())
+                {
+                    <a href="@Url.Action("Create", "Business", new {id = item.ClientId})">
+                        <i class="glyphicon glyphicon-plus" title="Add Business"></i>
+                        <span class="sr-only">Create Business</span>
+                    </a>
+                }
+
+                        }
+
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <div align="center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+            @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
+            @*@Html.PagedListPager(Model, page => Url.Action("Index",
+                new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))*@
+            @*@if (Model.HasPreviousPage)
+                {
+                    <a href="@Url.Action("Index", new { page = 1 })">
+                        <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                    </a>
+                    @Html.Raw(" ");
+                    <a href="@Url.Action("Index", new { page = Model.PageNumber - 1 })">
+                        <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                    </a>
+                }
+                else
+                {
+                    <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                    @Html.Raw(" ");
+                    <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <a href="@Url.Action("Index", new { page = Model.PageNumber + 1 })">
+                        <i class="glyphicon glyphicon-forward" title="Next"></i>
+                    </a>
+                    @Html.Raw(" ");
+                    <a href="@Url.Action("Index", new { page = Model.PageCount })">
+                        <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                    </a>
+
+                }
+                else
+                {
+                    <i class="glyphicon glyphicon-forward" title="Next"></i>
+                    @Html.Raw(" ")
+                    <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                }*@
+        </div>
+    </div>
+</div>

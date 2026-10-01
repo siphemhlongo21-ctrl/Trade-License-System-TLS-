@@ -1,0 +1,43 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.DocumentCheckList>
+@*@model C8.TradeLicense.Models.LicenseDocuments*@
+@*@using C8.TradeLicense.Models*@
+
+<table class="table" style="align-items: center">
+    <legend>Required Documents</legend>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentType.DocumentTypeName)
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentType.DocumentTypeName)
+            </td>
+
+        </tr>
+    }
+</table>
+
+@*<table class="table" style="align-items:center">
+     <legend>Required Documents</legend>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentType.DocumentTypeName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var entry in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => entry.DocumentType.DocumentTypeName)
+            </td>
+
+        </tr>
+    }
+
+</table>*@

@@ -1,0 +1,158 @@
+﻿@model C8.TradeLicense.Models.Enquiry
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Delete Enquiry?</h3>
+    </div>
+    <div class="panel-body">
+        <div>
+            <div>
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error: </span>
+                        @TempData["Error"].ToString()
+                    </div>
+                }
+            </div>
+
+            <dl class="dl-horizontal">
+                @*<dt>
+                        @Html.DisplayNameFor(model => model.CreatedByUser.FirstName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreatedByUser.FirstName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+                    </dt>*@
+
+                @*<dd>
+                        @Html.DisplayFor(model => model.ModifiedByUser.FirstName)
+                    </dd>*@
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ClientName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ClientName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ProposedTradeName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ProposedTradeName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PostalAddress)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PostalAddress)
+                </dd>
+
+                @*<dt>
+                        @Html.DisplayNameFor(model => model.PostalAddress2)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PostalAddress2)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PostalAddress3)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PostalAddress3)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PostalAddressCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PostalAddressCode)
+                    </dd>*@
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.EnquiryReport)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.EnquiryReport)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.InspectorsReport)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.InspectorsReport)
+                </dd>
+
+                @*<dt>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IsActive)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IsDeleted)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IsDeleted)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IsLocked)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IsLocked)
+                    </dd>*@
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CreatedDateTime)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CreatedDateTime)
+                </dd>
+
+                @*<dt>
+                        @Html.DisplayNameFor(model => model.ModifiedDateTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ModifiedDateTime)
+                    </dd>*@
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-default" /> |
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-warning" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

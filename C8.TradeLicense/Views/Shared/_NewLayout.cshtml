@@ -1,0 +1,430 @@
+﻿@using System.Web.Optimization
+@using C8.TradeLicense.DataAccessLayer
+<!DOCTYPE html>
+<html>
+<head>
+  
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Trade License System 2016 - @ViewBag.Title</title>
+    <meta name="description" content="Dashboard template. Bootstrap 4 Admin HTML Theme is a material design and bootstrap 4 based responsive dashboard template by propeller created mainly for admin and backend applications." />
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/themes/base/images/eThekwiniLogo.png">
+    <!-- Google icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Rubik Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet">
+    <!-- build:remove -->
+    <!--Admin css-->
+    <link rel="stylesheet" type="text/css" href="~/Content/themes/css/bootstrap4-admin-compress.min.css">
+    <!-- /build -->
+    <!-- build:include snippets/css-files-index.html -->
+    <!-- /build -->
+    <!-- build:remove -->
+    <!--Google Analytics code-->
+    @*<script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'http://themes.propeller.in/bootstrap4/html/bootstrap4-admin-theme/assets/js/analytics.js', 'ga');
+        ga('create', 'UA-124615-22', 'auto');
+        ga('send', 'pageview');
+    </script>*@
+
+    <!-- Canonical Tag -->
+    <link rel="canonical" href="dashboard.html" />
+    <!-- /build -->
+    <style>
+
+        .mytheme {
+            background: #33338B;
+            background-color: #33338B;
+        }
+
+        .pmd-content {
+             padding-top: 0rem;
+        }
+
+        .pmd-sidebar-nav .nav-item ul .nav-item .nav-link {
+            font-size: 1.375rem;
+            font-weight: 400;
+        }
+
+
+        .alert-info {
+            color: #000000 !important;
+            background-color: #b7b7b7 !important;
+            border-color: #2196F3 !important;
+        }
+
+        
+        .panel-default > .panel-heading {
+            color: #fff !important;
+            background-color: #757575 !important;
+            border-color: #ddd !important;
+        }
+
+        .pmd-navbar.navbar {
+            justify-content: inherit;
+            padding-top: 0;
+            padding-bottom: 0;
+            background-color: cornflowerblue;
+        }
+
+        .myText {
+            border-radius: 10px;
+            width: 350px;
+            height: 30px;
+            border-color: white;
+        }
+    </style>
+
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryvalidate")
+    @Scripts.Render("~/bundles/jqueryui")
+
+</head>
+<body>
+    <script>
+        document.onkeydown = function (event) {
+
+            if (!event) { /* This will happen in IE */
+                event = window.event;
+            }
+
+            var keyCode = event.keyCode;
+
+            if (keyCode == 8 &&
+                ((event.target || event.srcElement).tagName != "TEXTAREA") &&
+                ((event.target || event.srcElement).tagName != "INPUT")) {
+
+                if (navigator.userAgent.toLowerCase().indexOf("msie") == -1) {
+                    event.stopPropagation();
+                } else {
+                    alert("prevented");
+                    event.returnValue = false;
+                }
+
+                return false;
+            }
+        };
+    </script>
+    @*<nav role="navigation" class="navbar navbar-inverse">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a id="tls" href="#" class="navbar-brand">TLS - @DateTime.Now.Year</a>
+            </div>
+            <!-- Collection of nav links, forms, and other content for toggling -->
+            <div id="navbarCollapse" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Clerks") || User.IsInRole("Administrators") || User.IsInRole("Licensing Manager")
+                        || User.IsInRole("Inspectors") || User.IsInRole("Chief Inspectors"))
+                    {
+                        if (User.IsInRole("Clerks") || User.IsInRole("Administrators"))
+                        {
+                            <li>@Html.ActionLink("Clients", "Index", "Client")</li>
+                            <li>@Html.ActionLink("Businesses", "Index", "Business")</li>
+                        }
+
+                        if (User.IsInRole("Licensing Manager"))
+                        {
+                            <li>@Html.ActionLink("License Approval", "Index", "InspectionResponse")</li>
+                        }
+
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Licenses<b class="caret"></b></a>
+                            <ul role="menu" class="dropdown-menu" style="width: auto">
+
+                                <li>@Html.ActionLink("Approved Licenses", "ApprovedLicenses", "License")</li>
+                                <li>@Html.ActionLink("Pending License Applications", "Index", "License")</li>
+                                <li>@Html.ActionLink("Revoked Licenses", "RevokedLicenses", "License")</li>
+                                <li>@Html.ActionLink("Renew Licenses", "LicenseRenewal", "License")</li>
+                                <li>@Html.ActionLink("Terminated License Applications", "TerminatedLicenses", "License")</li>
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("License Collection", "LicenseCollection", "License")</li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Inspectors") || User.IsInRole("Chief Inspectors") || User.IsInRole("Administrators"))
+                    {
+                        var db = new TradeLicenseDbContext();
+                        var identityManager = new IdentityManager();
+                        var user = identityManager.CurrentUser(User);
+                        bool inspectorAssigned = db.DepartmentContacts.Any(dc => dc.UserId == user.UserId && dc.IsActive == true && dc.IsDeleted == false);
+
+                        if (inspectorAssigned || User.IsInRole("Administrators"))
+                        {
+                            <li>@Html.ActionLink("Inspection Request", "Index", "InspectionRequest")</li>
+                            <li>@Html.ActionLink("Inspection Response", "Index", "InspectionResponse")</li>
+
+                        }
+                        if (inspectorAssigned)
+                        {
+                            <li>@Html.ActionLink("Enquiries", "Index", "Enquiry")</li>
+                        }
+                    }
+
+                    @if (User.IsInRole("Administrators"))
+                    {
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Admin<b class="caret"></b></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li>@Html.ActionLink("Type Of Businesses", "Index", "BusinessType")</li>
+                                <li>@Html.ActionLink("Type Of Licenses", "Index", "LicenseType")</li>
+                                <li>@Html.ActionLink("Type Of Documents", "Index", "DocumentType")</li>
+                                <li>@Html.ActionLink("Document Checklist", "Index", "DocumentCheckList")</li>
+                                <li>@Html.ActionLink("Documents", "Index", "Document")</li>
+                                <li>@Html.ActionLink("Operation Structures", "Index", "OperationStructureType")</li>
+                                <li>@Html.ActionLink("Title Deeds", "Index", "TitleDeedType")</li>
+                                <li>@Html.ActionLink("Status", "Index", "Status")</li>
+                                <li>@Html.ActionLink("Status Types", "Index", "StatusType")</li>
+                                <li>@Html.ActionLink("Departments", "Index", "Department")</li>
+                                <li>@Html.ActionLink("Department Contacts", "Index", "DepartmentContact")</li>
+                                <li>@Html.ActionLink("Item Types", "Index", "ItemType")</li>
+                                <li>@Html.ActionLink("Item Sub-Categories", "Index", "ItemSubCategory")</li>
+                                <li>@Html.ActionLink("Regions", "Index", "Region")</li>
+                                <li>@Html.ActionLink("Conditions", "Index", "Condition")</li>
+                                <li>@Html.ActionLink("Item Conditions", "Index", "ItemCondition")</li>
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("Users", "Index", "User")</li>
+                            </ul>
+                        </li>
+                    }
+
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </nav>*@
+
+    @*<div class="container">
+            @RenderBody()
+            <hr>
+            <div class="row">
+                <div class="col-sm-12" align="center">
+                    <footer>
+                        <p>© Copyright 2015 eThekwini Municipality</p>
+                    </footer>
+                </div>
+            </div>
+        </div>*@
+
+
+
+
+
+    <!-- Header Starts -->
+    <nav class="navbar navbar-expand-xl navbar-fixed-top navbar-light pmd-navbar pmd-z-depth-light-1";>
+        <a href="javascript:void(0);" data-target="basicSidebar" data-placement="left" data-position="slidepush" is-open="true" is-open-width="1300" class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect pmd-sidebar-toggle"><i class="material-icons md-dark">menu</i></a>
+
+        <!-- Navbar Brand -->
+        <div class="navbar-header">
+                <h4 align="center" style="color:white;"> Business Trading Licences </h4>
+        </div>
+
+        <!-- Search Form -->
+
+    </nav>
+    <!-- Header Ends -->
+    <!-- Sidebar Starts -->
+    <div class="pmd-sidebar-overlay"></div>
+    <!-- Left sidebar -->
+    <aside id="basicSidebar" class="pmd-sidebar pmd-sidebar-dark pmd-sidebar-slide-push pmd-sidebar-open mytheme pmd-z-depth-light-2" role="navigation">
+        <ul class="nav flex-column pmd-sidebar-nav">
+
+            <!-- User info -->
+            <li class="nav-item pmd-user-info mb-0">
+                <a href="javascript:void(0);" class="nav-link btn-user text-center">
+                    <img class="rounded-circle m-auto" src="~/Content/images/TradingUser.jpg" width="40" height="40" alt="avatar">
+                    <h3 class="pmd-title m-0">@User.Identity.Name</h3>
+                    <p class="pmd-subheading1 m-0"></p>
+                </a>
+            </li>
+            <!-- End user info -->
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li class="nav-item">
+                    <a class="nav-link pmd-ripple-effect" href="@Url.Action("Index","Home")">
+                        <i class="material-icons pmd-list-icon pmd-sm md-light">
+                            <svg version="1.1" x="0px" y="0px" width="19.83px" height="18px" viewBox="287.725 407.535 19.83 18" enable-background="new 287.725 407.535 19.83 18" xml:space="preserve">
+                            <g><path d="M307.555,407.535h-9.108v10.264h9.108V407.535z M287.725,407.535v6.232h9.109v-6.232H287.725z M296.834,415.271h-9.109v10.264h9.109V415.271z M307.555,419.303h-9.108v6.232h9.108V419.303z" /></g>
+                    </svg>
+                        </i>
+                        <span class="media-body">Home</span>
+                    </a>
+                </li>
+
+                if (User.IsInRole("Administrators"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#admin-menu">
+                            <i class="material-icons pmd-list-icon pmd-sm md-light">
+                                exit_to_app
+                            </i>
+                            <span class="media-body">Admin</span>
+                            <div class="media-right media-bottom"><i class="dic-more-vert dic"></i></div>
+                        </a>
+                        <ul class="collapse" id="admin-menu" data-parent="#basicSidebar" style="background-color:cornflowerblue;color:white;padding-bottom:2px;">
+                            <li class="nav-item">@Html.ActionLink("Type Of Businesses", "Index", "BusinessType",null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Type Of Licenses", "Index", "LicenseType", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Type Of Documents", "Index", "DocumentType", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Document Checklist", "Index", "DocumentCheckList", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Documents", "Index", "Document", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Operation Structures", "Index", "OperationStructureType", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Title Deeds", "Index", "TitleDeedType", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Status", "Index", "Status", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Status Types", "Index", "StatusType", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Departments", "Index", "Department", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Department Contacts", "Index", "DepartmentContact", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Item Types", "Index", "ItemType", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Item Sub-Categories", "Index", "ItemSubCategory", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Regions", "Index", "Region", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Conditions", "Index", "Condition", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Item Conditions", "Index", "ItemCondition", null, new { @class = "nav-link" })</li>
+                            <li class="divider"></li>
+                            <li class="nav-item">@Html.ActionLink("Users", "Index", "User", null, new { @class = "nav-link" })</li>
+                        </ul>
+                    </li>
+
+                }
+
+                if (User.Identity.IsAuthenticated && User.IsInRole("Clerks") || User.IsInRole("Administrators") || User.IsInRole("Licensing Manager")
+                   || User.IsInRole("Inspectors") || User.IsInRole("Chief Inspectors"))
+                {
+
+
+                    if (User.IsInRole("Clerks") || User.IsInRole("Administrators"))
+                    {
+                        @*<li>@Html.ActionLink("Clients", "Index", "Client")</li>*@
+
+                        <li class="nav-item">
+                            <a class="nav-link pmd-ripple-effect" href="@Url.Action("Index", "Client")">
+                                <i class="material-icons pmd-list-icon pmd-sm md-light">
+                                    people
+                                </i>
+                                <span class="media-body">Clients</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link pmd-ripple-effect" href="@Url.Action("Index", "Business")">
+                                <i class="material-icons pmd-list-icon pmd-sm md-light">
+                                    business
+                                </i>
+                                <span class="media-body">Businesses</span>
+                            </a>
+                        </li>
+
+
+                        @*<li>@Html.ActionLink("Businesses", "Index", "Business")</li>*@
+                    }
+
+                    if (User.IsInRole("Licensing Manager"))
+                    {
+                        @*<li>@Html.ActionLink("License Approval", "Index", "InspectionResponse")</li>*@
+
+                        <li class="nav-item">
+                            <a class="nav-link pmd-ripple-effect" href="@Url.Action("Index", "InspectionResponse")">
+                                <i class="material-icons pmd-list-icon pmd-sm md-light">
+                                    today
+                                </i>
+                                <span class="media-body">License Approval</span>
+                            </a>
+                        </li>
+                    }
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#license-menu">
+                            <i class="material-icons pmd-list-icon pmd-sm md-light">
+                                notifications
+                            </i>
+                            <span class="media-body">Licenses</span>
+                            <div class="media-right media-bottom"><i class="dic-more-vert dic"></i></div>
+                        </a>
+                        <ul class="collapse" id="license-menu" data-parent="#basicSidebar" style="background-color:cornflowerblue;color:white;padding-bottom:2px;">
+
+                            <li class="nav-item">@Html.ActionLink("Approved Licenses", "ApprovedLicenses", "License", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Pending License Applications", "Index", "License", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Revoked Licenses", "RevokedLicenses", "License", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Renew Licenses", "LicenseRenewal", "License", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Terminated License Applications", "TerminatedLicenses", "License", null, new { @class = "nav-link" })</li>
+                            <li class="divider"></li>
+                            <li class="nav-item">@Html.ActionLink("License Collection", "LicenseCollection", "License", null, new { @class = "nav-link" })</li>
+                        </ul>
+                    </li>
+                }
+
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">
+                            <i class="material-icons pmd-list-icon pmd-sm">power_settings_new</i>
+                            <span class="media-body">Logout</span>
+                        </a>
+                    </li>
+                    @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+                }
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Login","Account")">
+                        <i class="material-icons pmd-list-icon pmd-sm">user</i>
+                        <span class="media-body">Login</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </aside>
+    <!-- End Left sidebar -->
+    <!-- Sidebar Ends -->
+    <!--content area start-->
+    <div id="content" class="pmd-content content-area dashboard">
+        <br />
+        <br />
+        <br />
+        <br />
+        @RenderBody()
+    </div>
+    <!--end content area-->
+
+    <!-- Footer Starts -->
+    <footer class="pmd-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 align-self-center">
+                    <div class="pmd-site-info">
+                        © <span class="auto-update-year"></span> <a href="#" class="text-white"><strong>powered by XET </strong></a> Solutions
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Ends -->
+
+    <script type="text/javascript" src="~/Content/themes/js/bootstrap4-admin-compress.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    
+</body>
+
+</html>

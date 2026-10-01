@@ -1,0 +1,2465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CommonCore_GoLiveModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="CommonCore_GoLiveModelStoreContainer">
+          <EntitySet Name="tb_Actions" EntityType="CommonCore_GoLiveModel.Store.tb_Actions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_ActiveDirectory" EntityType="CommonCore_GoLiveModel.Store.tb_ActiveDirectory" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Applications" EntityType="CommonCore_GoLiveModel.Store.tb_Applications" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_AppSettings" EntityType="CommonCore_GoLiveModel.Store.tb_AppSettings" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_AuthenticationTypes" EntityType="CommonCore_GoLiveModel.Store.tb_AuthenticationTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_BatchJobs" EntityType="CommonCore_GoLiveModel.Store.tb_BatchJobs" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Delegations" EntityType="CommonCore_GoLiveModel.Store.tb_Delegations" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EmailAccounts" EntityType="CommonCore_GoLiveModel.Store.tb_EmailAccounts" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EmailAttachmentQueue" EntityType="CommonCore_GoLiveModel.Store.tb_EmailAttachmentQueue" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EmailAttachmentQueueProcessed" EntityType="CommonCore_GoLiveModel.Store.tb_EmailAttachmentQueueProcessed" store:Type="Tables" store:Schema="dbo" store:Name="tb_EmailAttachmentQueueProcessed">
+            <DefiningQuery>SELECT 
+      [tb_EmailAttachmentQueueProcessed].[EmailAttachmentQueueId] AS [EmailAttachmentQueueId], 
+      [tb_EmailAttachmentQueueProcessed].[EmailQueueId] AS [EmailQueueId], 
+      [tb_EmailAttachmentQueueProcessed].[ApplicationId] AS [ApplicationId], 
+      [tb_EmailAttachmentQueueProcessed].[Filename] AS [Filename], 
+      [tb_EmailAttachmentQueueProcessed].[ContentType] AS [ContentType], 
+      [tb_EmailAttachmentQueueProcessed].[Attachment] AS [Attachment]
+      FROM [dbo].[tb_EmailAttachmentQueueProcessed] AS [tb_EmailAttachmentQueueProcessed]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tb_EmailExceptions" EntityType="CommonCore_GoLiveModel.Store.tb_EmailExceptions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EmailExceptionTypes" EntityType="CommonCore_GoLiveModel.Store.tb_EmailExceptionTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EmailLogs" EntityType="CommonCore_GoLiveModel.Store.tb_EmailLogs" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EmailQueue" EntityType="CommonCore_GoLiveModel.Store.tb_EmailQueue" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EmailQueueProcessed" EntityType="CommonCore_GoLiveModel.Store.tb_EmailQueueProcessed" store:Type="Tables" store:Schema="dbo" store:Name="tb_EmailQueueProcessed">
+            <DefiningQuery>SELECT 
+      [tb_EmailQueueProcessed].[EmailQueueId] AS [EmailQueueId], 
+      [tb_EmailQueueProcessed].[QueueDateTime] AS [QueueDateTime], 
+      [tb_EmailQueueProcessed].[ApplicationId] AS [ApplicationId], 
+      [tb_EmailQueueProcessed].[EmailAccountId] AS [EmailAccountId], 
+      [tb_EmailQueueProcessed].[ToList] AS [ToList], 
+      [tb_EmailQueueProcessed].[CcList] AS [CcList], 
+      [tb_EmailQueueProcessed].[BccList] AS [BccList], 
+      [tb_EmailQueueProcessed].[Subject] AS [Subject], 
+      [tb_EmailQueueProcessed].[Body] AS [Body], 
+      [tb_EmailQueueProcessed].[IsHtml] AS [IsHtml], 
+      [tb_EmailQueueProcessed].[FailureCount] AS [FailureCount], 
+      [tb_EmailQueueProcessed].[ReferenceId] AS [ReferenceId], 
+      [tb_EmailQueueProcessed].[ReferenceTypeId] AS [ReferenceTypeId], 
+      [tb_EmailQueueProcessed].[ProcessedDateTime] AS [ProcessedDateTime], 
+      [tb_EmailQueueProcessed].[HasAttachments] AS [HasAttachments]
+      FROM [dbo].[tb_EmailQueueProcessed] AS [tb_EmailQueueProcessed]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tb_EmailStaticAttachments" EntityType="CommonCore_GoLiveModel.Store.tb_EmailStaticAttachments" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EmailTemplates" EntityType="CommonCore_GoLiveModel.Store.tb_EmailTemplates" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Entities" EntityType="CommonCore_GoLiveModel.Store.tb_Entities" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EntityActions" EntityType="CommonCore_GoLiveModel.Store.tb_EntityActions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_EventLogs" EntityType="CommonCore_GoLiveModel.Store.tb_EventLogs" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_ReadEmailAttachments" EntityType="CommonCore_GoLiveModel.Store.tb_ReadEmailAttachments" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_ReadEmailItems" EntityType="CommonCore_GoLiveModel.Store.tb_ReadEmailItems" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_RecurringTypes" EntityType="CommonCore_GoLiveModel.Store.tb_RecurringTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_ReferenceTypes" EntityType="CommonCore_GoLiveModel.Store.tb_ReferenceTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_RoleActions" EntityType="CommonCore_GoLiveModel.Store.tb_RoleActions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_RoleEntityActions" EntityType="CommonCore_GoLiveModel.Store.tb_RoleEntityActions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Roles" EntityType="CommonCore_GoLiveModel.Store.tb_Roles" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Schedules" EntityType="CommonCore_GoLiveModel.Store.tb_Schedules" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_ScheduleTypes" EntityType="CommonCore_GoLiveModel.Store.tb_ScheduleTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Scripts" EntityType="CommonCore_GoLiveModel.Store.tb_Scripts" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_ScriptTypes" EntityType="CommonCore_GoLiveModel.Store.tb_ScriptTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_UnreadEmailAttachments" EntityType="CommonCore_GoLiveModel.Store.tb_UnreadEmailAttachments" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_UnreadEmailItems" EntityType="CommonCore_GoLiveModel.Store.tb_UnreadEmailItems" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_UserApplications" EntityType="CommonCore_GoLiveModel.Store.tb_UserApplications" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_UserDetails" EntityType="CommonCore_GoLiveModel.Store.tb_UserDetails" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_userdetails_270513" EntityType="CommonCore_GoLiveModel.Store.tb_userdetails_270513" store:Type="Tables" store:Schema="dbo" store:Name="tb_userdetails_270513">
+            <DefiningQuery>SELECT 
+      [tb_userdetails_270513].[UserDetailsID] AS [UserDetailsID], 
+      [tb_userdetails_270513].[UserID] AS [UserID], 
+      [tb_userdetails_270513].[ServiceNumber] AS [ServiceNumber], 
+      [tb_userdetails_270513].[ManagerUserID] AS [ManagerUserID], 
+      [tb_userdetails_270513].[Name] AS [Name], 
+      [tb_userdetails_270513].[Surname] AS [Surname], 
+      [tb_userdetails_270513].[Email] AS [Email], 
+      [tb_userdetails_270513].[PostalAddress1] AS [PostalAddress1], 
+      [tb_userdetails_270513].[PostalAddress2] AS [PostalAddress2], 
+      [tb_userdetails_270513].[PostalAddress3] AS [PostalAddress3], 
+      [tb_userdetails_270513].[PostalAddress4] AS [PostalAddress4], 
+      [tb_userdetails_270513].[PostalCode] AS [PostalCode], 
+      [tb_userdetails_270513].[PhysicalAddress1] AS [PhysicalAddress1], 
+      [tb_userdetails_270513].[PhysicalAddress2] AS [PhysicalAddress2], 
+      [tb_userdetails_270513].[PhysicalAddress3] AS [PhysicalAddress3], 
+      [tb_userdetails_270513].[PhysicalAddress4] AS [PhysicalAddress4], 
+      [tb_userdetails_270513].[PhysicalCode] AS [PhysicalCode], 
+      [tb_userdetails_270513].[TelephoneHome] AS [TelephoneHome], 
+      [tb_userdetails_270513].[TelephoneWork] AS [TelephoneWork], 
+      [tb_userdetails_270513].[Cellphone] AS [Cellphone], 
+      [tb_userdetails_270513].[Designation] AS [Designation], 
+      [tb_userdetails_270513].[BusinessUnit] AS [BusinessUnit], 
+      [tb_userdetails_270513].[IsActive] AS [IsActive], 
+      [tb_userdetails_270513].[IsDeleted] AS [IsDeleted]
+      FROM [dbo].[tb_userdetails_270513] AS [tb_userdetails_270513]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tb_UserDetails04072013" EntityType="CommonCore_GoLiveModel.Store.tb_UserDetails04072013" store:Type="Tables" store:Schema="dbo" store:Name="tb_UserDetails04072013">
+            <DefiningQuery>SELECT 
+      [tb_UserDetails04072013].[UserDetailsID] AS [UserDetailsID], 
+      [tb_UserDetails04072013].[UserID] AS [UserID], 
+      [tb_UserDetails04072013].[ServiceNumber] AS [ServiceNumber], 
+      [tb_UserDetails04072013].[ManagerUserID] AS [ManagerUserID], 
+      [tb_UserDetails04072013].[Name] AS [Name], 
+      [tb_UserDetails04072013].[Surname] AS [Surname], 
+      [tb_UserDetails04072013].[Email] AS [Email], 
+      [tb_UserDetails04072013].[PostalAddress1] AS [PostalAddress1], 
+      [tb_UserDetails04072013].[PostalAddress2] AS [PostalAddress2], 
+      [tb_UserDetails04072013].[PostalAddress3] AS [PostalAddress3], 
+      [tb_UserDetails04072013].[PostalAddress4] AS [PostalAddress4], 
+      [tb_UserDetails04072013].[PostalCode] AS [PostalCode], 
+      [tb_UserDetails04072013].[PhysicalAddress1] AS [PhysicalAddress1], 
+      [tb_UserDetails04072013].[PhysicalAddress2] AS [PhysicalAddress2], 
+      [tb_UserDetails04072013].[PhysicalAddress3] AS [PhysicalAddress3], 
+      [tb_UserDetails04072013].[PhysicalAddress4] AS [PhysicalAddress4], 
+      [tb_UserDetails04072013].[PhysicalCode] AS [PhysicalCode], 
+      [tb_UserDetails04072013].[TelephoneHome] AS [TelephoneHome], 
+      [tb_UserDetails04072013].[TelephoneWork] AS [TelephoneWork], 
+      [tb_UserDetails04072013].[Cellphone] AS [Cellphone], 
+      [tb_UserDetails04072013].[Designation] AS [Designation], 
+      [tb_UserDetails04072013].[BusinessUnit] AS [BusinessUnit], 
+      [tb_UserDetails04072013].[IsActive] AS [IsActive], 
+      [tb_UserDetails04072013].[IsDeleted] AS [IsDeleted]
+      FROM [dbo].[tb_UserDetails04072013] AS [tb_UserDetails04072013]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tb_UserDetails20130512" EntityType="CommonCore_GoLiveModel.Store.tb_UserDetails20130512" store:Type="Tables" store:Schema="dbo" store:Name="tb_UserDetails20130512">
+            <DefiningQuery>SELECT 
+      [tb_UserDetails20130512].[UserDetailsID] AS [UserDetailsID], 
+      [tb_UserDetails20130512].[UserID] AS [UserID], 
+      [tb_UserDetails20130512].[ServiceNumber] AS [ServiceNumber], 
+      [tb_UserDetails20130512].[ManagerUserID] AS [ManagerUserID], 
+      [tb_UserDetails20130512].[Name] AS [Name], 
+      [tb_UserDetails20130512].[Surname] AS [Surname], 
+      [tb_UserDetails20130512].[Email] AS [Email], 
+      [tb_UserDetails20130512].[PostalAddress1] AS [PostalAddress1], 
+      [tb_UserDetails20130512].[PostalAddress2] AS [PostalAddress2], 
+      [tb_UserDetails20130512].[PostalAddress3] AS [PostalAddress3], 
+      [tb_UserDetails20130512].[PostalAddress4] AS [PostalAddress4], 
+      [tb_UserDetails20130512].[PostalCode] AS [PostalCode], 
+      [tb_UserDetails20130512].[PhysicalAddress1] AS [PhysicalAddress1], 
+      [tb_UserDetails20130512].[PhysicalAddress2] AS [PhysicalAddress2], 
+      [tb_UserDetails20130512].[PhysicalAddress3] AS [PhysicalAddress3], 
+      [tb_UserDetails20130512].[PhysicalAddress4] AS [PhysicalAddress4], 
+      [tb_UserDetails20130512].[PhysicalCode] AS [PhysicalCode], 
+      [tb_UserDetails20130512].[TelephoneHome] AS [TelephoneHome], 
+      [tb_UserDetails20130512].[TelephoneWork] AS [TelephoneWork], 
+      [tb_UserDetails20130512].[Cellphone] AS [Cellphone], 
+      [tb_UserDetails20130512].[Designation] AS [Designation], 
+      [tb_UserDetails20130512].[BusinessUnit] AS [BusinessUnit], 
+      [tb_UserDetails20130512].[IsActive] AS [IsActive], 
+      [tb_UserDetails20130512].[IsDeleted] AS [IsDeleted]
+      FROM [dbo].[tb_UserDetails20130512] AS [tb_UserDetails20130512]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tb_UserDetails20141008" EntityType="CommonCore_GoLiveModel.Store.tb_UserDetails20141008" store:Type="Tables" store:Schema="dbo" store:Name="tb_UserDetails20141008">
+            <DefiningQuery>SELECT 
+      [tb_UserDetails20141008].[UserDetailsID] AS [UserDetailsID], 
+      [tb_UserDetails20141008].[UserID] AS [UserID], 
+      [tb_UserDetails20141008].[ServiceNumber] AS [ServiceNumber], 
+      [tb_UserDetails20141008].[ManagerUserID] AS [ManagerUserID], 
+      [tb_UserDetails20141008].[Name] AS [Name], 
+      [tb_UserDetails20141008].[Surname] AS [Surname], 
+      [tb_UserDetails20141008].[Email] AS [Email], 
+      [tb_UserDetails20141008].[PostalAddress1] AS [PostalAddress1], 
+      [tb_UserDetails20141008].[PostalAddress2] AS [PostalAddress2], 
+      [tb_UserDetails20141008].[PostalAddress3] AS [PostalAddress3], 
+      [tb_UserDetails20141008].[PostalAddress4] AS [PostalAddress4], 
+      [tb_UserDetails20141008].[PostalCode] AS [PostalCode], 
+      [tb_UserDetails20141008].[PhysicalAddress1] AS [PhysicalAddress1], 
+      [tb_UserDetails20141008].[PhysicalAddress2] AS [PhysicalAddress2], 
+      [tb_UserDetails20141008].[PhysicalAddress3] AS [PhysicalAddress3], 
+      [tb_UserDetails20141008].[PhysicalAddress4] AS [PhysicalAddress4], 
+      [tb_UserDetails20141008].[PhysicalCode] AS [PhysicalCode], 
+      [tb_UserDetails20141008].[TelephoneHome] AS [TelephoneHome], 
+      [tb_UserDetails20141008].[TelephoneWork] AS [TelephoneWork], 
+      [tb_UserDetails20141008].[Cellphone] AS [Cellphone], 
+      [tb_UserDetails20141008].[Designation] AS [Designation], 
+      [tb_UserDetails20141008].[BusinessUnit] AS [BusinessUnit], 
+      [tb_UserDetails20141008].[IsActive] AS [IsActive], 
+      [tb_UserDetails20141008].[IsDeleted] AS [IsDeleted]
+      FROM [dbo].[tb_UserDetails20141008] AS [tb_UserDetails20141008]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tb_UserLogInDetails" EntityType="CommonCore_GoLiveModel.Store.tb_UserLogInDetails" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_UserRoles" EntityType="CommonCore_GoLiveModel.Store.tb_UserRoles" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Users" EntityType="CommonCore_GoLiveModel.Store.tb_Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Users1" EntityType="CommonCore_GoLiveModel.Store.tb_Users1" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_UserSubscriptions" EntityType="CommonCore_GoLiveModel.Store.tb_UserSubscriptions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tb_Variables" EntityType="CommonCore_GoLiveModel.Store.tb_Variables" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="tb_Actions">
+          <Key>
+            <PropertyRef Name="ActionID" />
+          </Key>
+          <Property Name="ActionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ActionName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ActionDescription" Type="varchar" MaxLength="150" />
+          <Property Name="ActionKey" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ActiveDirectory">
+          <Key>
+            <PropertyRef Name="ActiveID" />
+          </Key>
+          <Property Name="ActiveID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserEmail" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tb_Applications">
+          <Key>
+            <PropertyRef Name="ApplicationID" />
+          </Key>
+          <Property Name="ApplicationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationKey" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ApplicationName" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ApplicationDescription" Type="varchar" MaxLength="250" />
+          <Property Name="ApplicationURL" Type="varchar" MaxLength="250" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_AppSettings">
+          <Key>
+            <PropertyRef Name="AppSettingID" />
+          </Key>
+          <Property Name="AppSettingID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="AppKey" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="AppValue" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="Description" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_AuthenticationTypes">
+          <Key>
+            <PropertyRef Name="AuthenticationTypeID" />
+          </Key>
+          <Property Name="AuthenticationTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="AuthenticationTypeName" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="AuthenticationTypeDescription" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="AuthenticationTypeKey" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_BatchJobs">
+          <Key>
+            <PropertyRef Name="BatchJobID" />
+          </Key>
+          <Property Name="BatchJobID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OrderIndex" Type="int" Nullable="false" />
+          <Property Name="ScheduleID" Type="int" Nullable="false" />
+          <Property Name="ReferenceID" Type="int" Nullable="false" />
+          <Property Name="ScheduleTypeID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Delegations">
+          <Key>
+            <PropertyRef Name="DelegationID" />
+          </Key>
+          <Property Name="DelegationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="int" />
+          <Property Name="DelegateeUserID" Type="int" Nullable="false" />
+          <Property Name="DelegatorUserID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailAccounts">
+          <Key>
+            <PropertyRef Name="EmailAccountId" />
+          </Key>
+          <Property Name="EmailAccountId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="EmailAccountDescription" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="EmailAddress" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="Username" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="Password" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ServiceUrl" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="PasswordExpiredDays" Type="int" Nullable="false" />
+          <Property Name="PasswordExpiredDate" Type="datetime" Nullable="false" />
+          <Property Name="PasswordNeverExpires" Type="bit" Nullable="false" />
+          <Property Name="DeleteServerEmail" Type="bit" Nullable="false" />
+          <Property Name="CanRecieve" Type="bit" Nullable="false" />
+          <Property Name="CanSend" Type="bit" Nullable="false" />
+          <Property Name="CheckUndeliverable" Type="bit" Nullable="false" />
+          <Property Name="AccountFailureCount" Type="int" Nullable="false" />
+          <Property Name="MaxFailureCount" Type="int" Nullable="false" />
+          <Property Name="DisableAccount" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="IsLocked" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailAttachmentQueue">
+          <Key>
+            <PropertyRef Name="EmailAttachmentQueueId" />
+          </Key>
+          <Property Name="EmailAttachmentQueueId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EmailQueueId" Type="int" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="Filename" Type="varchar" Nullable="false" MaxLength="1024" />
+          <Property Name="ContentType" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Attachment" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CommonCore_GoLive.dbo.tb_EmailAttachmentQueueProcessed' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="tb_EmailAttachmentQueueProcessed">
+          <Key>
+            <PropertyRef Name="EmailAttachmentQueueId" />
+            <PropertyRef Name="EmailQueueId" />
+            <PropertyRef Name="ApplicationId" />
+            <PropertyRef Name="Filename" />
+            <PropertyRef Name="ContentType" />
+            <PropertyRef Name="Attachment" />
+          </Key>
+          <Property Name="EmailAttachmentQueueId" Type="int" Nullable="false" />
+          <Property Name="EmailQueueId" Type="int" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="Filename" Type="varchar" Nullable="false" MaxLength="1024" />
+          <Property Name="ContentType" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Attachment" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailExceptions">
+          <Key>
+            <PropertyRef Name="EmailExceptionId" />
+          </Key>
+          <Property Name="EmailExceptionId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EmailExceptionTypeId" Type="int" Nullable="false" />
+          <Property Name="EmailQueueId" Type="int" Nullable="false" />
+          <Property Name="ToList" Type="varchar" MaxLength="512" />
+          <Property Name="Exception" Type="varchar(max)" />
+          <Property Name="ProcessedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="AttemptCount" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailExceptionTypes">
+          <Key>
+            <PropertyRef Name="EmailExceptionTypeId" />
+          </Key>
+          <Property Name="EmailExceptionTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EmailExceptionTypeName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="EmailExceptionTypeDescription" Type="varchar" MaxLength="256" />
+          <Property Name="EmailExceptionTypeKey" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailLogs">
+          <Key>
+            <PropertyRef Name="EmailLogID" />
+          </Key>
+          <Property Name="EmailLogID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="EmailTemplateID" Type="int" />
+          <Property Name="EmailTo" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="EmailFrom" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="EmailSubject" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="EmailBody" Type="varchar(max)" Nullable="false" />
+          <Property Name="SentDateTime" Type="datetime" Nullable="false" />
+          <Property Name="SentByUserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailQueue">
+          <Key>
+            <PropertyRef Name="EmailQueueId" />
+          </Key>
+          <Property Name="EmailQueueId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="QueueDateTime" Type="datetime" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="EmailAccountId" Type="int" Nullable="false" />
+          <Property Name="ToList" Type="varchar" Nullable="false" MaxLength="512" />
+          <Property Name="CcList" Type="varchar" MaxLength="512" />
+          <Property Name="BccList" Type="varchar" MaxLength="512" />
+          <Property Name="Subject" Type="varchar" Nullable="false" MaxLength="1024" />
+          <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IsHtml" Type="bit" Nullable="false" />
+          <Property Name="FailureCount" Type="int" Nullable="false" />
+          <Property Name="ReferenceId" Type="varchar" MaxLength="32" />
+          <Property Name="ReferenceTypeId" Type="int" />
+          <Property Name="HasAttachments" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CommonCore_GoLive.dbo.tb_EmailQueueProcessed' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="tb_EmailQueueProcessed">
+          <Key>
+            <PropertyRef Name="EmailQueueId" />
+            <PropertyRef Name="QueueDateTime" />
+            <PropertyRef Name="ApplicationId" />
+            <PropertyRef Name="EmailAccountId" />
+            <PropertyRef Name="ToList" />
+            <PropertyRef Name="Subject" />
+            <PropertyRef Name="Body" />
+            <PropertyRef Name="IsHtml" />
+            <PropertyRef Name="FailureCount" />
+            <PropertyRef Name="ProcessedDateTime" />
+            <PropertyRef Name="HasAttachments" />
+          </Key>
+          <Property Name="EmailQueueId" Type="int" Nullable="false" />
+          <Property Name="QueueDateTime" Type="datetime" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="EmailAccountId" Type="int" Nullable="false" />
+          <Property Name="ToList" Type="varchar" Nullable="false" MaxLength="512" />
+          <Property Name="CcList" Type="varchar" MaxLength="512" />
+          <Property Name="BccList" Type="varchar" MaxLength="512" />
+          <Property Name="Subject" Type="varchar" Nullable="false" MaxLength="1024" />
+          <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IsHtml" Type="bit" Nullable="false" />
+          <Property Name="FailureCount" Type="int" Nullable="false" />
+          <Property Name="ReferenceId" Type="varchar" MaxLength="32" />
+          <Property Name="ReferenceTypeId" Type="int" />
+          <Property Name="ProcessedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="HasAttachments" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailStaticAttachments">
+          <Key>
+            <PropertyRef Name="EmailStaticAttachmentId" />
+          </Key>
+          <Property Name="EmailStaticAttachmentId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EmailAccountId" Type="int" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="Filename" Type="varchar" Nullable="false" MaxLength="1024" />
+          <Property Name="ContentType" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Attachment" Type="varbinary(max)" Nullable="false" />
+          <Property Name="StartDateTime" Type="datetime" Nullable="false" />
+          <Property Name="EndDateTime" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailTemplates">
+          <Key>
+            <PropertyRef Name="EmailTemplateID" />
+          </Key>
+          <Property Name="EmailTemplateID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="EmailTemplateName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="EmailTemplateDescription" Type="varchar" MaxLength="50" />
+          <Property Name="EmailTemplateKey" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="EmailFrom" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="EmailSubject" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="EmailBody" Type="varchar(max)" Nullable="false" />
+          <Property Name="Variables" Type="varchar(max)" />
+          <Property Name="IsHTML" Type="bit" Nullable="false" />
+          <Property Name="ToVariable" Type="varchar(max)" />
+          <Property Name="CcVariable" Type="varchar(max)" />
+          <Property Name="HasVariables" Type="bit" Nullable="false" />
+          <Property Name="SendAsOneEmail" Type="bit" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Entities">
+          <Key>
+            <PropertyRef Name="EntityID" />
+          </Key>
+          <Property Name="EntityID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="Namespace" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="EntityName" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ServerName" Type="varchar" MaxLength="50" />
+          <Property Name="DatabaseName" Type="varchar" MaxLength="50" />
+          <Property Name="TableName" Type="varchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EntityActions">
+          <Key>
+            <PropertyRef Name="EntityActionID" />
+          </Key>
+          <Property Name="EntityActionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EntityID" Type="int" Nullable="false" />
+          <Property Name="ActionID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EventLogs">
+          <Key>
+            <PropertyRef Name="EventLogID" />
+          </Key>
+          <Property Name="EventLogID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="EventDateTime" Type="datetime" Nullable="false" />
+          <Property Name="EventData" Type="varchar(max)" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ReadEmailAttachments">
+          <Key>
+            <PropertyRef Name="EmailAttachmentId" />
+          </Key>
+          <Property Name="EmailAttachmentId" Type="int" Nullable="false" />
+          <Property Name="EmailItemId" Type="int" Nullable="false" />
+          <Property Name="Filename" Type="varchar" MaxLength="1024" />
+          <Property Name="ContentType" Type="varchar" MaxLength="50" />
+          <Property Name="Attachment" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ReadEmailItems">
+          <Key>
+            <PropertyRef Name="EmailItemId" />
+          </Key>
+          <Property Name="EmailItemId" Type="int" Nullable="false" />
+          <Property Name="EmailAccountId" Type="int" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="FromList" Type="varchar(max)" Nullable="false" />
+          <Property Name="ToList" Type="varchar(max)" Nullable="false" />
+          <Property Name="CcList" Type="varchar(max)" />
+          <Property Name="Subject" Type="varchar(max)" />
+          <Property Name="Body" Type="varchar(max)" />
+          <Property Name="IsHtml" Type="bit" />
+          <Property Name="RecievedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="HasAttachments" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_RecurringTypes">
+          <Key>
+            <PropertyRef Name="RecurringTypeID" />
+          </Key>
+          <Property Name="RecurringTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RecurringTypeName" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="RecurringTypeDescription" Type="varchar" MaxLength="255" />
+          <Property Name="RecurringTypeKey" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ReferenceTypes">
+          <Key>
+            <PropertyRef Name="ReferenceTypeId" />
+          </Key>
+          <Property Name="ReferenceTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ReferenceTypeName" Type="varchar" Nullable="false" MaxLength="512" />
+          <Property Name="ReferenceTypeDescription" Type="varchar" MaxLength="1024" />
+          <Property Name="ReferenceTypeKey" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="IsLocked" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_RoleActions">
+          <Key>
+            <PropertyRef Name="RoleActionID" />
+          </Key>
+          <Property Name="RoleActionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="ActionID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_RoleEntityActions">
+          <Key>
+            <PropertyRef Name="RoleEntityActionID" />
+          </Key>
+          <Property Name="RoleEntityActionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="EntityActionID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="RoleDescription" Type="varchar" MaxLength="100" />
+          <Property Name="RoleKey" Type="varchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Schedules">
+          <Key>
+            <PropertyRef Name="ScheduleID" />
+          </Key>
+          <Property Name="ScheduleID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleTypeID" Type="int" Nullable="false" />
+          <Property Name="ReferenceID" Type="int" Nullable="false" />
+          <Property Name="RecurringTypeID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="NextDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ScheduleTypes">
+          <Key>
+            <PropertyRef Name="ScheduleTypeID" />
+          </Key>
+          <Property Name="ScheduleTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleTypeName" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="ScheduleTypeDescription" Type="varchar" MaxLength="255" />
+          <Property Name="ScheduleTypeKey" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Scripts">
+          <Key>
+            <PropertyRef Name="ScriptID" />
+          </Key>
+          <Property Name="ScriptID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ScriptName" Type="varchar" MaxLength="50" />
+          <Property Name="ScriptDescription" Type="varchar" MaxLength="256" />
+          <Property Name="SqlScript" Type="nvarchar(max)" />
+          <Property Name="ScriptypeID" Type="int" Nullable="false" />
+          <Property Name="ParameterNames" Type="nvarchar(max)" />
+          <Property Name="ParameterValues" Type="nvarchar(max)" />
+          <Property Name="ServerName" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ServerPort" Type="varchar" MaxLength="50" />
+          <Property Name="DatabaseName" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Username" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Password" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ScriptTypes">
+          <Key>
+            <PropertyRef Name="ScriptTypeID" />
+          </Key>
+          <Property Name="ScriptTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ScriptTypeName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ScriptTypeDescription" Type="varchar" MaxLength="50" />
+          <Property Name="ScriptTypeKey" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UnreadEmailAttachments">
+          <Key>
+            <PropertyRef Name="EmailAttachmentId" />
+          </Key>
+          <Property Name="EmailAttachmentId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EmailItemId" Type="int" Nullable="false" />
+          <Property Name="Filename" Type="varchar" MaxLength="1024" />
+          <Property Name="ContentType" Type="varchar" MaxLength="50" />
+          <Property Name="Attachment" Type="varbinary(max)" Nullable="false" />
+          <Property Name="IsProcessed" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UnreadEmailItems">
+          <Key>
+            <PropertyRef Name="EmailItemId" />
+          </Key>
+          <Property Name="EmailItemId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EmailAccountId" Type="int" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="FromList" Type="varchar(max)" Nullable="false" />
+          <Property Name="ToList" Type="varchar(max)" Nullable="false" />
+          <Property Name="CcList" Type="varchar(max)" />
+          <Property Name="Subject" Type="varchar(max)" />
+          <Property Name="Body" Type="varchar(max)" />
+          <Property Name="RecievedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="IsHtml" Type="bit" />
+          <Property Name="IsProcessed" Type="bit" Nullable="false" />
+          <Property Name="HasAttachments" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserApplications">
+          <Key>
+            <PropertyRef Name="UserApplicationID" />
+          </Key>
+          <Property Name="UserApplicationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserDetails">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+          </Key>
+          <Property Name="UserDetailsID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ServiceNumber" Type="varchar" MaxLength="50" />
+          <Property Name="ManagerUserID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="20" />
+          <Property Name="PhysicalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalCode" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneHome" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneWork" Type="varchar" MaxLength="50" />
+          <Property Name="Cellphone" Type="varchar" MaxLength="50" />
+          <Property Name="Designation" Type="varchar" MaxLength="40" />
+          <Property Name="BusinessUnit" Type="varchar" MaxLength="60" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CommonCore_GoLive.dbo.tb_userdetails_270513' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="tb_userdetails_270513">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IsDeleted" />
+          </Key>
+          <Property Name="UserDetailsID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ServiceNumber" Type="varchar" MaxLength="50" />
+          <Property Name="ManagerUserID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="20" />
+          <Property Name="PhysicalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalCode" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneHome" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneWork" Type="varchar" MaxLength="50" />
+          <Property Name="Cellphone" Type="varchar" MaxLength="50" />
+          <Property Name="Designation" Type="varchar" MaxLength="40" />
+          <Property Name="BusinessUnit" Type="varchar" MaxLength="60" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CommonCore_GoLive.dbo.tb_UserDetails04072013' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="tb_UserDetails04072013">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IsDeleted" />
+          </Key>
+          <Property Name="UserDetailsID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ServiceNumber" Type="varchar" MaxLength="50" />
+          <Property Name="ManagerUserID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="20" />
+          <Property Name="PhysicalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalCode" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneHome" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneWork" Type="varchar" MaxLength="50" />
+          <Property Name="Cellphone" Type="varchar" MaxLength="50" />
+          <Property Name="Designation" Type="varchar" MaxLength="40" />
+          <Property Name="BusinessUnit" Type="varchar" MaxLength="60" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CommonCore_GoLive.dbo.tb_UserDetails20130512' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="tb_UserDetails20130512">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IsDeleted" />
+          </Key>
+          <Property Name="UserDetailsID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ServiceNumber" Type="varchar" MaxLength="50" />
+          <Property Name="ManagerUserID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="20" />
+          <Property Name="PhysicalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalCode" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneHome" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneWork" Type="varchar" MaxLength="50" />
+          <Property Name="Cellphone" Type="varchar" MaxLength="50" />
+          <Property Name="Designation" Type="varchar" MaxLength="40" />
+          <Property Name="BusinessUnit" Type="varchar" MaxLength="60" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CommonCore_GoLive.dbo.tb_UserDetails20141008' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="tb_UserDetails20141008">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IsDeleted" />
+          </Key>
+          <Property Name="UserDetailsID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ServiceNumber" Type="varchar" MaxLength="50" />
+          <Property Name="ManagerUserID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PostalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="20" />
+          <Property Name="PhysicalAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress3" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalAddress4" Type="varchar" MaxLength="50" />
+          <Property Name="PhysicalCode" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneHome" Type="varchar" MaxLength="50" />
+          <Property Name="TelephoneWork" Type="varchar" MaxLength="50" />
+          <Property Name="Cellphone" Type="varchar" MaxLength="50" />
+          <Property Name="Designation" Type="varchar" MaxLength="40" />
+          <Property Name="BusinessUnit" Type="varchar" MaxLength="60" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserLogInDetails">
+          <Key>
+            <PropertyRef Name="UserLogInDetailsID" />
+          </Key>
+          <Property Name="UserLogInDetailsID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="LogInDateTime" Type="datetime" Nullable="false" />
+          <Property Name="IPAddress" Type="varchar" MaxLength="50" />
+          <Property Name="ComputerName" Type="varchar" MaxLength="50" />
+          <Property Name="LogInSuccessful" Type="bit" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="AuthenticationTypeID" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserRoles">
+          <Key>
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="UserRoleID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="Password" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Users1">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="Password" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserSubscriptions">
+          <Key>
+            <PropertyRef Name="UserSubscriptionID" />
+          </Key>
+          <Property Name="UserSubscriptionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="EmailTemplateID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Variables">
+          <Key>
+            <PropertyRef Name="VariableID" />
+          </Key>
+          <Property Name="VariableID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="VariableName" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="SQLStatement" Type="varchar(max)" Nullable="false" />
+          <Property Name="VariableKey" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="ServerName" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ServerPort" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DatabaseName" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Username" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Password" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6013: The table/view 'CommonCore_GoLive.dbo.tb_Employee_View' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="tb_Employee_View">
+        <Property Name="SERVICE_NO" Type="varchar" MaxLength="10" />
+        <Property Name="SURNAME" Type="varchar" MaxLength="50" />
+        <Property Name="FIRST_NAME" Type="varchar" MaxLength="40" />
+        <Property Name="SECOND_NAME" Type="varchar" MaxLength="50" />
+        <Property Name="PREF_NAME" Type="varchar" MaxLength="20" />
+        <Property Name="TITLE" Type="varchar" MaxLength="6" />
+        <Property Name="INITIALS" Type="varchar" MaxLength="5" />
+        <Property Name="DESIGNATION" Type="varchar" MaxLength="40" />
+        <Property Name="CLUSTER_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="UNIT_ID" Type="varchar" MaxLength="60" />
+        <Property Name="UNIT_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="DEPT_ID" Type="varchar" MaxLength="60" />
+        <Property Name="DEPT_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="BRANCH_ID" Type="varchar" MaxLength="60" />
+        <Property Name="BRANCH_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="DIVISION_ID" Type="varchar" MaxLength="60" />
+        <Property Name="DIVISION_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="SECTION_ID" Type="varchar" MaxLength="60" />
+        <Property Name="SECTION_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="SUB_SECTION_ID" Type="varchar" MaxLength="60" />
+        <Property Name="SUB_SECTION_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="POST_NO" Type="varchar" MaxLength="60" />
+        <Property Name="CLUSTER_ID" Type="varchar" MaxLength="60" />
+        <Property Name="ISACTIVE" Type="varchar" MaxLength="60" />
+        <Property Name="EMAIL" Type="varchar" MaxLength="60" />
+        <Property Name="Manager_Serv_no" Type="varchar" MaxLength="10" />
+        <Property Name="Manager_First_Name" Type="varchar" MaxLength="40" />
+        <Property Name="Manager_Pref_Name" Type="varchar" MaxLength="20" />
+        <Property Name="Manager_Surname" Type="varchar" MaxLength="50" />
+      </EntityType>
+      Errors Found During Generation:
+      warning 6013: The table/view 'CommonCore_GoLive.dbo.tmp_View' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="tmp_View">
+        <Property Name="Manager_Serv_no" Type="varchar" MaxLength="10" />
+        <Property Name="Manager_First_Name" Type="varchar" MaxLength="40" />
+        <Property Name="Manager_Pref_Name" Type="varchar" MaxLength="20" />
+        <Property Name="Manager_Surname" Type="varchar" MaxLength="50" />
+        <Property Name="SERVICE_NO" Type="varchar" MaxLength="10" />
+        <Property Name="SURNAME" Type="varchar" MaxLength="50" />
+        <Property Name="FIRST_NAME" Type="varchar" MaxLength="40" />
+        <Property Name="SECOND_NAME" Type="varchar" MaxLength="50" />
+        <Property Name="PREF_NAME" Type="varchar" MaxLength="20" />
+        <Property Name="TITLE" Type="varchar" MaxLength="6" />
+        <Property Name="INITIALS" Type="varchar" MaxLength="5" />
+        <Property Name="DESIGNATION" Type="varchar" MaxLength="40" />
+        <Property Name="CLUSTER_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="UNIT_ID" Type="varchar" MaxLength="60" />
+        <Property Name="UNIT_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="DEPT_ID" Type="varchar" MaxLength="60" />
+        <Property Name="DEPT_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="BRANCH_ID" Type="varchar" MaxLength="60" />
+        <Property Name="BRANCH_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="DIVISION_ID" Type="varchar" MaxLength="60" />
+        <Property Name="DIVISION_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="SECTION_ID" Type="varchar" MaxLength="60" />
+        <Property Name="SECTION_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="SUB_SECTION_ID" Type="varchar" MaxLength="60" />
+        <Property Name="SUB_SECTION_DESC" Type="varchar" MaxLength="60" />
+        <Property Name="POST_NO" Type="varchar" MaxLength="40" />
+        <Property Name="CLUSTER_ID" Type="varchar" MaxLength="60" />
+        <Property Name="ISACTIVE" Type="varchar" MaxLength="1" />
+        <Property Name="EMAIL" Type="varchar" MaxLength="80" />
+      </EntityType>-->
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CommonCore_GoLiveModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CommonCore_GoLiveEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="tb_Actions" EntityType="CommonCore_GoLiveModel.tb_Actions" />
+          <EntitySet Name="tb_ActiveDirectory" EntityType="CommonCore_GoLiveModel.tb_ActiveDirectory" />
+          <EntitySet Name="tb_Applications" EntityType="CommonCore_GoLiveModel.tb_Applications" />
+          <EntitySet Name="tb_AppSettings" EntityType="CommonCore_GoLiveModel.tb_AppSettings" />
+          <EntitySet Name="tb_AuthenticationTypes" EntityType="CommonCore_GoLiveModel.tb_AuthenticationTypes" />
+          <EntitySet Name="tb_BatchJobs" EntityType="CommonCore_GoLiveModel.tb_BatchJobs" />
+          <EntitySet Name="tb_Delegations" EntityType="CommonCore_GoLiveModel.tb_Delegations" />
+          <EntitySet Name="tb_EmailAccounts" EntityType="CommonCore_GoLiveModel.tb_EmailAccounts" />
+          <EntitySet Name="tb_EmailAttachmentQueue" EntityType="CommonCore_GoLiveModel.tb_EmailAttachmentQueue" />
+          <EntitySet Name="tb_EmailAttachmentQueueProcessed" EntityType="CommonCore_GoLiveModel.tb_EmailAttachmentQueueProcessed" />
+          <EntitySet Name="tb_EmailExceptions" EntityType="CommonCore_GoLiveModel.tb_EmailExceptions" />
+          <EntitySet Name="tb_EmailExceptionTypes" EntityType="CommonCore_GoLiveModel.tb_EmailExceptionTypes" />
+          <EntitySet Name="tb_EmailLogs" EntityType="CommonCore_GoLiveModel.tb_EmailLogs" />
+          <EntitySet Name="tb_EmailQueue" EntityType="CommonCore_GoLiveModel.tb_EmailQueue" />
+          <EntitySet Name="tb_EmailQueueProcessed" EntityType="CommonCore_GoLiveModel.tb_EmailQueueProcessed" />
+          <EntitySet Name="tb_EmailStaticAttachments" EntityType="CommonCore_GoLiveModel.tb_EmailStaticAttachments" />
+          <EntitySet Name="tb_EmailTemplates" EntityType="CommonCore_GoLiveModel.tb_EmailTemplates" />
+          <EntitySet Name="tb_Entities" EntityType="CommonCore_GoLiveModel.tb_Entities" />
+          <EntitySet Name="tb_EntityActions" EntityType="CommonCore_GoLiveModel.tb_EntityActions" />
+          <EntitySet Name="tb_EventLogs" EntityType="CommonCore_GoLiveModel.tb_EventLogs" />
+          <EntitySet Name="tb_ReadEmailAttachments" EntityType="CommonCore_GoLiveModel.tb_ReadEmailAttachments" />
+          <EntitySet Name="tb_ReadEmailItems" EntityType="CommonCore_GoLiveModel.tb_ReadEmailItems" />
+          <EntitySet Name="tb_RecurringTypes" EntityType="CommonCore_GoLiveModel.tb_RecurringTypes" />
+          <EntitySet Name="tb_ReferenceTypes" EntityType="CommonCore_GoLiveModel.tb_ReferenceTypes" />
+          <EntitySet Name="tb_RoleActions" EntityType="CommonCore_GoLiveModel.tb_RoleActions" />
+          <EntitySet Name="tb_RoleEntityActions" EntityType="CommonCore_GoLiveModel.tb_RoleEntityActions" />
+          <EntitySet Name="tb_Roles" EntityType="CommonCore_GoLiveModel.tb_Roles" />
+          <EntitySet Name="tb_Schedules" EntityType="CommonCore_GoLiveModel.tb_Schedules" />
+          <EntitySet Name="tb_ScheduleTypes" EntityType="CommonCore_GoLiveModel.tb_ScheduleTypes" />
+          <EntitySet Name="tb_Scripts" EntityType="CommonCore_GoLiveModel.tb_Scripts" />
+          <EntitySet Name="tb_ScriptTypes" EntityType="CommonCore_GoLiveModel.tb_ScriptTypes" />
+          <EntitySet Name="tb_UnreadEmailAttachments" EntityType="CommonCore_GoLiveModel.tb_UnreadEmailAttachments" />
+          <EntitySet Name="tb_UnreadEmailItems" EntityType="CommonCore_GoLiveModel.tb_UnreadEmailItems" />
+          <EntitySet Name="tb_UserApplications" EntityType="CommonCore_GoLiveModel.tb_UserApplications" />
+          <EntitySet Name="tb_UserDetails" EntityType="CommonCore_GoLiveModel.tb_UserDetails" />
+          <EntitySet Name="tb_userdetails_270513" EntityType="CommonCore_GoLiveModel.tb_userdetails_270513" />
+          <EntitySet Name="tb_UserDetails04072013" EntityType="CommonCore_GoLiveModel.tb_UserDetails04072013" />
+          <EntitySet Name="tb_UserDetails20130512" EntityType="CommonCore_GoLiveModel.tb_UserDetails20130512" />
+          <EntitySet Name="tb_UserDetails20141008" EntityType="CommonCore_GoLiveModel.tb_UserDetails20141008" />
+          <EntitySet Name="tb_UserLogInDetails" EntityType="CommonCore_GoLiveModel.tb_UserLogInDetails" />
+          <EntitySet Name="tb_UserRoles" EntityType="CommonCore_GoLiveModel.tb_UserRoles" />
+          <EntitySet Name="tb_Users" EntityType="CommonCore_GoLiveModel.tb_Users" />
+          <EntitySet Name="tb_Users1" EntityType="CommonCore_GoLiveModel.tb_Users1" />
+          <EntitySet Name="tb_UserSubscriptions" EntityType="CommonCore_GoLiveModel.tb_UserSubscriptions" />
+          <EntitySet Name="tb_Variables" EntityType="CommonCore_GoLiveModel.tb_Variables" />
+        </EntityContainer>
+        <EntityType Name="tb_Actions">
+          <Key>
+            <PropertyRef Name="ActionID" />
+          </Key>
+          <Property Name="ActionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ActionName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ActionDescription" Type="String" MaxLength="150" Unicode="false" FixedLength="false" />
+          <Property Name="ActionKey" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ActiveDirectory">
+          <Key>
+            <PropertyRef Name="ActiveID" />
+          </Key>
+          <Property Name="ActiveID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Username" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="UserEmail" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tb_Applications">
+          <Key>
+            <PropertyRef Name="ApplicationID" />
+          </Key>
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationKey" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ApplicationName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ApplicationDescription" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="ApplicationURL" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_AppSettings">
+          <Key>
+            <PropertyRef Name="AppSettingID" />
+          </Key>
+          <Property Name="AppSettingID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="AppKey" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="AppValue" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_AuthenticationTypes">
+          <Key>
+            <PropertyRef Name="AuthenticationTypeID" />
+          </Key>
+          <Property Name="AuthenticationTypeID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="AuthenticationTypeName" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="AuthenticationTypeDescription" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="AuthenticationTypeKey" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_BatchJobs">
+          <Key>
+            <PropertyRef Name="BatchJobID" />
+          </Key>
+          <Property Name="BatchJobID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderIndex" Type="Int32" Nullable="false" />
+          <Property Name="ScheduleID" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceID" Type="Int32" Nullable="false" />
+          <Property Name="ScheduleTypeID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Delegations">
+          <Key>
+            <PropertyRef Name="DelegationID" />
+          </Key>
+          <Property Name="DelegationID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Int32" />
+          <Property Name="DelegateeUserID" Type="Int32" Nullable="false" />
+          <Property Name="DelegatorUserID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailAccounts">
+          <Key>
+            <PropertyRef Name="EmailAccountId" />
+          </Key>
+          <Property Name="EmailAccountId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="EmailAccountDescription" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ServiceUrl" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="PasswordExpiredDays" Type="Int32" Nullable="false" />
+          <Property Name="PasswordExpiredDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PasswordNeverExpires" Type="Boolean" Nullable="false" />
+          <Property Name="DeleteServerEmail" Type="Boolean" Nullable="false" />
+          <Property Name="CanRecieve" Type="Boolean" Nullable="false" />
+          <Property Name="CanSend" Type="Boolean" Nullable="false" />
+          <Property Name="CheckUndeliverable" Type="Boolean" Nullable="false" />
+          <Property Name="AccountFailureCount" Type="Int32" Nullable="false" />
+          <Property Name="MaxFailureCount" Type="Int32" Nullable="false" />
+          <Property Name="DisableAccount" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="IsLocked" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailAttachmentQueue">
+          <Key>
+            <PropertyRef Name="EmailAttachmentQueueId" />
+          </Key>
+          <Property Name="EmailAttachmentQueueId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailQueueId" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="Filename" Type="String" Nullable="false" MaxLength="1024" Unicode="false" FixedLength="false" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Attachment" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailAttachmentQueueProcessed">
+          <Key>
+            <PropertyRef Name="EmailAttachmentQueueId" />
+            <PropertyRef Name="EmailQueueId" />
+            <PropertyRef Name="ApplicationId" />
+            <PropertyRef Name="Filename" />
+            <PropertyRef Name="ContentType" />
+            <PropertyRef Name="Attachment" />
+          </Key>
+          <Property Name="EmailAttachmentQueueId" Type="Int32" Nullable="false" />
+          <Property Name="EmailQueueId" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="Filename" Type="String" Nullable="false" MaxLength="1024" Unicode="false" FixedLength="false" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Attachment" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailExceptions">
+          <Key>
+            <PropertyRef Name="EmailExceptionId" />
+          </Key>
+          <Property Name="EmailExceptionId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailExceptionTypeId" Type="Int32" Nullable="false" />
+          <Property Name="EmailQueueId" Type="Int32" Nullable="false" />
+          <Property Name="ToList" Type="String" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="Exception" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="ProcessedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AttemptCount" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailExceptionTypes">
+          <Key>
+            <PropertyRef Name="EmailExceptionTypeId" />
+          </Key>
+          <Property Name="EmailExceptionTypeId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailExceptionTypeName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EmailExceptionTypeDescription" Type="String" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="EmailExceptionTypeKey" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailLogs">
+          <Key>
+            <PropertyRef Name="EmailLogID" />
+          </Key>
+          <Property Name="EmailLogID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="EmailTemplateID" Type="Int32" />
+          <Property Name="EmailTo" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="EmailFrom" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="EmailSubject" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="EmailBody" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="SentDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SentByUserID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailQueue">
+          <Key>
+            <PropertyRef Name="EmailQueueId" />
+          </Key>
+          <Property Name="EmailQueueId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="QueueDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="EmailAccountId" Type="Int32" Nullable="false" />
+          <Property Name="ToList" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="CcList" Type="String" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="BccList" Type="String" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="1024" Unicode="false" FixedLength="false" />
+          <Property Name="Body" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="IsHtml" Type="Boolean" Nullable="false" />
+          <Property Name="FailureCount" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceId" Type="String" MaxLength="32" Unicode="false" FixedLength="false" />
+          <Property Name="ReferenceTypeId" Type="Int32" />
+          <Property Name="HasAttachments" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailQueueProcessed">
+          <Key>
+            <PropertyRef Name="EmailQueueId" />
+            <PropertyRef Name="QueueDateTime" />
+            <PropertyRef Name="ApplicationId" />
+            <PropertyRef Name="EmailAccountId" />
+            <PropertyRef Name="ToList" />
+            <PropertyRef Name="Subject" />
+            <PropertyRef Name="Body" />
+            <PropertyRef Name="IsHtml" />
+            <PropertyRef Name="FailureCount" />
+            <PropertyRef Name="ProcessedDateTime" />
+            <PropertyRef Name="HasAttachments" />
+          </Key>
+          <Property Name="EmailQueueId" Type="Int32" Nullable="false" />
+          <Property Name="QueueDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="EmailAccountId" Type="Int32" Nullable="false" />
+          <Property Name="ToList" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="CcList" Type="String" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="BccList" Type="String" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="1024" Unicode="false" FixedLength="false" />
+          <Property Name="Body" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="IsHtml" Type="Boolean" Nullable="false" />
+          <Property Name="FailureCount" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceId" Type="String" MaxLength="32" Unicode="false" FixedLength="false" />
+          <Property Name="ReferenceTypeId" Type="Int32" />
+          <Property Name="ProcessedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="HasAttachments" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailStaticAttachments">
+          <Key>
+            <PropertyRef Name="EmailStaticAttachmentId" />
+          </Key>
+          <Property Name="EmailStaticAttachmentId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailAccountId" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="Filename" Type="String" Nullable="false" MaxLength="1024" Unicode="false" FixedLength="false" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Attachment" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EmailTemplates">
+          <Key>
+            <PropertyRef Name="EmailTemplateID" />
+          </Key>
+          <Property Name="EmailTemplateID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="EmailTemplateName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EmailTemplateDescription" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EmailTemplateKey" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EmailFrom" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EmailSubject" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EmailBody" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Variables" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="IsHTML" Type="Boolean" Nullable="false" />
+          <Property Name="ToVariable" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="CcVariable" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="HasVariables" Type="Boolean" Nullable="false" />
+          <Property Name="SendAsOneEmail" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Entities">
+          <Key>
+            <PropertyRef Name="EntityID" />
+          </Key>
+          <Property Name="EntityID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="Namespace" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="EntityName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ServerName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DatabaseName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TableName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EntityActions">
+          <Key>
+            <PropertyRef Name="EntityActionID" />
+          </Key>
+          <Property Name="EntityActionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EntityID" Type="Int32" Nullable="false" />
+          <Property Name="ActionID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_EventLogs">
+          <Key>
+            <PropertyRef Name="EventLogID" />
+          </Key>
+          <Property Name="EventLogID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="EventDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EventData" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ReadEmailAttachments">
+          <Key>
+            <PropertyRef Name="EmailAttachmentId" />
+          </Key>
+          <Property Name="EmailAttachmentId" Type="Int32" Nullable="false" />
+          <Property Name="EmailItemId" Type="Int32" Nullable="false" />
+          <Property Name="Filename" Type="String" MaxLength="1024" Unicode="false" FixedLength="false" />
+          <Property Name="ContentType" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Attachment" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tb_ReadEmailItems">
+          <Key>
+            <PropertyRef Name="EmailItemId" />
+          </Key>
+          <Property Name="EmailItemId" Type="Int32" Nullable="false" />
+          <Property Name="EmailAccountId" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="FromList" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="ToList" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="CcList" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Subject" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="IsHtml" Type="Boolean" />
+          <Property Name="RecievedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="HasAttachments" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_RecurringTypes">
+          <Key>
+            <PropertyRef Name="RecurringTypeID" />
+          </Key>
+          <Property Name="RecurringTypeID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="RecurringTypeName" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="RecurringTypeDescription" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="RecurringTypeKey" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ReferenceTypes">
+          <Key>
+            <PropertyRef Name="ReferenceTypeId" />
+          </Key>
+          <Property Name="ReferenceTypeId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ReferenceTypeName" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="ReferenceTypeDescription" Type="String" MaxLength="1024" Unicode="false" FixedLength="false" />
+          <Property Name="ReferenceTypeKey" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="IsLocked" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_RoleActions">
+          <Key>
+            <PropertyRef Name="RoleActionID" />
+          </Key>
+          <Property Name="RoleActionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="ActionID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_RoleEntityActions">
+          <Key>
+            <PropertyRef Name="RoleEntityActionID" />
+          </Key>
+          <Property Name="RoleEntityActionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="EntityActionID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="RoleDescription" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="RoleKey" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Schedules">
+          <Key>
+            <PropertyRef Name="ScheduleID" />
+          </Key>
+          <Property Name="ScheduleID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleTypeID" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceID" Type="Int32" Nullable="false" />
+          <Property Name="RecurringTypeID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="NextDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ScheduleTypes">
+          <Key>
+            <PropertyRef Name="ScheduleTypeID" />
+          </Key>
+          <Property Name="ScheduleTypeID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleTypeName" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="ScheduleTypeDescription" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="ScheduleTypeKey" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Scripts">
+          <Key>
+            <PropertyRef Name="ScriptID" />
+          </Key>
+          <Property Name="ScriptID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ScriptName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ScriptDescription" Type="String" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="SqlScript" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ScriptypeID" Type="Int32" Nullable="false" />
+          <Property Name="ParameterNames" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ParameterValues" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ServerName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ServerPort" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_ScriptTypes">
+          <Key>
+            <PropertyRef Name="ScriptTypeID" />
+          </Key>
+          <Property Name="ScriptTypeID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ScriptTypeName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ScriptTypeDescription" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ScriptTypeKey" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UnreadEmailAttachments">
+          <Key>
+            <PropertyRef Name="EmailAttachmentId" />
+          </Key>
+          <Property Name="EmailAttachmentId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailItemId" Type="Int32" Nullable="false" />
+          <Property Name="Filename" Type="String" MaxLength="1024" Unicode="false" FixedLength="false" />
+          <Property Name="ContentType" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Attachment" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="IsProcessed" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UnreadEmailItems">
+          <Key>
+            <PropertyRef Name="EmailItemId" />
+          </Key>
+          <Property Name="EmailItemId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailAccountId" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="FromList" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="ToList" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="CcList" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Subject" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="RecievedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsHtml" Type="Boolean" />
+          <Property Name="IsProcessed" Type="Boolean" Nullable="false" />
+          <Property Name="HasAttachments" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserApplications">
+          <Key>
+            <PropertyRef Name="UserApplicationID" />
+          </Key>
+          <Property Name="UserApplicationID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserDetails">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+          </Key>
+          <Property Name="UserDetailsID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ServiceNumber" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ManagerUserID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalCode" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneHome" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneWork" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Cellphone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Designation" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="BusinessUnit" Type="String" MaxLength="60" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_userdetails_270513">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IsDeleted" />
+          </Key>
+          <Property Name="UserDetailsID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ServiceNumber" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ManagerUserID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalCode" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneHome" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneWork" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Cellphone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Designation" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="BusinessUnit" Type="String" MaxLength="60" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserDetails04072013">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IsDeleted" />
+          </Key>
+          <Property Name="UserDetailsID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ServiceNumber" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ManagerUserID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalCode" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneHome" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneWork" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Cellphone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Designation" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="BusinessUnit" Type="String" MaxLength="60" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserDetails20130512">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IsDeleted" />
+          </Key>
+          <Property Name="UserDetailsID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ServiceNumber" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ManagerUserID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalCode" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneHome" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneWork" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Cellphone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Designation" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="BusinessUnit" Type="String" MaxLength="60" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserDetails20141008">
+          <Key>
+            <PropertyRef Name="UserDetailsID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IsDeleted" />
+          </Key>
+          <Property Name="UserDetailsID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ServiceNumber" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ManagerUserID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalAddress4" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PhysicalCode" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneHome" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TelephoneWork" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Cellphone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Designation" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="BusinessUnit" Type="String" MaxLength="60" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserLogInDetails">
+          <Key>
+            <PropertyRef Name="UserLogInDetailsID" />
+          </Key>
+          <Property Name="UserLogInDetailsID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="LogInDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IPAddress" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ComputerName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="LogInSuccessful" Type="Boolean" />
+          <Property Name="Username" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="AuthenticationTypeID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserRoles">
+          <Key>
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Users1">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_UserSubscriptions">
+          <Key>
+            <PropertyRef Name="UserSubscriptionID" />
+          </Key>
+          <Property Name="UserSubscriptionID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="EmailTemplateID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Variables">
+          <Key>
+            <PropertyRef Name="VariableID" />
+          </Key>
+          <Property Name="VariableID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="VariableName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="SQLStatement" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="VariableKey" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="ServerName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ServerPort" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CommonCore_GoLiveModelStoreContainer" CdmEntityContainer="CommonCore_GoLiveEntities">
+          <EntitySetMapping Name="tb_Actions">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Actions">
+              <MappingFragment StoreEntitySet="tb_Actions">
+                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ActionDescription" ColumnName="ActionDescription" />
+                <ScalarProperty Name="ActionKey" ColumnName="ActionKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_ActiveDirectory">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_ActiveDirectory">
+              <MappingFragment StoreEntitySet="tb_ActiveDirectory">
+                <ScalarProperty Name="ActiveID" ColumnName="ActiveID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Applications">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Applications">
+              <MappingFragment StoreEntitySet="tb_Applications">
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="ApplicationKey" ColumnName="ApplicationKey" />
+                <ScalarProperty Name="ApplicationName" ColumnName="ApplicationName" />
+                <ScalarProperty Name="ApplicationDescription" ColumnName="ApplicationDescription" />
+                <ScalarProperty Name="ApplicationURL" ColumnName="ApplicationURL" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_AppSettings">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_AppSettings">
+              <MappingFragment StoreEntitySet="tb_AppSettings">
+                <ScalarProperty Name="AppSettingID" ColumnName="AppSettingID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="AppKey" ColumnName="AppKey" />
+                <ScalarProperty Name="AppValue" ColumnName="AppValue" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_AuthenticationTypes">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_AuthenticationTypes">
+              <MappingFragment StoreEntitySet="tb_AuthenticationTypes">
+                <ScalarProperty Name="AuthenticationTypeID" ColumnName="AuthenticationTypeID" />
+                <ScalarProperty Name="AuthenticationTypeName" ColumnName="AuthenticationTypeName" />
+                <ScalarProperty Name="AuthenticationTypeDescription" ColumnName="AuthenticationTypeDescription" />
+                <ScalarProperty Name="AuthenticationTypeKey" ColumnName="AuthenticationTypeKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_BatchJobs">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_BatchJobs">
+              <MappingFragment StoreEntitySet="tb_BatchJobs">
+                <ScalarProperty Name="BatchJobID" ColumnName="BatchJobID" />
+                <ScalarProperty Name="OrderIndex" ColumnName="OrderIndex" />
+                <ScalarProperty Name="ScheduleID" ColumnName="ScheduleID" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="ScheduleTypeID" ColumnName="ScheduleTypeID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Delegations">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Delegations">
+              <MappingFragment StoreEntitySet="tb_Delegations">
+                <ScalarProperty Name="DelegationID" ColumnName="DelegationID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="DelegateeUserID" ColumnName="DelegateeUserID" />
+                <ScalarProperty Name="DelegatorUserID" ColumnName="DelegatorUserID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailAccounts">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailAccounts">
+              <MappingFragment StoreEntitySet="tb_EmailAccounts">
+                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="EmailAccountDescription" ColumnName="EmailAccountDescription" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ServiceUrl" ColumnName="ServiceUrl" />
+                <ScalarProperty Name="PasswordExpiredDays" ColumnName="PasswordExpiredDays" />
+                <ScalarProperty Name="PasswordExpiredDate" ColumnName="PasswordExpiredDate" />
+                <ScalarProperty Name="PasswordNeverExpires" ColumnName="PasswordNeverExpires" />
+                <ScalarProperty Name="DeleteServerEmail" ColumnName="DeleteServerEmail" />
+                <ScalarProperty Name="CanRecieve" ColumnName="CanRecieve" />
+                <ScalarProperty Name="CanSend" ColumnName="CanSend" />
+                <ScalarProperty Name="CheckUndeliverable" ColumnName="CheckUndeliverable" />
+                <ScalarProperty Name="AccountFailureCount" ColumnName="AccountFailureCount" />
+                <ScalarProperty Name="MaxFailureCount" ColumnName="MaxFailureCount" />
+                <ScalarProperty Name="DisableAccount" ColumnName="DisableAccount" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailAttachmentQueue">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailAttachmentQueue">
+              <MappingFragment StoreEntitySet="tb_EmailAttachmentQueue">
+                <ScalarProperty Name="EmailAttachmentQueueId" ColumnName="EmailAttachmentQueueId" />
+                <ScalarProperty Name="EmailQueueId" ColumnName="EmailQueueId" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailAttachmentQueueProcessed">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailAttachmentQueueProcessed">
+              <MappingFragment StoreEntitySet="tb_EmailAttachmentQueueProcessed">
+                <ScalarProperty Name="EmailAttachmentQueueId" ColumnName="EmailAttachmentQueueId" />
+                <ScalarProperty Name="EmailQueueId" ColumnName="EmailQueueId" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailExceptions">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailExceptions">
+              <MappingFragment StoreEntitySet="tb_EmailExceptions">
+                <ScalarProperty Name="EmailExceptionId" ColumnName="EmailExceptionId" />
+                <ScalarProperty Name="EmailExceptionTypeId" ColumnName="EmailExceptionTypeId" />
+                <ScalarProperty Name="EmailQueueId" ColumnName="EmailQueueId" />
+                <ScalarProperty Name="ToList" ColumnName="ToList" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="ProcessedDateTime" ColumnName="ProcessedDateTime" />
+                <ScalarProperty Name="AttemptCount" ColumnName="AttemptCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailExceptionTypes">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailExceptionTypes">
+              <MappingFragment StoreEntitySet="tb_EmailExceptionTypes">
+                <ScalarProperty Name="EmailExceptionTypeId" ColumnName="EmailExceptionTypeId" />
+                <ScalarProperty Name="EmailExceptionTypeName" ColumnName="EmailExceptionTypeName" />
+                <ScalarProperty Name="EmailExceptionTypeDescription" ColumnName="EmailExceptionTypeDescription" />
+                <ScalarProperty Name="EmailExceptionTypeKey" ColumnName="EmailExceptionTypeKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailLogs">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailLogs">
+              <MappingFragment StoreEntitySet="tb_EmailLogs">
+                <ScalarProperty Name="EmailLogID" ColumnName="EmailLogID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="EmailTemplateID" ColumnName="EmailTemplateID" />
+                <ScalarProperty Name="EmailTo" ColumnName="EmailTo" />
+                <ScalarProperty Name="EmailFrom" ColumnName="EmailFrom" />
+                <ScalarProperty Name="EmailSubject" ColumnName="EmailSubject" />
+                <ScalarProperty Name="EmailBody" ColumnName="EmailBody" />
+                <ScalarProperty Name="SentDateTime" ColumnName="SentDateTime" />
+                <ScalarProperty Name="SentByUserID" ColumnName="SentByUserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailQueue">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailQueue">
+              <MappingFragment StoreEntitySet="tb_EmailQueue">
+                <ScalarProperty Name="EmailQueueId" ColumnName="EmailQueueId" />
+                <ScalarProperty Name="QueueDateTime" ColumnName="QueueDateTime" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
+                <ScalarProperty Name="ToList" ColumnName="ToList" />
+                <ScalarProperty Name="CcList" ColumnName="CcList" />
+                <ScalarProperty Name="BccList" ColumnName="BccList" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="IsHtml" ColumnName="IsHtml" />
+                <ScalarProperty Name="FailureCount" ColumnName="FailureCount" />
+                <ScalarProperty Name="ReferenceId" ColumnName="ReferenceId" />
+                <ScalarProperty Name="ReferenceTypeId" ColumnName="ReferenceTypeId" />
+                <ScalarProperty Name="HasAttachments" ColumnName="HasAttachments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailQueueProcessed">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailQueueProcessed">
+              <MappingFragment StoreEntitySet="tb_EmailQueueProcessed">
+                <ScalarProperty Name="EmailQueueId" ColumnName="EmailQueueId" />
+                <ScalarProperty Name="QueueDateTime" ColumnName="QueueDateTime" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
+                <ScalarProperty Name="ToList" ColumnName="ToList" />
+                <ScalarProperty Name="CcList" ColumnName="CcList" />
+                <ScalarProperty Name="BccList" ColumnName="BccList" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="IsHtml" ColumnName="IsHtml" />
+                <ScalarProperty Name="FailureCount" ColumnName="FailureCount" />
+                <ScalarProperty Name="ReferenceId" ColumnName="ReferenceId" />
+                <ScalarProperty Name="ReferenceTypeId" ColumnName="ReferenceTypeId" />
+                <ScalarProperty Name="ProcessedDateTime" ColumnName="ProcessedDateTime" />
+                <ScalarProperty Name="HasAttachments" ColumnName="HasAttachments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailStaticAttachments">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailStaticAttachments">
+              <MappingFragment StoreEntitySet="tb_EmailStaticAttachments">
+                <ScalarProperty Name="EmailStaticAttachmentId" ColumnName="EmailStaticAttachmentId" />
+                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+                <ScalarProperty Name="EndDateTime" ColumnName="EndDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EmailTemplates">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EmailTemplates">
+              <MappingFragment StoreEntitySet="tb_EmailTemplates">
+                <ScalarProperty Name="EmailTemplateID" ColumnName="EmailTemplateID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="EmailTemplateName" ColumnName="EmailTemplateName" />
+                <ScalarProperty Name="EmailTemplateDescription" ColumnName="EmailTemplateDescription" />
+                <ScalarProperty Name="EmailTemplateKey" ColumnName="EmailTemplateKey" />
+                <ScalarProperty Name="EmailFrom" ColumnName="EmailFrom" />
+                <ScalarProperty Name="EmailSubject" ColumnName="EmailSubject" />
+                <ScalarProperty Name="EmailBody" ColumnName="EmailBody" />
+                <ScalarProperty Name="Variables" ColumnName="Variables" />
+                <ScalarProperty Name="IsHTML" ColumnName="IsHTML" />
+                <ScalarProperty Name="ToVariable" ColumnName="ToVariable" />
+                <ScalarProperty Name="CcVariable" ColumnName="CcVariable" />
+                <ScalarProperty Name="HasVariables" ColumnName="HasVariables" />
+                <ScalarProperty Name="SendAsOneEmail" ColumnName="SendAsOneEmail" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Entities">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Entities">
+              <MappingFragment StoreEntitySet="tb_Entities">
+                <ScalarProperty Name="EntityID" ColumnName="EntityID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="Namespace" ColumnName="Namespace" />
+                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
+                <ScalarProperty Name="ServerName" ColumnName="ServerName" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EntityActions">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EntityActions">
+              <MappingFragment StoreEntitySet="tb_EntityActions">
+                <ScalarProperty Name="EntityActionID" ColumnName="EntityActionID" />
+                <ScalarProperty Name="EntityID" ColumnName="EntityID" />
+                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_EventLogs">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_EventLogs">
+              <MappingFragment StoreEntitySet="tb_EventLogs">
+                <ScalarProperty Name="EventLogID" ColumnName="EventLogID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="EventDateTime" ColumnName="EventDateTime" />
+                <ScalarProperty Name="EventData" ColumnName="EventData" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_ReadEmailAttachments">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_ReadEmailAttachments">
+              <MappingFragment StoreEntitySet="tb_ReadEmailAttachments">
+                <ScalarProperty Name="EmailAttachmentId" ColumnName="EmailAttachmentId" />
+                <ScalarProperty Name="EmailItemId" ColumnName="EmailItemId" />
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_ReadEmailItems">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_ReadEmailItems">
+              <MappingFragment StoreEntitySet="tb_ReadEmailItems">
+                <ScalarProperty Name="EmailItemId" ColumnName="EmailItemId" />
+                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="FromList" ColumnName="FromList" />
+                <ScalarProperty Name="ToList" ColumnName="ToList" />
+                <ScalarProperty Name="CcList" ColumnName="CcList" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="IsHtml" ColumnName="IsHtml" />
+                <ScalarProperty Name="RecievedDateTime" ColumnName="RecievedDateTime" />
+                <ScalarProperty Name="HasAttachments" ColumnName="HasAttachments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_RecurringTypes">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_RecurringTypes">
+              <MappingFragment StoreEntitySet="tb_RecurringTypes">
+                <ScalarProperty Name="RecurringTypeID" ColumnName="RecurringTypeID" />
+                <ScalarProperty Name="RecurringTypeName" ColumnName="RecurringTypeName" />
+                <ScalarProperty Name="RecurringTypeDescription" ColumnName="RecurringTypeDescription" />
+                <ScalarProperty Name="RecurringTypeKey" ColumnName="RecurringTypeKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_ReferenceTypes">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_ReferenceTypes">
+              <MappingFragment StoreEntitySet="tb_ReferenceTypes">
+                <ScalarProperty Name="ReferenceTypeId" ColumnName="ReferenceTypeId" />
+                <ScalarProperty Name="ReferenceTypeName" ColumnName="ReferenceTypeName" />
+                <ScalarProperty Name="ReferenceTypeDescription" ColumnName="ReferenceTypeDescription" />
+                <ScalarProperty Name="ReferenceTypeKey" ColumnName="ReferenceTypeKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_RoleActions">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_RoleActions">
+              <MappingFragment StoreEntitySet="tb_RoleActions">
+                <ScalarProperty Name="RoleActionID" ColumnName="RoleActionID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_RoleEntityActions">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_RoleEntityActions">
+              <MappingFragment StoreEntitySet="tb_RoleEntityActions">
+                <ScalarProperty Name="RoleEntityActionID" ColumnName="RoleEntityActionID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="EntityActionID" ColumnName="EntityActionID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Roles">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Roles">
+              <MappingFragment StoreEntitySet="tb_Roles">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+                <ScalarProperty Name="RoleKey" ColumnName="RoleKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Schedules">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Schedules">
+              <MappingFragment StoreEntitySet="tb_Schedules">
+                <ScalarProperty Name="ScheduleID" ColumnName="ScheduleID" />
+                <ScalarProperty Name="ScheduleTypeID" ColumnName="ScheduleTypeID" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="RecurringTypeID" ColumnName="RecurringTypeID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="NextDate" ColumnName="NextDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_ScheduleTypes">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_ScheduleTypes">
+              <MappingFragment StoreEntitySet="tb_ScheduleTypes">
+                <ScalarProperty Name="ScheduleTypeID" ColumnName="ScheduleTypeID" />
+                <ScalarProperty Name="ScheduleTypeName" ColumnName="ScheduleTypeName" />
+                <ScalarProperty Name="ScheduleTypeDescription" ColumnName="ScheduleTypeDescription" />
+                <ScalarProperty Name="ScheduleTypeKey" ColumnName="ScheduleTypeKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Scripts">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Scripts">
+              <MappingFragment StoreEntitySet="tb_Scripts">
+                <ScalarProperty Name="ScriptID" ColumnName="ScriptID" />
+                <ScalarProperty Name="ScriptName" ColumnName="ScriptName" />
+                <ScalarProperty Name="ScriptDescription" ColumnName="ScriptDescription" />
+                <ScalarProperty Name="SqlScript" ColumnName="SqlScript" />
+                <ScalarProperty Name="ScriptypeID" ColumnName="ScriptypeID" />
+                <ScalarProperty Name="ParameterNames" ColumnName="ParameterNames" />
+                <ScalarProperty Name="ParameterValues" ColumnName="ParameterValues" />
+                <ScalarProperty Name="ServerName" ColumnName="ServerName" />
+                <ScalarProperty Name="ServerPort" ColumnName="ServerPort" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_ScriptTypes">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_ScriptTypes">
+              <MappingFragment StoreEntitySet="tb_ScriptTypes">
+                <ScalarProperty Name="ScriptTypeID" ColumnName="ScriptTypeID" />
+                <ScalarProperty Name="ScriptTypeName" ColumnName="ScriptTypeName" />
+                <ScalarProperty Name="ScriptTypeDescription" ColumnName="ScriptTypeDescription" />
+                <ScalarProperty Name="ScriptTypeKey" ColumnName="ScriptTypeKey" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UnreadEmailAttachments">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UnreadEmailAttachments">
+              <MappingFragment StoreEntitySet="tb_UnreadEmailAttachments">
+                <ScalarProperty Name="EmailAttachmentId" ColumnName="EmailAttachmentId" />
+                <ScalarProperty Name="EmailItemId" ColumnName="EmailItemId" />
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UnreadEmailItems">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UnreadEmailItems">
+              <MappingFragment StoreEntitySet="tb_UnreadEmailItems">
+                <ScalarProperty Name="EmailItemId" ColumnName="EmailItemId" />
+                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="FromList" ColumnName="FromList" />
+                <ScalarProperty Name="ToList" ColumnName="ToList" />
+                <ScalarProperty Name="CcList" ColumnName="CcList" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="RecievedDateTime" ColumnName="RecievedDateTime" />
+                <ScalarProperty Name="IsHtml" ColumnName="IsHtml" />
+                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+                <ScalarProperty Name="HasAttachments" ColumnName="HasAttachments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UserApplications">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UserApplications">
+              <MappingFragment StoreEntitySet="tb_UserApplications">
+                <ScalarProperty Name="UserApplicationID" ColumnName="UserApplicationID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UserDetails">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UserDetails">
+              <MappingFragment StoreEntitySet="tb_UserDetails">
+                <ScalarProperty Name="UserDetailsID" ColumnName="UserDetailsID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ServiceNumber" ColumnName="ServiceNumber" />
+                <ScalarProperty Name="ManagerUserID" ColumnName="ManagerUserID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PostalAddress1" ColumnName="PostalAddress1" />
+                <ScalarProperty Name="PostalAddress2" ColumnName="PostalAddress2" />
+                <ScalarProperty Name="PostalAddress3" ColumnName="PostalAddress3" />
+                <ScalarProperty Name="PostalAddress4" ColumnName="PostalAddress4" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="PhysicalAddress1" ColumnName="PhysicalAddress1" />
+                <ScalarProperty Name="PhysicalAddress2" ColumnName="PhysicalAddress2" />
+                <ScalarProperty Name="PhysicalAddress3" ColumnName="PhysicalAddress3" />
+                <ScalarProperty Name="PhysicalAddress4" ColumnName="PhysicalAddress4" />
+                <ScalarProperty Name="PhysicalCode" ColumnName="PhysicalCode" />
+                <ScalarProperty Name="TelephoneHome" ColumnName="TelephoneHome" />
+                <ScalarProperty Name="TelephoneWork" ColumnName="TelephoneWork" />
+                <ScalarProperty Name="Cellphone" ColumnName="Cellphone" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="BusinessUnit" ColumnName="BusinessUnit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_userdetails_270513">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_userdetails_270513">
+              <MappingFragment StoreEntitySet="tb_userdetails_270513">
+                <ScalarProperty Name="UserDetailsID" ColumnName="UserDetailsID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ServiceNumber" ColumnName="ServiceNumber" />
+                <ScalarProperty Name="ManagerUserID" ColumnName="ManagerUserID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PostalAddress1" ColumnName="PostalAddress1" />
+                <ScalarProperty Name="PostalAddress2" ColumnName="PostalAddress2" />
+                <ScalarProperty Name="PostalAddress3" ColumnName="PostalAddress3" />
+                <ScalarProperty Name="PostalAddress4" ColumnName="PostalAddress4" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="PhysicalAddress1" ColumnName="PhysicalAddress1" />
+                <ScalarProperty Name="PhysicalAddress2" ColumnName="PhysicalAddress2" />
+                <ScalarProperty Name="PhysicalAddress3" ColumnName="PhysicalAddress3" />
+                <ScalarProperty Name="PhysicalAddress4" ColumnName="PhysicalAddress4" />
+                <ScalarProperty Name="PhysicalCode" ColumnName="PhysicalCode" />
+                <ScalarProperty Name="TelephoneHome" ColumnName="TelephoneHome" />
+                <ScalarProperty Name="TelephoneWork" ColumnName="TelephoneWork" />
+                <ScalarProperty Name="Cellphone" ColumnName="Cellphone" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="BusinessUnit" ColumnName="BusinessUnit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UserDetails04072013">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UserDetails04072013">
+              <MappingFragment StoreEntitySet="tb_UserDetails04072013">
+                <ScalarProperty Name="UserDetailsID" ColumnName="UserDetailsID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ServiceNumber" ColumnName="ServiceNumber" />
+                <ScalarProperty Name="ManagerUserID" ColumnName="ManagerUserID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PostalAddress1" ColumnName="PostalAddress1" />
+                <ScalarProperty Name="PostalAddress2" ColumnName="PostalAddress2" />
+                <ScalarProperty Name="PostalAddress3" ColumnName="PostalAddress3" />
+                <ScalarProperty Name="PostalAddress4" ColumnName="PostalAddress4" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="PhysicalAddress1" ColumnName="PhysicalAddress1" />
+                <ScalarProperty Name="PhysicalAddress2" ColumnName="PhysicalAddress2" />
+                <ScalarProperty Name="PhysicalAddress3" ColumnName="PhysicalAddress3" />
+                <ScalarProperty Name="PhysicalAddress4" ColumnName="PhysicalAddress4" />
+                <ScalarProperty Name="PhysicalCode" ColumnName="PhysicalCode" />
+                <ScalarProperty Name="TelephoneHome" ColumnName="TelephoneHome" />
+                <ScalarProperty Name="TelephoneWork" ColumnName="TelephoneWork" />
+                <ScalarProperty Name="Cellphone" ColumnName="Cellphone" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="BusinessUnit" ColumnName="BusinessUnit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UserDetails20130512">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UserDetails20130512">
+              <MappingFragment StoreEntitySet="tb_UserDetails20130512">
+                <ScalarProperty Name="UserDetailsID" ColumnName="UserDetailsID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ServiceNumber" ColumnName="ServiceNumber" />
+                <ScalarProperty Name="ManagerUserID" ColumnName="ManagerUserID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PostalAddress1" ColumnName="PostalAddress1" />
+                <ScalarProperty Name="PostalAddress2" ColumnName="PostalAddress2" />
+                <ScalarProperty Name="PostalAddress3" ColumnName="PostalAddress3" />
+                <ScalarProperty Name="PostalAddress4" ColumnName="PostalAddress4" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="PhysicalAddress1" ColumnName="PhysicalAddress1" />
+                <ScalarProperty Name="PhysicalAddress2" ColumnName="PhysicalAddress2" />
+                <ScalarProperty Name="PhysicalAddress3" ColumnName="PhysicalAddress3" />
+                <ScalarProperty Name="PhysicalAddress4" ColumnName="PhysicalAddress4" />
+                <ScalarProperty Name="PhysicalCode" ColumnName="PhysicalCode" />
+                <ScalarProperty Name="TelephoneHome" ColumnName="TelephoneHome" />
+                <ScalarProperty Name="TelephoneWork" ColumnName="TelephoneWork" />
+                <ScalarProperty Name="Cellphone" ColumnName="Cellphone" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="BusinessUnit" ColumnName="BusinessUnit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UserDetails20141008">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UserDetails20141008">
+              <MappingFragment StoreEntitySet="tb_UserDetails20141008">
+                <ScalarProperty Name="UserDetailsID" ColumnName="UserDetailsID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ServiceNumber" ColumnName="ServiceNumber" />
+                <ScalarProperty Name="ManagerUserID" ColumnName="ManagerUserID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PostalAddress1" ColumnName="PostalAddress1" />
+                <ScalarProperty Name="PostalAddress2" ColumnName="PostalAddress2" />
+                <ScalarProperty Name="PostalAddress3" ColumnName="PostalAddress3" />
+                <ScalarProperty Name="PostalAddress4" ColumnName="PostalAddress4" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="PhysicalAddress1" ColumnName="PhysicalAddress1" />
+                <ScalarProperty Name="PhysicalAddress2" ColumnName="PhysicalAddress2" />
+                <ScalarProperty Name="PhysicalAddress3" ColumnName="PhysicalAddress3" />
+                <ScalarProperty Name="PhysicalAddress4" ColumnName="PhysicalAddress4" />
+                <ScalarProperty Name="PhysicalCode" ColumnName="PhysicalCode" />
+                <ScalarProperty Name="TelephoneHome" ColumnName="TelephoneHome" />
+                <ScalarProperty Name="TelephoneWork" ColumnName="TelephoneWork" />
+                <ScalarProperty Name="Cellphone" ColumnName="Cellphone" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="BusinessUnit" ColumnName="BusinessUnit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UserLogInDetails">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UserLogInDetails">
+              <MappingFragment StoreEntitySet="tb_UserLogInDetails">
+                <ScalarProperty Name="UserLogInDetailsID" ColumnName="UserLogInDetailsID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="LogInDateTime" ColumnName="LogInDateTime" />
+                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+                <ScalarProperty Name="ComputerName" ColumnName="ComputerName" />
+                <ScalarProperty Name="LogInSuccessful" ColumnName="LogInSuccessful" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="AuthenticationTypeID" ColumnName="AuthenticationTypeID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UserRoles">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UserRoles">
+              <MappingFragment StoreEntitySet="tb_UserRoles">
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Users">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Users">
+              <MappingFragment StoreEntitySet="tb_Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Users1">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Users1">
+              <MappingFragment StoreEntitySet="tb_Users1">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_UserSubscriptions">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_UserSubscriptions">
+              <MappingFragment StoreEntitySet="tb_UserSubscriptions">
+                <ScalarProperty Name="UserSubscriptionID" ColumnName="UserSubscriptionID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="EmailTemplateID" ColumnName="EmailTemplateID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Variables">
+            <EntityTypeMapping TypeName="CommonCore_GoLiveModel.tb_Variables">
+              <MappingFragment StoreEntitySet="tb_Variables">
+                <ScalarProperty Name="VariableID" ColumnName="VariableID" />
+                <ScalarProperty Name="VariableName" ColumnName="VariableName" />
+                <ScalarProperty Name="SQLStatement" ColumnName="SQLStatement" />
+                <ScalarProperty Name="VariableKey" ColumnName="VariableKey" />
+                <ScalarProperty Name="ServerName" ColumnName="ServerName" />
+                <ScalarProperty Name="ServerPort" ColumnName="ServerPort" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

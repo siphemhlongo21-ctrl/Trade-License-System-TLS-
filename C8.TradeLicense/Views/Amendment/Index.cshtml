@@ -1,0 +1,52 @@
+﻿@using C8.TradeLicense.ViewModels;
+@model  List<AmendmentListVM>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Pending Amendments  <span class="badge">@ViewBag.LicenseCount</span></h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Amendment ID</th>
+                            <th>License ID</th>
+                            <th>License Number</th>
+                            <th>Type</th>
+                            <th>Requested Date</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.AmendmentId</td>
+                                <td>@item.LicenseId</td>
+                                <td>@item.LicenseNumber</td>
+                                <td>@item.AmendmentType</td>
+                                <td>@item.RequestedDate.ToString("yyyy-MM-dd")</td>
+                                <td>@item.Status</td>
+
+                                <td>
+                                    @Html.ActionLink(
+                                                            "Review",
+                                                            "Review",
+                                                            new { id = item.AmendmentId },
+                                                            new { @class = "btn btn-primary btn-sm" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+             
+            </div>
+        </div>
+    </div>
+</div>
+
+

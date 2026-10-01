@@ -1,0 +1,174 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@model C8.TradeLicense.Models.LicenseApplicationDetails
+
+
+@{
+    ViewBag.Title = "Details";
+    var documentTypes = Model.ClientDocuments;
+    var documentsList = Model.ClientUploadList;
+    var businesses = Model.ClientBusinessesList;
+
+}
+
+
+<div class="panel-group" id="accordionClient">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-parent="#accordionClient" href="#collapseOne">Customer Information</a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse ">
+            <div class="panel-body">
+                <div class="form-horizontal" align="left">
+                    <div style="float: left">
+                        <table>
+                            <tr>
+                                <td>FirstName</td>
+                                <td>: @Model.CustomerDetails.Name </td>
+                            </tr>
+                            <tr>
+                                <td>Surname</td>
+                                <td>: @Model.CustomerDetails.Surname </td>
+                            </tr>
+                            <tr>
+                                <td>Individual Type</td>
+                                <td>: @Model.CustomerDetails.Individual </td>
+                            </tr>
+
+                            @if (Model.CustomerDetails.IdentityOrPassportNumber == null)
+
+                            {
+                                <tr>
+                                    <td>Business Name</td>
+                                    <td>: @Model.CustomerDetails.BusinessName</td>
+                                </tr>
+                                <tr>
+                                    <td>Business Reg Number</td>
+                                    <td>: @Model.CustomerDetails.RegNumber</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>ID/ Passport No.</td>
+                                    <td>: @Model.CustomerDetails.IdentityOrPassportNumber</td>
+                                </tr>
+                            }
+
+                            <tr></tr>
+                            <tr>
+                                <td style="vertical-align: top">Postal Address</td>
+                                <td>: @Model.CustomerDetails.PostalAddress</td>
+                          
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td style="vertical-align: top">Residential Address</td>
+                                <td>: @Model.CustomerDetails.ResidentialAddress</td>
+                       
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div style="float: right">
+                        <table>
+                            <tr>
+                                <td>Telephone No.</td>
+                                <td>: @Model.CustomerDetails.TelephoneNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Cellphone No.</td>
+                                <td>: @Model.CustomerDetails.CellphoneNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Alternative Cellphone No.</td>
+                                <td>: @Model.CustomerDetails.AltCellphoneNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Fax No.</td>
+                                <td>: @Model.CustomerDetails.FaxNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Email Address</td>
+                                <td>: @Model.CustomerDetails.EmailAddress</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-parent="#accordionClient" href="#collapseTwo">
+                        Documentation
+                    </a>
+        
+                </h4>
+            </div>
+            <div id="collapseTwo" class="">
+                <div class="panel-body">
+         
+
+                    @if (documentsList.Any())
+                    {
+                        <table class="table-bordered">
+                            <tr>
+                                <th>Document Type</th>
+                                <th>FileName</th>
+                                <th>Created Date</th>
+                            </tr>
+                            @foreach (var item in documentsList)
+                            {
+                                <tr>
+                                    <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                    <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                    <td style="padding-right: 10px">@item.Uploadeddate</td>
+                                </tr>
+
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <label style="font-style: italic; font-family: sans-serif; color: red">No documents to display.</label>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-parent="#accordion" href="#collapseFour">
+                        Customer Registered Business
+                    </a>
+                </h4>
+            </div>
+
+            <div id="collapseFour" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    @if (businesses.Any())
+                    {
+                        <div>
+                            @Html.Partial("~/Views/Shared/_ClientBusinessPartial.cshtml")
+                        </div>
+                    }
+                    else
+                    {
+                        <label style="font-style: italic; font-family: sans-serif; color: red">No businesses registered.</label>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div>
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+    </div>
+</div>

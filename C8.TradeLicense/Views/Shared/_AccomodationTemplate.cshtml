@@ -1,0 +1,323 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@model IEnumerable<C8.TradeLicense.Models.License>
+@using C8.TradeLicense.Models
+
+@{
+    Layout = null;
+
+    var Manager = (IEnumerable<BusinessManger>)ViewData["Manager"];
+    var business = (Business)ViewData["Business"];
+    var license = (License)ViewData["License"];
+    var conditions = (IEnumerable<LicenseApplicationConditions>)ViewData["Conditions"] ?? Enumerable.Empty<LicenseApplicationConditions>();
+
+    int totalConditions = conditions.Count();
+    int displayed = Math.Min(9, totalConditions);
+
+
+
+    //// === Mask Identity Number ===
+    //string MaskIdentity(string id)
+    //{
+    //    if (string.IsNullOrEmpty(id))
+    //        return "N/A";
+
+    //    string clean = id.Trim().ToUpper();
+
+    //    if (clean.Length <= 5)
+    //        return clean;
+
+    //    string firstTwo = clean.Substring(0, 2);
+    //    string lastThree = clean.Substring(clean.Length - 3);
+
+    //    int middleLength = clean.Length - 5;
+    //    string masked = new string('X', middleLength);
+
+    //    return firstTwo + masked + lastThree;
+    //}
+}
+
+<style>
+    @@page {
+        size: A4 portrait !important;
+        margin: 10mm !important;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Times New Roman", Times, serif;
+        font-size: 7.5pt !important;
+        /*        font-size: 15pt !important;*/
+        line-height: 1.4 !important;
+        color: #000;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 100% !important;
+        position: relative;
+    }
+
+    /* ==================== FIXED HEADER & FOOTER ==================== */
+    .header {
+        position: fixed;
+        top: 0;
+        left: 10mm;
+        right: 10mm;
+        background: white;
+        z-index: 100;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 10mm;
+        right: 10mm;
+        background: white;
+        z-index: 100;
+        padding-bottom: 15px;
+    }
+
+    .main-content {
+        margin-top: 200px;        /* Gap after header */
+        margin-bottom: 350px;    /* Important: Space reserved for footer */
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .logo {
+        height: 140px;
+    }
+
+    .license-type-box {
+        border: 3px solid #000;
+        height: 85px;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 14pt !important;
+        font-weight: bold;
+        padding: 10px;
+        line-height: 1.3;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse;
+        
+    }
+
+    td {
+        padding: 8px 10px;
+        vertical-align: top;
+    }
+
+    .label {
+        width: 35%;
+        font-weight: bold;
+        font-size: 7.5pt !important;
+    }
+
+    .value {
+        font-weight: normal;
+        font-size: 7.5pt !important;
+    }
+
+    .conditions-title {
+        font-size: 10pt;
+        font-weight: bold;
+        text-decoration: underline;
+        margin: 30px 0 12px 0;
+    }
+
+    .condition-item {
+        margin: 6px 0;
+       
+    }
+
+    /* Fixed height for conditions area */
+    .conditions-box {
+        min-height: 210px; 
+        border: 1px solid #ccc;
+        padding: 10px 12px;
+        background: #fff;
+        font-size: 8.5pt;
+    }
+</style>
+
+<div class="container">
+
+    <!-- ==================== FIXED HEADER ==================== -->
+    <div class="header">
+        <table style="width:100%; margin-bottom:15px; border-collapse:collapse;">
+            <tr>
+                <td style="vertical-align:bottom; padding:0;">
+                    <img src="@Url.Content("~/content/themes/base/images/eThekwiniLogo.png")" class="logo" />
+                </td>
+                <td style="vertical-align:bottom; padding:0 0 0 8px;">
+                    <div style="text-align:right; margin-bottom:8px;">
+                        <div style="font-size:20px; font-weight:bold;">LICENSING AUTHORITY</div>
+                        <div style="font-size:14px;">Certificate issued in terms of the Accommodation Establishment Bylaw, 1993</div>
+                    </div>
+
+                    <table style="width:100%; border-collapse:collapse;">
+                        <tr>
+                            <td class="license-type-box">
+                                @license.ItemType.ItemTypeName.ToUpper() : @license.ItemType.ItemTypeDescription.ToUpper()
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <table style="width: 100%; font-size: 8pt; border-collapse: collapse;">
+            <tr>
+                <td style="font-weight:bold; ">
+                    BUSINESS LICENSE NO: @license.LicenseNumber.ToUpper()
+                </td>
+                <td style="text-align:right; font-weight:bold; ">
+                    VALIDITY DATE:
+                    @license.LicenseIssueDateTime.Value.ToString("yyyy-MM-dd")
+                    to
+                    @license.LicenseIssueDateTime.Value.AddYears(1).ToString("yyyy-MM-dd")
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <div class="main-content">
+
+        <!-- LICENSE HOLDER -->
+        @if (license.Client.CustomerType == "Individual")
+        {
+            <table>
+                <tr><td class="label">LICENSE HOLDER:</td><td class="value">@license.Client.Fullname.ToUpper()</td></tr>
+                <tr><td class="label">IDENTITY NUMBER:</td><td class="value">@MaskIdentityNumber(license.Client.IdentityOrPassportNumber.ToUpper())</td></tr>
+            </table>
+        }
+        else
+        {
+            <table>
+                <tr>
+                    <td class="label">LICENSE HOLDER:</td>
+                    <td class="value">@(license.Client.CustomerType == "Business" ? license.Client.BusinessName.ToUpper() : license.Client.Fullname.ToUpper())</td>
+                </tr>
+                <tr>
+                    <td class="label">REGISTRATION NUMBER:</td>
+                    <td class="value">@(string.IsNullOrEmpty(license.Client.RegNumber) ? "N/A" : license.Client.RegNumber.ToUpper())</td>
+                </tr>
+            </table>
+        }
+
+        <!-- BUSINESS DETAILS -->
+        <table>
+            <tr>
+                <td class="label">TRADING NAME OF BUSINESS:</td>
+                <td class="value">@business.ProposedTradeName.ToUpper()</td>
+            </tr>
+            <tr>
+                <td class="label">DESCRIPTION OF PREMISES AND ADDRESS:</td>
+                <td class="value">
+                    @if (business.ResidentialShopOrUnitNumber != null)
+                    {
+                        <text>Unit No: @business.ResidentialShopOrUnitNumber<br /></text>
+                    }
+                    @business.ResidentialAddress1.ToUpper()<br />
+                    @if (!string.IsNullOrEmpty(business.ResidentialAddress2))
+                    {@business.ResidentialAddress2.ToUpper()<br />}
+                    @if (!string.IsNullOrEmpty(business.ResidentialAddress3))
+                    {@business.ResidentialAddress3.ToUpper()<br />}
+                    @business.ResidentialAddressCode.ToString().ToUpper()
+                </td>
+            </tr>
+            <tr>
+                <td class="label">TYPE OF BUSINESS:</td>
+                <td class="value">@license.ItemSubCategory.ItemSubCategoryName.ToUpper()</td>
+            </tr>
+        </table>
+
+        <!-- CONDITIONS - Fixed Height Area -->
+        <div class="conditions-title">CONDITIONS:</div>
+        <div class="conditions-box">
+
+            @{ int count = 1; }
+
+            @foreach (var item in conditions.Take(9))
+            {
+                <div class="condition-item">
+                    <b>@count.</b> @item.ConditionName
+                </div>
+                count++;
+            }
+
+            @if (totalConditions > 9)
+            {
+                <div class="condition-item" style="margin-top:12px; font-style:italic;">
+                    <b>(and @(totalConditions - 9) more conditions apply)</b>
+                </div>
+            }
+        </div>
+
+    </div>
+
+    <!-- ==================== FIXED FOOTER ==================== -->
+    <div class="footer">
+        <div>
+            <div style="margin-bottom:10px;">____________________</div>
+            <div style="font-weight:bold;">LICENSING AUTHORITY</div>
+            <div style="margin-top:5px;">
+                Date of issue: @license.LicenseIssueDateTime.Value.ToString("yyyy-MM-dd")
+            </div>
+        </div>
+
+        <div style="margin-top:40px; font-weight:bold;">
+            Terms And Conditions Apply:
+        </div>
+
+        <table style="width:100%; font-size:7.5pt; margin-top:15px; border-collapse:collapse;">
+            <tr>
+                <td style="width:50%; vertical-align:top; padding-right:25px;">
+                    <div style="font-weight:bold; margin-bottom:10px;">Renewal of a Business License</div>
+                    <div style="margin-bottom:12px;">1. A license holder must, at least 60 days prior to the expiry of the license apply to the Municipality on the prescribed form.</div>
+                    <div>2. Failure to renew the license will result in your license being lapsed and liable for prosecution.</div>
+                </td>
+                <td style="width:50%; vertical-align:top; padding-left:25px;">
+                    <div style="font-weight:bold; margin-bottom:10px;">COMPLIANCE WITH OTHER LAWS:</div>
+                    <div style="font-weight:bold; margin-bottom:10px;">Transfer of business license to third party:</div>
+                    <div>A license holder who intends to sell their business and transfer the business license to another person must, pursuant to such sale, transfer the business license within 60 days.</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    @functions {
+        string MaskIdentityNumber(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return "N/A";
+
+            string clean = id.Trim().ToUpper();
+
+            if (clean.Length <= 5)
+                return clean;
+
+            string firstTwo = clean.Substring(0, 2);
+            string lastThree = clean.Substring(clean.Length - 3);
+            int middleLength = clean.Length - 5;
+
+            string masked = "";
+            for (int i = 0; i < middleLength; i++)
+            {
+                masked += "X";
+            }
+
+            return firstTwo + masked + lastThree;
+        }
+    }
+
+</div>

@@ -1,0 +1,531 @@
+﻿@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+
+
+
+@{
+    ViewBag.Title = "Add Refusal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var InspectionRequest = Model.InspectionRequestDetails;
+    var licence = Model.LicenseDetails;
+    var InspectionResponse = Model.InspectionResponseDetails;
+    var documentTypes =Model.BussinessDocuments;
+    var documentsList = Model.RefusalDocuments;
+    var DepartmentContact = Model.DepartmentContactDetails;
+    var client = Model.CustomerDetails;
+    var business = Model.BusinessDetails;
+    var InspectiondocumentsList = Model.ClientUploadList;
+
+    var license = Model.LicenseDetails;
+    var InspectorDocs = Model.InspectionRequestDocuments;
+    var DepartmentContactlist = Model.DepartmentContacts;
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error</strong> @TempData["Error"].ToString()
+    </div>
+}
+
+<div id="errorResponse" class="alert alert-warning" style="display:none;">
+</div>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+           .error {
+        color: tomato;
+    }
+    </style>
+</head>
+
+
+<br />
+<br />
+<br />
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <script>
+        $(document).ready(function () {
+            @*var currentItemType = $("#ddlItemTypeName option:selected").text();
+            $("#ClientId").val('@client.ClientId');
+            if (currentItemType !== "Item 2") {
+                $("#fingerprint_verification").hide();
+            }*@
+
+            $("#LicenseId").val('@licence.LicenseId');
+            $("#InspectionResponseId").val('@InspectionResponse.InspectionResponseId');
+            $("#InspectionRequestId").val('@InspectionRequest.InspectionRequestId');
+            var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(ViewBag.OustandingDocuments))';
+            var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+            var groupList = [];
+
+            $.each(outstandingDocuments, function (index, value) {
+                groupList.push('<li>' + value + '</li>');
+            });
+
+            if (groupList.length > 0) {
+                $('#outstandingDocumentList').append(groupList.join(''));
+                $('#documentAlert').show();
+            }
+
+
+        });
+        //TODO: Validating File Types
+        var validFilesTypes = [".bmp", ".gif", ".png", ".jpg", ".jpeg", ".doc", ".xls", ".pdf", ".docx", ".xlsx"];
+        $(document).bind("change", "#file", function (e) {
+            var file = $('input[type=file]').val();
+            var isValidFile = false;
+            if (file) {
+                var ext = file.substring(file.lastIndexOf("."), file.length).toLowerCase();
+                for (var i = 0; i < validFilesTypes.length; i++) {
+                    if (ext == validFilesTypes[i]) {
+                        isValidFile = true;
+                        break;
+                    }
+                }
+                if (!isValidFile) {
+                    alert("Invalid File. Refer supported file types below:\n\n" + validFilesTypes.join(", "));
+                    $('#file').replaceWith($('#file').clone());
+                }
+            }
+        });
+
+    </script>
+    @using (Html.BeginForm("Details", "Refusals", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @*Success message*@
+        <div>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                    @*<a class="close" data-dismiss="alert">×</a>*@
+                    @*<strong>Success!</strong>@TempData["Success"].ToString()*@
+                    <span class="sr-only">Success: </span>
+                    @TempData["Success"].ToString()
+                </div>
+            }
+        </div>
+        <div>
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    @*<a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Error!</strong> @TempData["Error"].ToString()*@
+                    <span class="sr-only">Error: </span>
+                    @TempData["Error"].ToString()
+                </div>
+            }
+        </div>
+        <div>
+            @if (TempData["Info"] != null)
+            {
+                <div class="alert alert-info">
+                    <a class="close" data-dismiss="alert">×</a>
+                    <strong>Note!</strong>
+                    @TempData["Info"].ToString()
+                </div>
+            }
+        </div>
+
+        @Html.ValidationSummary(true)
+        <div>
+            @Html.HiddenFor(model => model.RefusalDetails.RefusalId)
+        </div>
+        <div>
+            @Html.HiddenFor(model => model.RefusalDetails.InspectionRequestId)
+        </div>
+        <div>
+            @Html.HiddenFor(model => model.RefusalDetails.InspectionResponseId)
+        </div>
+        <div>
+            @Html.HiddenFor(model => model.RefusalDetails.LicenseId)
+        </div>
+
+        <div id="demo">
+            <div class="step-app">
+                <ul class="step-steps">
+                    <li><a href="#step1"><span class="number">1</span>License Holders Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                    <li><a href="#step3"> <span class="number">3</span>License Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                    <li><a href="#step4"> <span class="number">4</span>Department Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step5"><span class="number">5</span>Inspection History <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step6"><span class="number">6</span> View Report </a></li>
+
+                </ul>
+                <div class="step-content">
+
+                    <div class="step-tab-panel" id="step1" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_ClientPartial.cshtml",client)
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="step-tab-panel" id="step2" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_BusinessPartial.cshtml",business)
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step3" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_LicencePartial.cshtml", licence)
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step4" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_InspectionRequestPartial.cshtml",Model)
+             
+
+
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+
+                    <div class="step-tab-panel" id="step5" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">Response Details</legend>
+                        <div>
+
+
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+
+                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+
+
+
+                                            <table class="table">
+
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayName("Inspector Name")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Inspection Date")
+                                                    </th>
+
+                                                    <th>
+                                                        @Html.DisplayName("Inspection Status")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Clerk")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Captured By Clerk")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Adhoc inspection")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Comment")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Report")
+                                                    </th>
+
+
+                                                </tr>
+
+                                                @foreach (var item in Model.InspectionHistorys)
+                                                {
+                                                    <tr>
+                                                        @foreach (var DepartmentCont in DepartmentContactlist)
+                                                        {
+                                                            if (DepartmentCont.DepartmentContactId == item.InspectionRequest.DepartmentContactId)
+                                                            {
+
+                                                                <td>
+
+                                                                    @DepartmentCont.User.FullName
+                                                                </td>
+                                                            }
+                                                        }
+                                                        <td>
+                                                            @item.InspectionDateTime
+                                                        </td>
+
+                                                        <td>
+                                                            @item.Status.StatusName
+                                                        </td>
+                                                        <td>
+                                                            @item.Clerk
+                                                        </td>
+                                                        <td>
+                                                            @if (item.CapturedByClerk == false)
+                                                            {
+                                                                @Html.DisplayName("No")
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.DisplayName("Yes")
+                                                            }
+
+                                                        </td>
+                                                        <td>
+                                                            @if (item.AdhocInspector == false)
+                                                            {
+                                                                @Html.DisplayName("No")
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.DisplayName("Yes")
+                                                            }
+
+                                                        </td>
+
+                                                        <td>
+                                                            @item.Comment
+                                                        </td>
+                                                        <td style="padding-right: 10px">
+                                                            @if (InspectorDocs.Any() || InspectorDocs != null)
+                                                            {
+                                                                foreach (var Report in InspectorDocs)
+                                                                {
+                                                                    if (Report.referenceId == item.InspectionResponseId)
+                                                                    {
+
+                                                                        <a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@Report.FilePath">@Report.FileName</a>
+
+                                                                  
+
+                                                                        break;
+                                                                    }
+
+                                                                }
+                                                            }
+
+
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </table>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="step-tab-panel" id="step6" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">Download Refusal Report</legend>
+                        <div>
+                            <div class="panel-body">
+                             
+
+                                @if (documentsList.Any())
+                                {
+                                    <table class="table-bordered">
+                                        <tr>
+                                            <th>Document Type</th>
+                                            <th>FileName</th>
+                                            <th>Uploaded By</th>
+                                            <th>Created Date</th>
+                                        </tr>
+                                        @foreach (var item in documentsList)
+                                        {
+                                            <tr>
+                                                <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                                   <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+
+                                                <td style="padding-right: 10px">@item.Uploadedby </td>
+                                                
+
+                                                <td style="padding-right: 10px">@item.Uploadeddate</td>
+                                            </tr>
+
+                                        }
+                                    </table>
+                                }
+                            </div>
+
+
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+
+                  
+                </div>
+                <div class="step-footer">
+                    <div class="form-group" hidden>
+                        <div class="col-md-offset-2 col-md-5">
+                            <input type="submit" value="Create" id="Createbtn" class="btn btn-default" />
+                        </div>
+                    </div>
+                    <div align="left" class="col-lg-3">
+
+                        <a class="btn btn-outline-primary" href="@Url.Action("Index", "Refusals", new { LicenseID = licence.LicenseId })">
+                            <span class="font-icon-group"></span>Back to List
+                        </a>
+                    </div>
+                    <div align="center" class="col-lg-6">
+                        <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                        <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                        <button data-direction="finish" class="btn btn-outline-success">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    }
+    <script src="~/Scripts/jquery-steps.js"></script>
+    <script src="~/Scripts/datepicker/bootstrap-datepicker.js"></script>
+    <link href="~/Scripts/datepicker/datepicker3.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $('#demo').steps({
+            onFinish: function () { document.getElementById("Createbtn").click(); }
+        });
+
+        $("table").addClass("table table-bordered")
+        $('#ExpiryPermit').datepicker({
+            format: 'mm/dd/yyyy',
+
+        });
+        $('#AppealDate').datepicker({
+            format: 'mm/dd/yyyy',
+
+        });
+        function Nationalitychange(element) {
+
+            if (element.value == "Other") {
+                document.getElementById("DivNationalityOther").hidden = false;
+                document.getElementById("DivExpiryPermit").hidden = false;
+
+                document.getElementById("DivNationalityOther").required = true;
+                document.getElementById("DivExpiryPermit").required = true;
+            }
+            else if (element.value != "South African National") {
+                document.getElementById("DivNationalityOther").hidden = true;
+                document.getElementById("DivExpiryPermit").hidden = false;
+                document.getElementById("DivNationalityOther").required = false;
+                document.getElementById("DivExpiryPermit").required = true;
+            }
+            else {
+                document.getElementById("DivNationalityOther").required = false;
+                document.getElementById("DivExpiryPermit").required = false;
+                document.getElementById("DivNationalityOther").hidden = true;
+                document.getElementById("DivExpiryPermit").hidden = true;
+            }
+        }
+
+        var isSame = "false"
+        $(document).ready(function () {
+            $('#isSame').change(function () {
+                var isChecked = $(this).is(':checked');
+                if (isChecked) {
+
+
+                    isSame = "true"
+                    $("#PostalAddress1").val(  $("#ResidentialAddress1").val())
+                    $("#PostalAddress2").val($("#ResidentialAddress2").val())
+                    $("#PostalAddress3").val($("#ResidentialAddress3").val());
+                    $("#PostalAddressCode").val($("#ResidentialAddressCode").val())
+                    document.getElementById("PostalAddressCode").defaultValue = parseInt($("#ResidentialAddressCode").val());
+
+
+                } else {
+                    $("#PostalAddress1").val("");
+                    $("#PostalAddress2").val("");
+                    $("#PostalAddress3").val("");
+                    $("#PostalAddressCode").val("");
+                    document.getElementById("PostalAddressCode").defaultValue = "";
+
+                    $('#postalAddress').show();
+                }
+            });
+
+
+
+        });
+    </script>
+</body>
+
+</html>
+
+
+

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?><Database Name="TradeLicenseSystem" Class="TradeLicenseEntitiesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=YOUR_SERVER;Initial Catalog=YOUR_DATABASE;Persist Security Info=True;User ID=YOUR_USER" SettingsObjectName="C8.Windows.Service.Properties.Settings" SettingsPropertyName="TradeLicenseSystemConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.InspectionRequests" Member="InspectionRequests">
+    <Type Name="InspectionRequest">
+      <Column Name="InspectionRequestId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OverrideOrderIndex" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="LicenseId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LicenseTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StatusId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SlaExpiryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="User_InspectionRequest" Member="User" ThisKey="CreatedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_InspectionRequest1" Member="User1" ThisKey="ModifiedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="Client_InspectionRequest" Member="Client" ThisKey="ClientId" OtherKey="ClientId" Type="Client" IsForeignKey="true" />
+      <Association Name="License_InspectionRequest" Member="License" ThisKey="LicenseId" OtherKey="LicenseId" Type="License" IsForeignKey="true" />
+      <Association Name="Status_InspectionRequest" Member="Status" ThisKey="StatusId" OtherKey="StatusId" Type="Status" IsForeignKey="true" />
+      <Association Name="Department_InspectionRequest" Member="Department" ThisKey="DepartmentId" OtherKey="DepartmentId" Type="Department" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DepartmentContacts" Member="DepartmentContacts">
+    <Type Name="DepartmentContact">
+      <Column Name="DepartmentContactId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DepartmentId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsPrinciple" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentHeadContactId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="DepartmentContact_DepartmentContact" Member="DepartmentContacts" ThisKey="DepartmentContactId" OtherKey="DepartmentHeadContactId" Type="DepartmentContact" />
+      <Association Name="DepartmentContact_DepartmentContact" Member="DepartmentContact1" ThisKey="DepartmentHeadContactId" OtherKey="DepartmentContactId" Type="DepartmentContact" IsForeignKey="true" />
+      <Association Name="User_DepartmentContact" Member="User" ThisKey="CreatedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_DepartmentContact1" Member="User1" ThisKey="ModifiedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_DepartmentContact2" Member="User2" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="Department_DepartmentContact" Member="Department" ThisKey="DepartmentId" OtherKey="DepartmentId" Type="Department" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="EmailAddress" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="LandLine" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Fax" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="IpAddress" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsPasswordReset" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="User_InspectionRequest" Member="InspectionRequests" ThisKey="UserId" OtherKey="CreatedByUserId" Type="InspectionRequest" />
+      <Association Name="User_InspectionRequest1" Member="InspectionRequests1" ThisKey="UserId" OtherKey="ModifiedByUserId" Type="InspectionRequest" />
+      <Association Name="User_DepartmentContact" Member="DepartmentContacts" ThisKey="UserId" OtherKey="CreatedByUserId" Type="DepartmentContact" />
+      <Association Name="User_DepartmentContact1" Member="DepartmentContacts1" ThisKey="UserId" OtherKey="ModifiedByUserId" Type="DepartmentContact" />
+      <Association Name="User_DepartmentContact2" Member="DepartmentContacts2" ThisKey="UserId" OtherKey="UserId" Type="DepartmentContact" />
+      <Association Name="User_User" Member="Users" ThisKey="UserId" OtherKey="CreatedByUserId" Type="User" />
+      <Association Name="User_User1" Member="Users1" ThisKey="UserId" OtherKey="ModifiedByUserId" Type="User" />
+      <Association Name="User_Client" Member="Clients" ThisKey="UserId" OtherKey="ClientUserId" Type="Client" />
+      <Association Name="User_Client1" Member="Clients1" ThisKey="UserId" OtherKey="CreatedByUserId" Type="Client" />
+      <Association Name="User_Client2" Member="Clients2" ThisKey="UserId" OtherKey="ModifiedByUserId" Type="Client" />
+      <Association Name="User_License" Member="Licenses" ThisKey="UserId" OtherKey="CreatedByUserId" Type="License" />
+      <Association Name="User_License1" Member="Licenses1" ThisKey="UserId" OtherKey="ModifiedByUserId" Type="License" />
+      <Association Name="User_Status" Member="Status" ThisKey="UserId" OtherKey="CreatedByUserId" Type="Status" />
+      <Association Name="User_Status1" Member="Status1" ThisKey="UserId" OtherKey="ModifiedByUserId" Type="Status" />
+      <Association Name="User_Department" Member="Departments" ThisKey="UserId" OtherKey="CreatedByUserId" Type="Department" />
+      <Association Name="User_Department1" Member="Departments1" ThisKey="UserId" OtherKey="ModifiedByUserId" Type="Department" />
+      <Association Name="User_Business" Member="Businesses" ThisKey="UserId" OtherKey="CreatedByUserId" Type="Business" />
+      <Association Name="User_Business1" Member="Businesses1" ThisKey="UserId" OtherKey="ModifiedByUserId" Type="Business" />
+      <Association Name="User_User" Member="User1" ThisKey="CreatedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_User1" Member="User2" ThisKey="ModifiedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Clients" Member="Clients">
+    <Type Name="Client">
+      <Column Name="ClientId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IdentityOrPassportNumber" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Surname" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ResidentialAddress1" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ResidentialAddress2" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ResidentialAddress3" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ResidentialAddressCode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PostalAddress1" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PostalAddress2" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PostalAddress3" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PostalAddressCode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TelephoneNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="CellphoneNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FaxNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="EmailAddress" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ClientUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientStatusId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Client_InspectionRequest" Member="InspectionRequests" ThisKey="ClientId" OtherKey="ClientId" Type="InspectionRequest" />
+      <Association Name="Client_License" Member="Licenses" ThisKey="ClientId" OtherKey="ClientId" Type="License" />
+      <Association Name="Client_Business" Member="Businesses" ThisKey="ClientId" OtherKey="ClientId" Type="Business" />
+      <Association Name="User_Client" Member="User" ThisKey="ClientUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_Client1" Member="User1" ThisKey="CreatedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_Client2" Member="User2" ThisKey="ModifiedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="Status_Client" Member="Status" ThisKey="ClientStatusId" OtherKey="StatusId" Type="Status" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Licenses" Member="Licenses">
+    <Type Name="License">
+      <Column Name="LicenseId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LicenseTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BusinessId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LicenseIssueYear" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApplicationDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LicenseIssueDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="NotificationUpdatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="StatusId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LicenseClosureDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LicenseCollectedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="RequiredDocuments" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LicenseExpiryDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LicenseNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ItemTypeId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ItemSubCategoryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RegionId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ItemConditionId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LicenseRenewalDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="License_InspectionRequest" Member="InspectionRequests" ThisKey="LicenseId" OtherKey="LicenseId" Type="InspectionRequest" />
+      <Association Name="Client_License" Member="Client" ThisKey="ClientId" OtherKey="ClientId" Type="Client" IsForeignKey="true" />
+      <Association Name="User_License" Member="User" ThisKey="CreatedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_License1" Member="User1" ThisKey="ModifiedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="Status_License" Member="Status" ThisKey="StatusId" OtherKey="StatusId" Type="Status" IsForeignKey="true" />
+      <Association Name="Business_License" Member="Business" ThisKey="BusinessId" OtherKey="BusinessId" Type="Business" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Status" Member="Status">
+    <Type Name="Status">
+      <Column Name="StatusId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="StatusName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="StatusTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StatusDescription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="StatusKey" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Status_InspectionRequest" Member="InspectionRequests" ThisKey="StatusId" OtherKey="StatusId" Type="InspectionRequest" />
+      <Association Name="Status_Client" Member="Clients" ThisKey="StatusId" OtherKey="ClientStatusId" Type="Client" />
+      <Association Name="Status_License" Member="Licenses" ThisKey="StatusId" OtherKey="StatusId" Type="License" />
+      <Association Name="Status_Business" Member="Businesses" ThisKey="StatusId" OtherKey="BusinessStatusId" Type="Business" />
+      <Association Name="User_Status" Member="User" ThisKey="CreatedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_Status1" Member="User1" ThisKey="ModifiedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Departments" Member="Departments">
+    <Type Name="Department">
+      <Column Name="DepartmentId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DepartmentName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentDescription" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentKey" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentStructureType" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="RegionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Department_InspectionRequest" Member="InspectionRequests" ThisKey="DepartmentId" OtherKey="DepartmentId" Type="InspectionRequest" />
+      <Association Name="Department_DepartmentContact" Member="DepartmentContacts" ThisKey="DepartmentId" OtherKey="DepartmentId" Type="DepartmentContact" />
+      <Association Name="User_Department" Member="User" ThisKey="CreatedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_Department1" Member="User1" ThisKey="ModifiedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Businesses" Member="Businesses">
+    <Type Name="Business">
+      <Column Name="BusinessId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ClientId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProposedTradeName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="BusinessTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PostalAddress1" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PostalAddress2" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PostalAddress3" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PostalAddressCode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ResidentialShopOrUnitNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ResidentialStreetAddress" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ResidentialAddress1" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ResidentialAddress2" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ResidentialAddress3" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ResidentialAddressCode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TelephoneNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="CellphoneNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FaxNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TitleDeedTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NameOfBusinessOperator" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="OperatorIdentityOrPassportNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="OperatorResidentialAddress1" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="OperatorResidentialAddress2" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="OperatorResidentialAddress3" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="OperatorResidentialAddressCode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NameOfEmployer" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="EmployerResidentialAddress1" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="EmployerResidentialAddress2" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="EmployerResidentialAddress3" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="EmployerResidentialAddressCode" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OperationStructureTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BusinessStatusId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BusinessOperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RatesAccountNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ItemTypeId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsSelfEmployed" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Business_License" Member="Licenses" ThisKey="BusinessId" OtherKey="BusinessId" Type="License" />
+      <Association Name="Client_Business" Member="Client" ThisKey="ClientId" OtherKey="ClientId" Type="Client" IsForeignKey="true" />
+      <Association Name="Status_Business" Member="Status" ThisKey="BusinessStatusId" OtherKey="StatusId" Type="Status" IsForeignKey="true" />
+      <Association Name="User_Business" Member="User" ThisKey="CreatedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_Business1" Member="User1" ThisKey="ModifiedByUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

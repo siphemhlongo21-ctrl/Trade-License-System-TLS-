@@ -1,0 +1,190 @@
+﻿@using C8.TradeLicense.DataAccessLayer;
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+
+@model PagedList.IPagedList<C8.TradeLicense.Models.User>
+@using PagedList.Mvc;
+
+
+@{
+    ViewBag.Title = "Index";
+    var db = new TradeLicenseDbContext();
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!").addClass("error");
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+
+        $('#closeModal').click(function (e) {
+            $("#errorModal").hide();
+        });
+    });
+</script>
+
+
+@using (Html.BeginForm("Index", "User", FormMethod.Get))
+{
+    <div class="alert alert-info">
+        <h5>Select Search Option Below:</h5>
+        <div id="SelectionSearch" class="form-group " align="left">
+            @Html.RadioButton("selectedSearch", "UserFirstName")&nbsp;First Name
+            &nbsp; &nbsp;
+            @Html.RadioButton("selectedSearch", "UserName")&nbsp;Username
+            &nbsp; &nbsp;
+            @Html.TextBox("inputSearch")
+            &nbsp; &nbsp;
+            <input type="submit" value="Search" id="btnSearch" />
+            &nbsp; &nbsp;
+            <a href="@Url.Action("Index")">
+                <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+            </a>
+        </div>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div id="errorModal" class="alert-danger">
+        <a id="closeModal" class="close" data-dismiss="alert">×</a>
+        @TempData["Error"].ToString()
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Add User", "Create", null, new { @class = "btn btn-outline-warning" })
+</p>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Users - <span class="badge">@ViewBag.UserCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Username)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().EmailAddress)
+                </th>
+                <th>
+                </th>
+                <th>
+                    @Html.DisplayName("Current Role")
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                var userAssigned = db.DepartmentContacts.Any(dc => dc.UserId == item.UserId && dc.IsActive == true && dc.IsDeleted == false);
+                
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmailAddress)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.UserId })
+                        
+                        @if (!userAssigned)
+                        {
+                            @Html.Raw(" ")@Html.Label("|")@Html.Raw(" ")
+                            @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+                        }
+                        
+                    </td>
+                    @{
+
+                var identityManager = new IdentityManager();
+                var userName = item.Username;
+                var userRole = "";
+
+                if (userName != "")
+                {
+                    userRole = identityManager.UserManager.GetRoles(identityManager.CurrentUserId(userName)).FirstOrDefault();
+                    if (userRole == null)
+                    {
+                        userRole = string.Empty;
+                    }
+                }
+                else
+                {
+                    userRole = "Client";
+                }
+                    }
+
+                    <td>
+                        @Html.DisplayName(userRole)
+                    </td>
+
+                    <td>
+                        @{
+                if (userRole != "Client")
+                {
+                    if (userRole == "")
+                    {
+                        @Html.ActionLink("Add Role", "AddUserRole", new { data = item.Username })
+                    }
+                    else
+                    {
+                         @Html.ActionLink("Edit Role", "EditUserRole", new { data = item.Username })
+                       
+                         if(!userAssigned)
+                         {
+                             @Html.Raw(" ")@Html.Label("|")@Html.Raw(" ")
+                             @Html.ActionLink("Delete Role", "DeleteUserRole", new { data = item.Username })
+                         }                           
+                    }
+                }
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <div align="center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+    </div>
+</div>

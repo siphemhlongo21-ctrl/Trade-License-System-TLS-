@@ -1,0 +1,188 @@
+﻿@model C8.TradeLicense.Models.InspectionResponse
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@{
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+}
+
+<div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapseOne">Inspection Response Details</a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse collapse in">
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayName("Client Name")
+                    </dt>
+
+                    <dd>
+                        @Html.Raw(@ViewBag.ClientName)
+                        @*@Html.DisplayFor(model => model.License.Client.ClientUser.FullName)*@
+                    </dd>
+
+                    @*     <dt>
+                            @Html.DisplayNameFor(model => model.InspectionRequest.InspectionRequestId)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.InspectionRequest.InspectionRequestId)
+                        </dd>*@
+
+                    @*     <dt>
+                            @Html.DisplayNameFor(model => model.License.LicenseId)
+                        </dt>*@
+
+                    @*    <dd>
+                            @Html.DisplayFor(model => model.License.LicenseId)
+                        </dd>*@
+
+                    @*  <dt>
+                            @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ModifiedByUser.FirstName)
+                        </dd>*@
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Status.StatusName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Status.StatusName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InspectionDateTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.InspectionDateTime)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayName("Modified By")
+                    </dt>
+
+                    <dd>
+                        @Html.Raw(@ViewBag.ModifiedBy)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayName("Failure Count")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.InspectionFailureCount)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Comment)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Comment)
+                    </dd>
+
+                    @if (documentsList.Count() > 0)
+                    {
+                        <dt>
+                            @Html.DisplayName("Documents")
+                        </dt>
+
+                        <dd>
+                            <div>
+                                <table class="table-bordered">
+                                    <tr>
+                                        <th>Document</th>
+                                        <th>FileName</th>
+                                    </tr>
+                                    @foreach (var item in documentsList)
+                                    {
+                                        <tr>
+                                            <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                            <td style="padding-right: 10px">@Html.ActionLink(linkText: item.FileName, actionName: "Download", controllerName: "InspectionResponse", routeValues: new { id = item.FileUploadId, file = item.FileName, clientId = item.ClientId }, htmlAttributes: new { @class = "btn btn-outline-warning" })</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+
+                        </dd>
+                    }
+
+
+                    @*  <dt>
+                            @Html.DisplayNameFor(model => model.IsActive)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.IsActive)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.IsDeleted)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.IsDeleted)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.IsLocked)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.IsLocked)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.CreatedDateTime)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.CreatedDateTime)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ModifiedDateTime)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ModifiedDateTime)
+                        </dd>*@
+
+                </dl>
+            </div>
+        </div>
+    </div>
+
+</div>
+<p>
+
+    @if (User.IsInRole("Chief Inspector"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.InspectionResponseId }, new { @class = "btn btn-outline-warning" })
+        @Html.Raw(" ")
+        @Html.Label("|")
+    }
+
+    @if ((User.IsInRole("Administrator")) || (User.IsInRole("Licensing Manager")))
+    {
+        @Html.ActionLink(linkText: "Back to List", actionName: "ApproveLicense", controllerName: "InspectionResponse", routeValues: new { id = Model.LicenseId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+    }
+    else
+    {
+        @Html.ActionLink("Back to List", "Index",null, new { @class = "btn btn-outline-warning" })
+    }
+
+</p>

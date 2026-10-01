@@ -1,0 +1,45 @@
+﻿@using C8.TradeLicense.Models
+@model C8.TradeLicense.Models.License
+
+@{
+    License licence = Model;
+}
+<div>
+    <table>
+        <legend>License Information</legend>
+        <tr>
+            <td>Region </td>
+            <td>: @licence.Region.RegionName</td>
+        </tr>
+        <tr>
+            <td> Type</td>
+            <td>: @licence.ItemType.ItemTypeName</td>
+        </tr>
+        <tr>
+            <td> Item Sub-Category </td>
+            <td>: @licence.ItemSubCategory.ItemSubCategoryName
+        </tr>
+        <tr>
+            <td> Item Condition</td>
+            <td>: @licence.ItemCondition.ItemConditionName</td>
+        </tr>
+        <tr>
+            <td> Migrated License</td>
+            <td>
+                : @if (licence.migratedLicense == false)
+                {
+                    @Html.DisplayName("No")
+                }
+                else
+                {
+                    @Html.DisplayName("Yes")
+                }
+            </td>
+        </tr>
+
+
+    </table>
+</div>
+
+
+

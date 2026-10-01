@@ -1,0 +1,392 @@
+﻿@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "Managers Review";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var InspectionResponse = Model.InspectionResponses;
+    var User = Model.UserDetails;
+    var client = Model.CustomerDetails;
+    var business = Model.BusinessDetails;
+    var ChiefReview = Model.ChiefReviews;
+    var ManagerReview = Model.ManagerReviews;
+    var DepartmentRequest = Model.InspectionRequests;
+    var licenseType = Model.LicenseTypeDetails;
+    var itemType = Model.ItemTypeDetails;
+    var InspectorDocs =Model.InspectionResponseDocuments;
+    var license = Model.LicenseDetails;
+    var InspectiondocumentsList = Model.InspectionRequestUploadList;
+    var DepartmentContact =Model.DepartmentContacts;
+    var AppealReview = Model.InspectionAppealsReviews;
+    var AminReview = Model.AdministratorReviews;
+    var departmentCirculationHistoryVM = Model.DepartmentCirculationHistoryVM;
+
+    var db = new TradeLicenseDbContext();
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+
+        .error {
+            color: tomato;
+        }
+    </style>
+</head>
+
+
+<br />
+<br />
+<br />
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <script>
+        @*$(document).ready(function () {
+            var currentItemType = $("#ddlItemTypeName option:selected").text();
+            $("#ClientId").val('@client.ClientId');
+            if (currentItemType !== "Item 2") {
+                $("#fingerprint_verification").hide();
+            }
+
+            var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(ViewBag.OustandingDocuments))';
+            var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+            var groupList = [];
+
+            $.each(outstandingDocuments, function (index, value) {
+                groupList.push('<li>' + value + '</li>');
+            });
+
+            if (groupList.length > 0) {
+                $('#outstandingDocumentList').append(groupList.join(''));
+                $('#documentAlert').show();
+            }
+
+        });*@
+    </script>
+
+    @using (Html.BeginForm("Create", "ManagerReviews", FormMethod.Post, new { @id = "CreateForm", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @*Success message*@
+        <div>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                    @*<a class="close" data-dismiss="alert">×</a>*@
+                    @*<strong>Success!</strong>@TempData["Success"].ToString()*@
+                    <span class="sr-only">Success: </span>
+                    @TempData["Success"].ToString()
+                </div>
+            }
+        </div>
+        <div>
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    @*<a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Error!</strong> @TempData["Error"].ToString()*@
+                    <span class="sr-only">Error: </span>
+                    @TempData["Error"].ToString()
+                </div>
+            }
+        </div>
+        <div>
+            @if (TempData["Info"] != null)
+            {
+                <div class="alert alert-info">
+                    <a class="close" data-dismiss="alert">×</a>
+                    <strong>Note!</strong>
+                    @TempData["Info"].ToString()
+                </div>
+            }
+        </div>
+
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.LicenseDetails.LicenseId)
+        @Html.HiddenFor(model => model.LicenseDetails.RegionId)
+        @Html.HiddenFor(model => model.LicenseDetails.ApplicationDateTime)
+        @Html.HiddenFor(model => model.LicenseDetails.LicenseTypeId)
+        @Html.HiddenFor(model => model.LicenseDetails.ItemTypeId)
+        @Html.HiddenFor(model => model.LicenseDetails.ItemConditionId)
+
+        <div>
+            @Html.HiddenFor(model => model.LicenseDetails.LicenseId, new { Value = @license.LicenseId })
+        </div>
+
+        <div id="demo">
+            <div class="step-app">
+                <ul class="step-steps">
+                    <li><a href="#step1"><span class="number">1</span>License Holders Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                    <li><a href="#step3"> <span class="number">3</span>License Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step4"> <span class="number">4</span>Department Circulation History <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step5"> <span class="number">5</span>Department Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                    <li><a href="#step6"> <span class="number">6</span> Previous Review <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                    <li><a href="#step7"> <span class="number">7</span> Manager Review  </a></li>
+
+                </ul>
+                <div class="step-content">
+
+                    <div class="step-tab-panel" id="step1" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_ClientPartial.cshtml", client)
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="step-tab-panel" id="step2" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_BusinessPartial.cshtml", business)
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step3" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_LicencePartial.cshtml", license)
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step4">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_DepartmentcirculationHistoryPartial.cshtml", departmentCirculationHistoryVM)
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+
+
+                    </div>
+                    <div class="step-tab-panel" id="step5" align="center">
+                        <br />
+                        <br />
+                        <br />
+
+                        @Html.Partial("~/Views/Shared/_InspectionResponsePartialList.cshtml")
+
+
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+
+
+                    <div class="step-tab-panel" id="step6" align="center">
+                        <br />
+                        <br />
+                        <br />
+
+                        @Html.Partial("~/Views/Shared/_ReviewPartial.cshtml")
+
+
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+
+                    <div class="step-tab-panel" id="step7">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">Review and Approval</legend>
+                        <div class="form-horizontal">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            @Html.HiddenFor(model => model.LicenseDetails.LicenseId, new { Value = license.LicenseId })
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.UserDetails.UserId, "User Name", htmlAttributes: new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-10">
+                                    @Html.Editor("Username", new { htmlAttributes = new { Value = @User.FullName, @class = "form-control", @required = "required" } })
+                                    @Html.Hidden("Userid", User.UserId, new { htmlAttributes = new { Value = @User.UserId, @class = "form-control" } })
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ManagerReviewDetails.Decision, htmlAttributes: new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(model => model.ManagerReviewDetails.Decision, new SelectList(new[] { "Approve", "Reject" }), "Select Decision", new { @class = "form-control", Onchange = "decision(this)", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.ManagerReviewDetails.Decision, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ManagerReviewDetails.Comment, htmlAttributes: new { @class = "control-label col-md-2", id = "lblComment" })
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(model => model.ManagerReviewDetails.Comment, 8, 45, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ManagerReviewDetails.Comment, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ManagerReviewDetails.DateReviewed, htmlAttributes: new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ManagerReviewDetails.DateReviewed, new { htmlAttributes = new { @class = "form-control", @id = "DateReviewed", @required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.ManagerReviewDetails.DateReviewed, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="step-footer">
+
+                    <div class="form-group" hidden>
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" id="Createbtn" value="Create" class="btn btn-default" />
+                        </div>
+                    </div>
+                    <div align="left" class="col-lg-3">
+                        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+                    </div>
+                    <div align="center" class="col-lg-6">
+                        <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                        <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                        <button data-direction="finish" class="btn btn-outline-success">Submit</button>
+                    </div>
+                    <br />
+                    <br />
+
+                </div>
+            </div>
+        </div>
+    }
+    <!-- Date Picker -->
+
+    <script src="~/Scripts/datepicker/bootstrap-datepicker.js"></script>
+    <link href="~/Scripts/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-steps.js"></script>
+    <script type="text/javascript">
+        //$('#demo').steps({
+        //    onFinish: function () { document.getElementById("Createbtn").click(); }
+        //});
+
+        function decision(element) {
+            if (element.value == "Reject") {
+                document.getElementById("Comment").required = true;
+                document.getElementById("lblComment").className = "required-field control-label col-md-2";
+            }
+            else {
+                document.getElementById("Comment").required = false;
+                document.getElementById("lblComment").className = "control-label col-md-2";
+            }
+
+        }
+        var form = $("#CreateForm");
+        form.children("div").steps({
+
+            onFinish: function () {
+
+                $('#Username').prop("disabled", false);
+                document.getElementById("Createbtn").click();
+            },
+            onChange: function (event, currentIndex, newIndex) {
+                
+                //submit(currentIndex, newIndex)
+
+                if (newIndex < currentIndex) {
+                    return true;
+                }
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid();
+
+            }
+        });
+
+        $("table").addClass("table table-bordered")
+        $(document).ready(function () {
+
+            $('#Username').prop("disabled", true);
+            var DateReviewed = new Pikaday({
+                field: document.getElementById('DateReviewed'),
+                format: 'YYYY/MM/DD HH:MM',
+                maxDate: new Date(),
+                toString(date, format) {
+                    var today = new Date();
+                    const day = ('0' + (date.getDate())).slice(-2);
+                    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    const year = date.getFullYear();
+                    const hour = today.getHours();
+                    const min = ('0' + today.getMinutes()).slice(-2);
+
+                    return `${year}-${month}-${day} ${hour}:${min}`;
+                }
+            });
+        })
+
+    </script>
+</body>
+
+
+</html>

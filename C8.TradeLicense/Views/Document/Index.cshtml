@@ -1,0 +1,55 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.Document>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@*<h2>Index</h2>*@
+
+<p>
+    @Html.ActionLink("Add Document", "Create",null, new { @class = "btn btn-outline-warning" })
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Documents - <span class="badge">@ViewBag.DocumentCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentType.DocumentTypeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentDescription)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td style="width: 250px">
+                        @Html.DisplayFor(modelItem => item.DocumentType.DocumentTypeName)
+                    </td>
+                    <td style="width: 250px">
+                        @Html.DisplayFor(modelItem => item.DocumentName)
+                    </td>
+                    <td style="width: 250px">
+                        @Html.DisplayFor(modelItem => item.DocumentDescription)
+                    </td>
+                    <td style="width: 250px">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.DocumentId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.DocumentId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.DocumentId }, new { @class = "btn btn-outline-warning" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

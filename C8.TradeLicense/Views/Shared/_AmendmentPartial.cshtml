@@ -1,0 +1,39 @@
+﻿@using C8.TradeLicense.Models
+@model  List<C8.TradeLicense.Models.Amendment>
+    <div class="table-responsive">
+        @if (Model.Count > 0)
+        {
+        <table class="table">
+            <legend>Amendment History</legend>
+            <thead>
+                <tr>
+                    <td>Amendment Type</td>
+                    <td>Table Amended</td>
+                    <td>Field Amended</td>
+                    <td>Old Value</td>
+                    <td>New Value</td>
+                    <td>User Actioned</td>
+                    <td>Actioned Date</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var record in Model)
+                {
+                <tr>
+                    <td>@record.AmendmentType</td>
+                    <td>@record.TableAmended</td>
+                    <td>@record.FieldAmended</td>
+                    <td>@record.OldData</td>
+                    <td>@record.NewData</td>
+                    <td>@record.CreatedByUser.Username</td>
+                    <td>@record.CreatedDateTime</td>
+                </tr>
+                }
+            </tbody>
+
+        </table>
+        }
+    </div>
+
+
+

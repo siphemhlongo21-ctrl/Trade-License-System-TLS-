@@ -1,0 +1,97 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.ItemCondition>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<p>
+    @Html.ActionLink("Add Condition Item", "Create", null, new { @class = "btn btn-outline-warning" })
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Item Conditions - <span class="badge">@ViewBag.ItemConditionCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.CreatedByUser.FirstName)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemType.ItemTypeName)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemConditionName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemConditionDescription)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsDeleted)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsLocked)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ModifiedDateTime)
+                </th>*@
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.CreatedByUser.FirstName)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemType.ItemTypeName)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.ModifiedByUser.FirstName)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemConditionName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemConditionDescription)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsDeleted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsLocked)
+                    </td>*@
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.CreatedDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiedDateTime)
+                    </td>*@
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ItemConditionId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ItemConditionId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ItemConditionId }, new { @class = "btn btn-outline-warning" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

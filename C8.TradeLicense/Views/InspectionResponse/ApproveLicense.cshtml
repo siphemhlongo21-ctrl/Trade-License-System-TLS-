@@ -1,0 +1,183 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.InspectionResponse>
+@using C8.TradeLicense.Models
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    int id = Convert.ToInt32(ViewContext.RouteData.Values["id"]);
+}
+
+
+<div class="alert alert-warning" id="inspectionRequestAlert" style="display:none;">
+    <strong>Awaiting Inspection Response</strong> from the following department(s):
+    <ul id="outstandingDepartmentList"></ul>
+</div>
+
+<div class="alert alert-danger" id="inspectionResponseAlert" style="display:none;">
+    License has received a negative response from the following department(s):
+    <ul id="failedDepartmentList"></ul>
+</div>
+
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var jsonResponseList = '@Html.Raw(Json.Encode(ViewBag.OutstandingResponses))';
+                var jsonFailedInspections = '@Html.Raw(Json.Encode(ViewBag.FailedInspections))';
+                var outstandingResponses = JSON.parse(jsonResponseList);
+                var failedInspections = JSON.parse(jsonFailedInspections);
+
+                var groupList = [];
+
+                $("#submitInspections").val("Process License");
+
+                $.each(outstandingResponses, function (index, value) {
+                    groupList.push('<li>' + value.Department.DepartmentName + '</li>');
+                });
+
+                if (groupList.length > 0) {
+                    $('#outstandingDepartmentList').append(groupList.join(''));
+                    $('#inspectionRequestAlert').show();
+                    $('#submitInspections').attr("disabled", true);
+                }
+                else if (failedInspections.length > 0) {
+                    $.each(failedInspections, function (index, value) {
+                        if ($.trim(value.Status.StatusKey) === "InspectionFailed") {
+                            groupList.push('<li>' + value.Department.DepartmentName + '</li>');
+                        }
+                    });
+
+                    $('#failedDepartmentList').append(groupList.join(''));
+                    $('#inspectionResponseAlert').show();
+                    $('#submitInspections').attr("disabled", true);
+                }
+                else {
+                    $('#inspectionResponseAlert').hide();
+                }
+            });
+
+        </script>
+    }
+}
+
+
+@using (Html.BeginForm(new { id = @id }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Inspection Responses - <span class="badge">@ViewBag.LicenseInspectionResponseCount</span></h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayName("Client Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Department")
+                    </th>
+                    @*<<th>
+                            @Html.DisplayNameFor(model => model.InspectionRequest.InspectionRequestId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.License.LicenseId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+                        </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status.StatusName)
+                    </th>
+                    @*<th>
+                        @Html.DisplayNameFor(model => model.InspectionDateTime)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Comment)
+                    </th>*@
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.IsActive)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsDeleted)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsLocked)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreatedDateTime)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ModifiedDateTime)*@
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.License.Client.Fullname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InspectionRequest.Department.DepartmentName)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.InspectionRequest.InspectionRequestId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.License.LicenseId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ModifiedByUser.FirstName)
+                            </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.StatusName)
+                        </td>
+                        <td>
+                            @Html.ActionLink(linkText: "Details", actionName: "Details", controllerName: "InspectionResponse", routeValues: new { id = item.InspectionResponseId }, htmlAttributes: new { @class = "btn btn-outline-warning" })
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.InspectionDateTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>*@
+
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.IsActive)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsDeleted)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsLocked)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedDateTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ModifiedDateTime)
+                            </td>*@
+                        <td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+       
+    <div class="form-group">
+        @*<input id="submitInspections" type="submit" value="Approve License" class="btn btn-default" />*@
+        @Html.Raw("|")
+        @Html.ActionLink("Back to List", "LicensePendingResponses", "InspectionResponse", null, new { @class = "btn btn-outline-warning" })
+    </div>
+}
+
+
+
+

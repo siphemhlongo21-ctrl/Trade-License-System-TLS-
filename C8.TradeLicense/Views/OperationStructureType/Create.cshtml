@@ -1,0 +1,54 @@
+﻿@model C8.TradeLicense.Models.OperationStructureType
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@*<h2>Create</h2>*@
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>OperationStructureType</h4>
+            <hr />*@
+        @Html.ValidationSummary(true)
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Create Operation Structure</h3>
+            </div>
+            <div class="panel-collapse in">
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OperationStructureTypeName, new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.OperationStructureTypeName)
+                            @Html.ValidationMessageFor(model => model.OperationStructureTypeName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OperationStructureTypeDescription, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.OperationStructureTypeDescription)
+                            @Html.ValidationMessageFor(model => model.OperationStructureTypeDescription)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Submit" class="btn btn-outline-success" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+</div>

@@ -1,0 +1,31 @@
+﻿@model C8.TradeLicense.Models.Business
+@using C8.TradeLicense.Models
+
+@{
+    Business business = Model;
+}
+<div>
+    <table>
+        <legend>Business Information</legend>
+        <tr>
+            <td>Business Name </td>
+            <td>: @business.ProposedTradeName</td>
+        </tr>
+        <tr>
+            <td>Business Address</td>
+            <td>: @business.ResidentialAddress1, @business.ResidentialAddress2, @business.ResidentialAddress3, @business.ResidentialAddressCode</td>
+        </tr>
+        <tr>
+            <td>Business Telephone Number</td>
+            <td>: @business.TelephoneNumber</td>
+        </tr>
+        <tr>
+            <td>CellPhone Number</td>
+            <td>: @business.CellphoneNumber</td>
+        </tr>
+        <tr>
+            <td>Alternative CellPhone Number</td>
+            <td>: @business.AltCellphoneNumber</td>
+        </tr>
+    </table>
+</div>

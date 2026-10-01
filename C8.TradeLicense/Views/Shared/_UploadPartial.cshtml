@@ -1,0 +1,130 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@model IEnumerable<C8.TradeLicense.Models.Document>
+
+<script type="text/javascript">
+    //TODO: Validating File Types
+    var validFilesTypes = [".bmp", ".gif", ".png", ".jpg", ".jpeg", ".doc", ".xls", ".pdf", ".docx", ".xlsx", ".txt"];
+    $(document).bind("change", "#file", function (e) {
+        var file = $('input[type=file]').val();
+        var isValidFile = false;
+        if (file) {
+            var ext = file.substring(file.lastIndexOf("."), file.length).toLowerCase();
+            for (var i = 0; i < validFilesTypes.length; i++) {
+                if (ext == validFilesTypes[i]) {
+                    isValidFile = true;
+                    break;
+                }
+            }
+            if (!isValidFile) {
+                alert("Invalid File. Refer supported file types below:\n\n" + validFilesTypes.join(", "));
+                $('#file').replaceWith($('#file').clone());
+            }
+        }
+    });
+</script>
+
+<form action="_UploadPartial.cshtml" method="post" enctype="multipart/form-data">
+    <table class="table-responsive" id="UploadTable" >
+        <tr>
+            <th></th>
+            <th>File Type</th>
+            <th>Comments</th>
+            <th>Upload</th>
+          
+        </tr>
+            @{ int count = 0;
+                var comment = "comment" + count;}
+            @foreach (var item in Model)
+            {
+                comment = "comment" + count;
+        <tr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tr>
+        <tr id="@item.DocumentKey">
+            <td>@Html.HiddenFor(modelItem => item.DocumentId)</td>
+            @if ((@item.DocumentName == "Other") || (@item.DocumentName == "Fingerprint Verification" ) || ( @item.DocumentName == "Events Management"))
+            {
+                <td >
+                    <label id="item.DocumentName" class="">@item.DocumentName </label>
+                    &nbsp;&nbsp;&nbsp;
+                </td>
+            }
+            else
+            {
+                <td style="">
+                    <label id="item.DocumentName" class="required-field">@item.DocumentName </label>
+                    &nbsp;&nbsp;&nbsp;
+                </td>
+            }
+            <td style="">
+                <div class="col-md-4">
+                    <input type="text" id="@comment" onfocusout="AddComment(this)" class="" />
+                    </div>
+</td>
+            <td style="">
+                <input type="file" name="files[@count]" id="file" class="" />
+            </td>
+  
+
+        </tr>
+                count++;
+               
+            }
+    </table>
+    <div hidden ="hidden">
+        @Html.Editor("CommentData", null, new { htmlAttributes = new { @class = "form-control", id = "CommentData" } })
+    </div>
+    <script type="text/javascript">
+        var TableData = [];
+        function AddComment(element)
+    {
+
+    addToArray();
+    }
+    function addToArray() {
+
+    
+        $("#UploadTable tr").each(function (i, v) {
+            TableData[i] = Array();
+            $(this).find("td").each(function (ii, vv) {
+            
+            $(this).find("div.col-md-4").each(function (iii, vvv) {
+
+             
+                    value =  $(this).find("input[type='text']").val();
+                    if (value != undefined) {
+                        if (value == "") {
+                            value = "*" + "N/A"
+                        
+                        }
+                        else {
+                            value = "*" + $(this).find("input[type='text']").val();
+                        }
+                        
+                  
+                        TableData[i][iii] = value;
+                    }
+                }
+               
+              
+              
+                
+
+           ) } );
+
+        })
+
+        TableData.shift();
+      
+        var data = TableData.join();
+        debugger;
+        document.getElementById("CommentData").value = data;
+
+
+
+
+
+    }
+    </script>
+
+</form>
+
+

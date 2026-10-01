@@ -1,0 +1,136 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@model IEnumerable<C8.TradeLicense.Models.InspectionRequest>
+@using C8.TradeLicense.Models
+
+@{
+    ViewBag.Title = "_InspectionReport";
+}
+
+@{
+    var license = (License)ViewData["License"];
+    var business = (Business)ViewData["Business"];
+    var client = (Client)ViewData["Client"];
+    var licenseItemCategory = (ItemType)ViewData["ItemTypes"];
+}
+
+<style type="text/css">
+    .headerLabel {
+        font-weight: bold;
+    }
+
+    .tableLabel {
+        font-weight: bold;
+        font-size: x-large;
+    }
+
+    .bottom {
+        height: 200px;
+        width: 100%;
+    }
+
+    .column {
+        float: left;
+    }
+
+    .commentHR {
+        border-bottom: 2px solid;
+    }
+</style>
+
+<div>
+    <div>
+      <img src="@Url.Content("~/content/themes/base/images/eThekwiniLogo.png")" style="width: 120px; height: 120px;" />
+    </div>
+    <br />
+    @Html.Label("ETHEKWINI LICENSING AUTHORITY", new { @class = "headerLabel" })<br />
+    <hr />
+</div>
+
+<div style="width:100%; height:690%;">
+    <div style="width:100%; height:33%;">
+        <div id="body" class="bottom">
+            <div class="column" style="width:43%">
+                @Html.Label("TRADING NAME:", new { @class = "headerLabel" })<br />
+                @Html.Label(business.ProposedTradeName)<br /><br />
+                @Html.Label("PREMISES ADDRESS:", new { @class = "headerLabel" })<br />
+                @Html.Label(business.ResidentialAddress1)<br />
+                @Html.Label("SHOP/UNIT:")@Html.Raw(" ") @Html.Label(business.ResidentialShopOrUnitNumber.ToString())<br />
+                @Html.Label(business.ResidentialAddress2)<br />
+                @Html.Label(business.ResidentialAddressCode.ToString())<br /><br />
+
+                @Html.Label("POSTAL ADDRESS:", new { @class = "headerLabel" })<br />
+                @Html.Label(business.PostalAddress1)<br />
+                @Html.Label(business.PostalAddress2)<br />
+                @Html.Label(business.PostalAddressCode.ToString())<br /><br />
+
+
+                @Html.Label("LICENSE CATEGORY:", new { @class = "headerLabel" })<br />
+                @Html.Label(licenseItemCategory.ItemTypeName, new { @class = "headerLabel" })<br />
+                @Html.Label(licenseItemCategory.ItemTypeDescription)<br /><br />
+            </div>
+
+            <div class="column" style="width:43%">
+                @Html.Label("APPLICANT:", new { @class = "headerLabel" })<br />
+                @Html.Label(client.Name + " " + client.Surname)<br /><br />
+                @Html.Label("TEL NO:", new { @class = "headerLabel" })<br />
+                @Html.Label(client.TelephoneNumber ?? string.Empty)<br /><br />
+                @Html.Label("CEL NO:", new { @class = "headerLabel" })<br />
+                @Html.Label(client.CellphoneNumber)<br /><br />
+                @Html.Label("RESIDENTIAL ADDRESS:", new { @class = "headerLabel" })<br />
+                @Html.Label(client.ResidentialAddress1)<br />
+                @Html.Label(client.ResidentialAddress2)<br />
+                @Html.Label(client.ResidentialAddressCode.ToString())<br /><br/>
+
+                @Html.Label("AMOUNT:", new { @class = "headerLabel" })<br />
+                @Html.Label("R" + (string)ViewBag.LicenseTypeAmount)<br /><br/>
+            </div>
+
+            <div class="column" style="width:14%">
+                @Html.Label("REF NO:", new { @class = "headerLabel" })<br />
+                @Html.Label(license.LicenseId.ToString())<br /><br />
+                @Html.Label("DATE:", new { @class = "headerLabel" })<br />
+                @Html.Label((string)ViewBag.Date)
+
+            </div>
+
+        </div>
+    </div>
+    <div style="width:100%; height:62%;">
+        <table border="1" style="width:100%">
+           <tr>
+               <td style="text-align:center">@Html.Label("DEPARTMENT", new { @class = "tableLabel" })</td>
+               <td style="text-align:center">@Html.Label((string)ViewBag.Department, new { @class = "tableLabel" })</td>
+           </tr>
+        </table>
+        <br/>
+
+        @Html.Label("NAME OF REPORTING OFFICER:", new { @class = "headerLabel" }) _________________________________________________________________________<br/><br/>
+        @Html.Label("CONTACT NUMBER:", new { @class = "headerLabel" }) ___________________________________________________________________________________<br/><br/> 
+        @Html.Label("KINDLY SUMBIT A REPORT ON THE ABOVE APPLICATION IN ACCORDANCE WITH THE PROVISIONS OF THE BUSINESS ACT ", new { @class = "headerLabel"})<br/><br/><br/>
+               
+        <hr class="commentHR" />
+        <br/><br/>
+        <hr class="commentHR"/>
+        <br /><br />
+        <hr class="commentHR" />
+        <br /><br />
+        <hr class="commentHR" />
+        <br /><br />
+        <hr class="commentHR" />
+        <br /><br />
+        <hr class="commentHR" />
+        <br /><br />
+        <hr class="commentHR" />
+        <br /><br />
+        <hr class="commentHR" />
+        <br /><br />
+        <hr class="commentHR" />
+        <br /> 
+             
+    </div>
+    <div style="width:100%; height:5%;">
+       @Html.Label("PLEASE NOTE.THIS FORM MUST BE SCANNED AND", new{ @class = "headerLabel"})<br/>
+       @Html.Label("UPLOADED WHEN CREATING THE INSPECTION RESPONSE", new { @class = "headerLabel" })
+    </div>
+</div>
+

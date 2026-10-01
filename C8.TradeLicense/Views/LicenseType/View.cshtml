@@ -1,0 +1,92 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.DocumentCheckList>
+
+
+@*@foreach (var item in Model)
+{
+    <tr>*@
+
+
+@Html.Partial("~/Views/Shared/_DocumentCheckListPartial.cshtml")
+
+
+@*    </tr>
+}*@
+@*@{
+    ViewBag.Title = "View1";
+}
+
+<h2>View1</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedByUser.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentType.DocumentTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LicenseType.LicenseTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsDeleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsLocked)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedDateTime)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedByUser.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DocumentType.DocumentTypeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LicenseType.LicenseTypeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModifiedByUser.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsDeleted)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsLocked)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModifiedDateTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.DocumentCheckListId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.DocumentCheckListId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.DocumentCheckListId })
+        </td>
+    </tr>
+}
+
+</table>*@

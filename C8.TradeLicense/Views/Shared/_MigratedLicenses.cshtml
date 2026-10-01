@@ -1,0 +1,60 @@
+﻿@model PagedList.IPagedList<C8.TradeLicense.Models.MigratedLicense>
+<table class="table">
+    <tr>
+        <th>License Number</th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Region.RegionName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().MigratedBusiness.ProposedTradeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().MigratedClient.Fullname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().LicenseType.LicenseTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().ApplicationDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Status.StatusName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LicenseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Region.RegionName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MigratedBusiness.ProposedTradeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MigratedClient.Fullname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LicenseType.LicenseTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDateTime)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.Status.StatusName)
+            </th>
+            <td>
+                @{
+                    <a href="@Url.Action("Edit", new { id = item.MLicenseId })">
+                        <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+                        <span class="sr-only">Edit</span>
+                    </a>
+                }
+            </td>
+        </tr>
+    }
+</table>

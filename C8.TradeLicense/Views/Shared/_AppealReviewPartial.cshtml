@@ -1,0 +1,59 @@
+﻿@*@using C8.TradeLicense.Models*@
+@using C8.TradeLicense.Models
+@*@model C8.TradeLicense.ViewModels.RegisterClientBusinessViewModel *@
+
+
+@{
+   
+    var AppealReview = (IEnumerable<InspectionAppealsReviews>)ViewData["AppealsReviews"];
+
+    var isrecord = false;
+}
+<div>
+    @if (AppealReview.Count() > 0)
+    {
+        isrecord = true;
+    
+        <table>
+            <legend>Appeal Review</legend>
+            <tr>
+                <td>Name</td>
+                <td>Date</td>
+                <td>Decision</td>
+                <td>Comment</td>
+
+            </tr>
+            @foreach (var record in AppealReview)
+            {
+                <tr>
+
+                    <td>@record.User.FullName</td>
+                    <td>@record.DateReviewed</td>
+                    <td>@record.Decision</td>
+
+                    <td>@record.Comment</td>
+
+
+                </tr>
+            }
+
+
+        </table>
+
+    }
+
+@if(isrecord == false)
+{
+
+        <div class="alert alert-danger" id="Erroralert">
+            <a class="close" data-dismiss="alert">×</a>
+
+            <strong><p id="error2">No Previous Records found</p></strong>
+        </div>
+
+    }
+
+</div>
+
+
+

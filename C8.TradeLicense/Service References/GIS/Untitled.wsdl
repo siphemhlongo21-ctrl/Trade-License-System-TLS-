@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://xmlns.example.com/1471170409795" xmlns:ns0="http://www.tibco.com/schemas/ESB_GIS_Service/SharedResources/Schema/Schema.xsd" name="Untitled" targetNamespace="http://xmlns.example.com/1471170409795" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns="http://www.tibco.com/schemas/ESB_GIS_Service/SharedResources/Schema/Schema.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tibco.com/schemas/ESB_GIS_Service/SharedResources/Schema/Schema.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="Error_T">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ErrortCode" type="xs:string" />
+          <xs:element minOccurs="0" name="ErrorMSG" type="xs:string" />
+          <xs:element minOccurs="0" name="ErrorDescription" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GISResponseDetails_T">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="GISId" type="xs:string" />
+          <xs:element minOccurs="0" name="Erf" type="xs:string" />
+          <xs:element minOccurs="0" name="Portion" type="xs:string" />
+          <xs:element minOccurs="0" name="FarmTownship" type="xs:string" />
+          <xs:element minOccurs="0" name="Remainder" type="xs:string" />
+          <xs:element minOccurs="0" name="UnitNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="FloorNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="SectionNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="BuildingComplex" type="xs:string" />
+          <xs:element minOccurs="0" name="StreetNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="StreetName" type="xs:string" />
+          <xs:element minOccurs="0" name="StreetType" type="xs:string" />
+          <xs:element minOccurs="0" name="Suburb" type="xs:string" />
+          <xs:element minOccurs="0" name="City" type="xs:string" />
+          <xs:element minOccurs="0" name="Code" type="xs:string" />
+          <xs:element minOccurs="0" name="StreetAddressLongitude" type="xs:string" />
+          <xs:element minOccurs="0" name="StreetAddressLatitude" type="xs:string" />
+          <xs:element minOccurs="0" name="Councillor" type="xs:string" />
+          <xs:element minOccurs="0" name="WardRepresentative" type="xs:string" />
+          <xs:element minOccurs="0" name="WardNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="PinId" type="xs:string" />
+          <xs:element minOccurs="0" name="RateNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="AccountNumber" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GISResponse_T">
+        <xs:sequence>
+          <xs:element ref="ns0:Status" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns0:GISResponseDetails" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GIS_Request_T">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="StreetNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="StreetName" type="xs:string" />
+          <xs:element minOccurs="0" name="StreetType" type="xs:string" />
+          <xs:element minOccurs="0" name="AccountNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="Erf" type="xs:string" />
+          <xs:element minOccurs="0" name="Portion" type="xs:string" />
+          <xs:element minOccurs="0" name="FarmTownship" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Status_T">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="StatusCode" type="xs:string" />
+          <xs:element minOccurs="0" name="StatusMSG" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Error" type="ns0:Error_T" />
+      <xs:element name="GISResponse" type="ns0:GISResponse_T" />
+      <xs:element name="GISResponseDetails" type="ns0:GISResponseDetails_T" />
+      <xs:element name="GIS_Request" type="ns0:GIS_Request_T" />
+      <xs:element name="Status" type="ns0:Status_T" />
+      <xs:element name="root">
+        <xs:complexType />
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GISRequest">
+    <wsdl:part name="GISRequest" element="ns0:GIS_Request" />
+  </wsdl:message>
+  <wsdl:message name="GISResponse">
+    <wsdl:part name="GISResponse" element="ns0:GISResponse" />
+  </wsdl:message>
+  <wsdl:message name="Error">
+    <wsdl:part name="part1" element="ns0:Error" />
+  </wsdl:message>
+  <wsdl:portType name="PortType">
+    <wsdl:operation name="Operation">
+      <wsdl:input message="tns:GISRequest" />
+      <wsdl:output message="tns:GISResponse" />
+      <wsdl:fault name="fault1" message="tns:Error" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PortTypeEndpoint0Binding" type="tns:PortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Operation">
+      <soap:operation soapAction="/Services/GIS_Abstract_WSDL-service0.serviceagent/PortTypeEndpoint0/Operation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="GISRequest" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="GISResponse" />
+      </wsdl:output>
+      <wsdl:fault name="fault1">
+        <soap:fault use="literal" name="fault1" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GIS_Abstract_WSDL-service0.serviceagent">
+    <wsdl:port name="PortTypeEndpoint0" binding="tns:PortTypeEndpoint0Binding">
+      <soap:address location="http://localhost:8222/Services/GIS_Abstract_WSDL-service0.serviceagent/PortTypeEndpoint0" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

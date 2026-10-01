@@ -1,0 +1,49 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.DocumentType>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@*<h2>Index</h2>*@
+
+<p>
+
+    @Html.ActionLink("Add Document Types ", "Create", null, new { @class = "btn btn-outline-warning" })
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Document Types - <span class="badge">@ViewBag.DocumentTypeCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentTypeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentTypeDescription)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DocumentTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DocumentTypeDescription)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.DocumentTypeId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.DocumentTypeId }, new { @class = "btn btn-outline-warning" }) |
+                        @*@Html.ActionLink("Delete", "Delete", new { id = item.DocumentTypeId }, new { @class = "btn btn-outline-warning" })*@
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

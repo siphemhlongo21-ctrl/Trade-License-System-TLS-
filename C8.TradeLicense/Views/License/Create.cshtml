@@ -1,0 +1,1211 @@
+﻿@model C8.TradeLicense.Models.License
+
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "Create License";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+
+    var client = (Client)ViewData["ClientData"];
+    var business = (Business)ViewData["BusinessData"];
+    var DepartmentRequest = (InspectionRequest)ViewData["DepartmentRequest"];
+    var DepartmentResponse = (InspectionResponse)ViewData["DepartmentResponse"];
+    var licenseType = (LicenseType)ViewData["LicenseType"];
+    var itemType = (ItemType)ViewData["ItemType"];
+    var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+    var license = (License)ViewData["LicenseInfo"];
+    var db = new TradeLicenseDbContext();
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error</strong> @TempData["Error"].ToString()
+    </div>
+}
+
+<div class="alert alert-danger" hidden="hidden" id="Erroralert">
+    <a class="close" data-dismiss="alert">×</a>
+
+    <strong><p id="error2">error</p></strong>
+</div>
+
+<div id="errorResponse" class="alert alert-warning" style="display:none;">
+</div>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+
+        .error {
+            color: tomato;
+        }
+    </style>
+</head>
+
+
+<br />
+<br />
+<br />
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <script>
+            $(document).ready(function () {
+                var currentItemType = $("#ddlItemTypeName option:selected").text();
+                $("#ClientId").val('@client.ClientId');
+        if (currentItemType !== "Item 2") {
+            $("#fingerprint_verification").hide();
+        }
+
+        var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(ViewBag.OustandingDocuments))';
+        var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+        var groupList = [];
+
+        $.each(outstandingDocuments, function (index, value) {
+            groupList.push('<li>' + value + '</li>');
+        });
+
+        if (groupList.length > 0) {
+            $('#outstandingDocumentList').append(groupList.join(''));
+            $('#documentAlert').show();
+        }
+
+    });
+    </script>
+
+    @using (Html.BeginForm("Create", "License", FormMethod.Post, new { enctype = "multipart/form-data", Id = "Create" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div id="demo">
+            <div class="step-app">
+                <ul class="step-steps">
+                    <li><a href="#step1"><span class="number">1</span>License Holders Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step3"><span class="number">3</span>Documentation <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step4"> <span class="number">4</span>License Details<span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step5"> <span class="number">5</span>Payment<span class="glyphicon glyphicon-arrow-right"></span></a></li>
+
+                </ul>
+                <div class="step-content">
+                    <div class="step-tab-panel" id="step1" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_ClientPartial.cshtml", client)
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="step-tab-panel" id="step2" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_BusinessPartial.cshtml", business)
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step3">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">Business Documents</legend>
+
+
+                        @if (documentsList.Any())
+                        {
+                            <strong>Uploaded Documents</strong>
+
+                            <table class="table-bordered">
+                                <tr>
+                                    <th>Document Type</th>
+                                    <th>FileName</th>
+                                    <th>Created Date</th>
+                                </tr>
+                                @foreach (var item in documentsList)
+                                {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                        <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                        <td style="padding-right: 10px">@item.Uploadeddate</td>
+
+                                    </tr>
+
+                                }
+                            </table>
+                        }
+
+
+                        @if (ViewBag.OustandingDocuments.Count > 0)
+                        {
+                            <strong>Outstanding Documents</strong>
+                            <ul id="outstandingDocumentList"></ul>
+                            <br />
+                            @Html.Partial("~/Views/Shared/_UploadPartial.cshtml", documentTypes)
+
+                        }
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step4">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">License Details</legend>
+
+                        <div class="form-group" hidden="hidden">
+                            @Html.LabelFor(model => model.ClientId, new { @class = "control-label col-md-2" })
+                            <div class="col-md-5">
+                                @Html.TextBoxFor(model => model.ClientId, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ClientId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        
+                            <div class="col-md-5">
+                                @Html.Label(licenseType.LicenseTypeName)
+                                <div hidden="hidden">
+                                   
+                                    @Html.Editor("BusinessID", new { htmlAttributes = new { @class = "form-control" } })
+                                   
+                                    @Html.HiddenFor(model => model.BusinessId, new { Value = @business.BusinessId })
+                                </div>
+
+                            </div>
+                        
+
+                        <dl class="dl-horizontal">
+
+                            <!-- License Type - Now as Dropdown -->
+                            <dt>
+                                @Html.Label(" License Type :", new { @class = "control-label required-field" })
+                            </dt>
+                            <dd>
+                                <div class="col-md-5">
+                                    @Html.DropDownList("LicenseTypeId", null, "Select License Type",
+                                        new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.LicenseTypeId, "", new { @class = "text-danger" })
+                                </div>
+                            </dd>
+
+                            <!-- Region -->
+                            <dt>
+                                @Html.Label(" Region :", new { @class = "control-label required-field" })
+                            </dt>
+                            <dd>
+                                <div class="col-md-5">
+                                    @Html.DropDownList("RegionId", null, "Select Region",
+                                        new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.RegionId, "", new { @class = "text-danger" })
+                                </div>
+                            </dd>
+                            <!-- Item Type -->
+                            <dt>@Html.Label(" Item Type :", new { @class = "control-label required-field" })</dt>
+                            <dd>
+                                <div class="col-md-5">
+                                    @Html.DropDownList("ItemTypeId", null, "Select Item Type",
+                                        new { @class = "form-control", @required = "required", @id = "ItemTypeId" })
+                                    @Html.ValidationMessageFor(model => model.ItemTypeId)
+                                </div>
+                            </dd>
+
+                            <!-- Item Sub-Category -->
+                            <dt>@Html.Label(" Item Sub-Category :", new { @class = "control-label required-field" })</dt>
+                            <dd>
+                                <div class="col-md-5">
+                                    @Html.DropDownList("ItemSubCategoryId", null, "Select Sub Category",
+                                        new { @class = "form-control", @required = "required", @id = "ItemSubCategoryId" })
+                                    @Html.ValidationMessageFor(model => model.ItemSubCategoryId)
+                                </div>
+                            </dd>
+
+                            <dd id="OtherDiv" style="display:none;">
+                                <div class="col-md-5">
+                                    @Html.TextBox("OtherItemSubCategory", null,
+                                        new { @class = "form-control", @required = "required", @id = "OtherItemSubCategory" })
+                                </div>
+                            </dd>
+
+                            <!-- Item Condition -->
+                            <dt>@Html.Label(" Item Condition :", new { @class = "control-label required-field" })</dt>
+                            <dd>
+                                <div class="col-md-5">
+                                    @Html.DropDownList("ItemConditionId", null, "Select Item Condition",
+                                        new { @class = "form-control", @required = "required", @id = "ItemConditionId" })
+                                    @Html.ValidationMessageFor(model => model.ItemConditionId)
+                                </div>
+                            </dd>
+
+                        </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        @*<dl class="dl-horizontal">
+            <dt>
+                License Type :
+            </dt>
+            <dd>
+                <div class="col-md-3">
+                    @Html.Label(licenseType.LicenseTypeName)
+                    <div hidden="hidden">
+                        @Html.Editor("LicenseTypeId", new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.Editor("BusinessID", new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.HiddenFor(model => model.LicenseTypeId, new { Value = @licenseType.LicenseTypeId })
+                        @Html.HiddenFor(model => model.BusinessId, new { Value = @business.BusinessId })
+                    </div>
+
+                </div>
+            </dd>
+            <dt>
+                @Html.Label(" Region :", new { @class = "control-label required-field" })
+
+            </dt>
+            <dd>
+                <div class="col-md-3">
+
+                    @Html.DropDownList("RegionId", null, "Select Region", new { @class = "form-control", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.RegionId, "", new { @class = "text-danger" })
+                </div>
+            </dd>
+            <dt>
+                Item Type :
+            </dt>
+            <dd>
+                <div class="col-md-3">
+                    @Html.Label(itemType.ItemTypeName)
+                    @Html.Hidden(itemType.ItemTypeId.ToString(), new { htmlAttributes = new { name = "ItemTypeId", id = "ItemTypeId", @class = "form-control" } })
+                    @Html.HiddenFor(model => model.ItemTypeId, new { Value = @itemType.ItemTypeId })
+                </div>
+            </dd>
+            <dt>
+
+                @Html.Label(" Item Sub-Category :", new { @class = "control-label required-field" })
+
+            </dt>
+            <dd>
+                <div class="col-md-3">
+                    @Html.DropDownList("ItemSubCategoryId", null, "Select Sub Category", new { @class = "form-control ", @required = "required", @id = "ItemSubCategoryId", @onchange = "ToggleOtherDiv();" })
+                    @Html.ValidationMessageFor(model => model.ItemSubCategoryId, "", new { @class = "text-danger" })
+                </div>
+            </dd>
+            <dd id="OtherDiv">
+                <div class="col-md-3">
+                    @Html.TextBox("OtherItemSubCategory", null, new { @class = "form-control ", @required = "required", @id = "OtherItemSubCategory" })
+                </div>
+            </dd>
+            <dt>
+                @Html.Label("  Item Condition :", new { @class = "control-label required-field" })
+
+            </dt>
+            <dd>
+                <div class="col-md-3">
+                    @Html.DropDownList("ItemConditionId", null, "Select Item Condition", new { @class = "form-control", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.ItemConditionId, "", new { @class = "text-danger" })
+                </div>
+            </dd>
+
+
+
+        </dl>*@
+
+
+
+
+
+
+                        <div class="form-group" hidden>
+                            <div class="col-md-offset-2 col-md-10" align="right">
+                                <input type="submit" id="createLicense" value="Create" class="btn btn-outline-success" />
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step5">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">Payment Details</legend>
+                        <div>
+                            <div>
+                                <div class="form-group">
+                                    @Html.Label("Payin slip Number", new { @class = "control-label col-md-2" })
+                                    <div class="col-md-3">
+                                        @Html.TextBox("PayinslipNumber", null, new { @class = "form-control", onkeypress = "return blockSpecialCharandnums(event)", minLength = "11" })
+
+                                    </div>
+                                </div>
+
+                                @Html.Hidden("PayinslipNumberData", null, new { htmlAttributes = new { @class = "form-control", id = "PayinslipNumberData" } })
+                                @Html.Hidden("PayinslipTableData", null, new { htmlAttributes = new { @class = "form-control", id = "PayinslipTableData" } })
+
+                                <div class="form-group">
+                                    <span id="addbtn">
+                                        <button class="btn btn-default" title="Add" type="button" onclick="PayInSlipCheck()"> Add </button>
+                                        <span class="sr-only">Add Payin slip number</span>
+
+
+                                    </span>
+                                </div>
+
+
+                            </div>
+                            <div>
+                                <table id="PayinslipTable">
+
+                                    <tr>
+                                        <td style="font-weight:bold">Payinslip Numbers </td>
+
+                                    </tr>
+
+
+
+                                </table>
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+                    </div>
+                    @*code for rms integration*
+                                            <div class="step-tab-panel" id="step5">
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <legend align="center">Payment Details</legend>
+                                                <div>
+
+
+                                                    <div class="panel-group" id="accordion">
+                                                        <div class="panel panel-default">
+
+                                                            <div id="collapseOne" class="panel-collapse collapse in">
+                                                                <div class="panel-body">
+                                                                    <div id="PayinslipNumberdiv">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="form-group">
+                                                                                @Html.Label("Pay in slip Number", new { @class = "control-label col-md-4" })
+                                                                                <div class="col-md-6">
+                                                                                    @Html.Editor("PayinslipNumber", new { htmlAttributes = new { id = "PayinslipNumber",@class = "form-control" } })
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        @Html.Hidden("PayinslipNumberData",null, new { htmlAttributes = new { @class = "form-control", id = "PayinslipNumberData" } })
+                                                                        <div class="col-lg-4">
+                                                                            <div class="form-group ">
+
+                                                                                <button class="btn btn-default" title="Query" type="button" onclick="PayInSlipCheck()">Query</button>
+                                                                                <span class="sr-only">Query</span>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br />
+                                                                    <br />
+
+                                                                    <div>
+
+
+                                                                        <div class="panel-group" id="accordion">
+                                                                            <div class="panel panel-default">
+
+                                                                                <div id="collapseOne" class="panel-collapse collapse in">
+                                                                                    <div class="panel-body">
+
+
+
+                                                                                        <table class="table" id="tblPayment" >
+                                                                                            <thead>
+                                                                                                <tr>
+
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Pay in slip Number")
+                                                                                                    </th>
+
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Customer Account Number")
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Service Unit")
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Request Number")
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Pay in slip Amount")
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Allocated Amount")
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Paid Amount")
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Unallocated Amount")
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Pay In Slip Date")
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        @Html.DisplayName("Paid Date")
+                                                                                                    </th>
+
+
+                                                                                                </tr>
+                                                                                            </thead>
+                                                                                            <tbody id="tblPaymentbody">
+                                                                                                @foreach (var item in @ViewBag.payment)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.PAYINSLIP_NO
+                                            </td>
+
+                                            <td>
+                                                @item.CUST_ACCT_NO
+                                            </td>
+                                            <td>
+                                                @item.SERVICE_UNIT
+                                            </td>
+                                            <td>
+                                                @item.REQUEST_NO
+                                            </td>
+                                            <td>
+                                                @item.PAYINSLIP_AMOUNT
+                                            </td>
+                                            <td>
+                                                @item.ALLOCATED_AMOUNT
+                                            </td>
+                                            <td>
+                                                @item.PAID_AMOUNT
+                                            </td>
+                                            <td>
+                                                @item.BALANCE_UNALLOCATED_AMOUNT
+                                            </td>
+                                            <td>
+                                                @item.PAYINSLIP_DATE
+                                            </td>
+                                            <td>
+                                                @item.PAID_DATE
+                                            </td>
+
+
+
+
+
+                                        </tr>
+                                    }
+                                                                                            </tbody>
+                        </table>
+
+
+
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+
+
+                                            </div>
+
+                    *@
+
+
+
+
+
+                </div>
+                <div class="step-footer">
+                    <div align="left" class="col-lg-3">
+                        @Html.ActionLink("Back to List", "Index", "Business", null, new { @class = "btn btn-outline-primary" })
+                    </div>
+                    <div align="center" class="col-lg-6">
+                        <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                        <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                        <button data-direction="finish" class="btn btn-outline-success">Finish</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+    <script src="~/Scripts/jquery-steps.js"></script>
+
+   
+    
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script type="text/javascript">
+
+       function ToggleOtherDiv() {
+        var optionSelected = $("#ItemSubCategoryId option:selected").text();
+        if (optionSelected == "Other") {
+            $("#OtherDiv").show();
+        } else {
+            $("#OtherItemSubCategory").val("");
+            $("#OtherDiv").hide();
+        }
+    }
+
+    // Load Sub Categories
+    function LoadSubCategories(itemTypeId) {
+        var dropdown = $("#ItemSubCategoryId");
+        if (!itemTypeId) {
+            dropdown.html('<option value="">Select Sub Category</option>');
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("GetSubCategoriesByItemType", "License")',
+            type: 'GET',
+            data: { itemTypeId: itemTypeId },
+            success: function (data) {
+                dropdown.empty().append('<option value="">Select Sub Category</option>');
+                $.each(data, function (i, item) {
+                    dropdown.append($('<option></option>').val(item.Value).html(item.Text));
+                });
+                ToggleOtherDiv();
+            }
+        });
+    }
+
+    // Load Item Conditions
+    function LoadItemConditions(itemTypeId) {
+        var dropdown = $("#ItemConditionId");
+        if (!itemTypeId) {
+            dropdown.html('<option value="">Select Item Condition</option>');
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("GetItemConditionsByItemType", "License")',
+            type: 'GET',
+            data: { itemTypeId: itemTypeId },
+            success: function (data) {
+                dropdown.empty().append('<option value="">Select Item Condition</option>');
+                $.each(data, function (i, item) {
+                    dropdown.append($('<option></option>').val(item.Value).html(item.Text));
+                });
+            }
+        });
+    }
+
+    // ==================== Main Ready Function ====================
+    $(document).ready(function () {
+
+        $("#OtherDiv").hide();
+
+        $("#ItemTypeId").change(function () {
+            var itemTypeId = $(this).val();
+            LoadSubCategories(itemTypeId);
+            LoadItemConditions(itemTypeId);
+        });
+
+        // Initial load if Item Type is already selected
+        var initialType = $("#ItemTypeId").val();
+        if (initialType && initialType > 0) {
+            LoadSubCategories(initialType);
+            LoadItemConditions(initialType);
+        }
+    });
+
+
+
+
+
+            var form = $("#Create");
+
+            form.children("div").steps({
+
+                onFinish: function () {
+
+
+                        document.getElementById("createLicense").click();
+
+
+                },
+                onChange: function (event, currentIndex, newIndex) {
+                    if (newIndex < currentIndex) {
+                        return true;
+                    }
+                    form.validate().settings.ignore = ":disabled,:hidden";
+                    return form.valid();
+                }
+            });
+
+            $("table").addClass("table table-bordered")
+
+            //payin slip code
+
+            var TableData = [];
+            var TableDataTemp = [];
+            var Index = 1;
+            function date(element) {
+
+                var dte = document.getElementById("PaidDateVal").value ;
+
+                if (element.id == "PayinSlipDate") {
+                    var picker = new Pikaday({
+                        field: element,
+                        format: 'YYYY/MM/DD',
+                        maxDate: new Date(dte),
+                        toString(date, format) {
+                            var today = new Date();
+                            const day = ('0' + (date.getDate())).slice(-2);
+                            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                            const year = date.getFullYear();
+
+
+                            return `${year}-${month}-${day}`;
+                        }
+                    });
+                }
+                else {
+                    var picker = new Pikaday({
+                        field: element,
+                        format: 'YYYY/MM/DD',
+                        maxDate: new Date,
+                        toString(date, format) {
+                            var today = new Date();
+                            const day = ('0' + (date.getDate())).slice(-2);
+                            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                            const year = date.getFullYear();
+
+
+                            return `${year}-${month}-${day}`;
+                        }
+                    });
+
+                }
+
+            }
+
+            function changevalue(element) {
+                debugger;
+
+                addToArray();
+            }
+
+            function insRow() {
+
+                var table = document.getElementById('PayinslipTable');
+                var PayinslipNumber = document.getElementById('PayinslipNumber');
+                var PayinslipNumberData = document.getElementById('PayinslipNumberData');
+                document.getElementById('PayinslipNumber').style.borderColor = "";
+                document.getElementById("Erroralert").hidden = true;
+                if (PayinslipNumber.value != "") {
+
+
+
+                    if (!table) return;
+                    var len = table.rows.length;
+
+
+                    if (len == 1) {
+                        var newRow = table.insertRow(1);
+
+
+                        var cellRefnum = newRow.insertCell(0);
+
+
+
+
+
+
+                        cellRefnum.innerHTML = '<div class="content"style="display: inline-block !important"><div class="col-lg-6">@Html.Label("PayInSlip Number", new { @class = "control-label col-md-5 required-field" })<div class="col-md-7"> <input type="text" value="" id="PayInSlipNoVal" minLength="11" maxLength="11" onkeypress="return blockSpecialCharandnums(event)" onfocusout="changevalue(this)" required="required" class="form-control" /></div></div><div class="col-lg-6">@Html.Label("Customer Account No", new { @class = "control-label col-md-5 required-field" })<div class="col-md-7"><input type="text" value="" id="CustAcctNo" minLength="11" maxLength="11"onkeypress="return blockSpecialCharandnums(event)" onfocusin="changevalue(this)" required="required" class="form-control" /></div></div><div class="col-lg-6">@Html.Label("Service Unit", new { @class = "control-label col-md-5" })<div class="col-md-7"><input type="text"  onfocusout="changevalue(this)" value="" id="ServiceUnitVal" class="form-control" /></div></div><br><div class="col-lg-6">@Html.Label("Request Number", new { @class = "control-label col-md-5" })<div class="col-md-7"> <input type="text" minLength="18" maxLength="18" value="" onfocusout="changevalue(this)" id="RequestNoVal" class="form-control" /></div></div><div class="col-lg-6">@Html.Label("Payin Slip Amount", new { @class = "control-label col-md-5 " })<div class="col-md-7"><input type="text" value="" id="PayinSlipAmountVal" onfocusout="changevalue(this)" onkeypress = "return blockSpecialCharandnums(event)" class="form-control" /></div></div><div class="col-lg-6">@Html.Label("Allocated Amount", new { @class = "control-label col-md-5" })<div class="col-md-7"><input type="text" value="" id="AllocatedAmountVal" onkeypress = "return blockSpecialCharandnums(event)" onfocusout="changevalue(this)" class="form-control" /></div></div><div class="col-lg-6">@Html.Label("Paid Amount", new { @class = "control-label col-md-5 required-field" })<div class="col-md-7"><input type="text" value="" id="PaidAmountVal" onfocusout="changevalue(this)" required="required" onkeypress = "return blockSpecialCharandnums(event)" maxlength = 10 class="form-control" /></div></div><div class="col-lg-6">@Html.Label("Paid Date", new { @class = "control-label col-md-5 required-field" })<div class="col-md-7"> <input type="text" Name="PaymentDate" value="" id="PaidDateVal" onfocusin="date(this)" required="required" onfocusout="changevalue(this)" class="form-control" /></div></div><div class="col-lg-6">@Html.Label(" PayinSlipDate", new { @class = "control-label col-md-5 required-field" })<div class="col-md-7"><input type="text" value="" Name="PaymentDate" id="PayinSlipDate" required="required" onfocusin="date(this)" onfocusout="changevalue(this)" class="form-control" /></div></div><div class="col-lg-6">@Html.Label("Balance Unallocated Amount", new { @class = "control-label col-md-5" })<div class="col-md-7"><input type="text" value="" id="BalanceUnallocatedAmountVal" onkeypress = "return blockSpecialCharandnums(event)" onfocusout="changevalue(this)" class="form-control" /></div></div></div><span id = "delbtn"><button class="btn btn-outline-warning" title="Delete" type="button" onclick="deleteRow()">Remove</button><span class="sr-only">remove</span>'
+
+
+
+
+
+                        document.getElementById('PayInSlipNoVal').value = PayinslipNumber.value;
+
+                        document.getElementsByName("PaymentDate").required = true;
+
+                        //TableData[len] = { "ReferenceNumber": document.getElementById('Refnum').value, "AllocatedDate": document.getElementById('AllocatedDate').value, "Department": document.getElementById('DepartmentName').value , "Status": document.getElementById('Status').value }
+
+
+
+
+
+                        addToArray();
+
+
+                    }
+
+
+
+                    else {
+                        //var Exist = '0';
+                        //debugger;
+                        //for (var i = 0; i < TableDataTemp.length; i++) {
+                        //    var name = TableDataTemp[i];
+                        //    for (var ii = 0; ii < TableData.length; ii++) {
+                        //        var name2 = TableData[ii];
+                        //        for (var iii = 0; iii < name2.length; iii++) {
+                        //            var list = name2[iii];
+                        //            var ret = list.replace('*', '');
+                        //            if (ret == name) {
+                        //                Exist = '1';
+                        //                document.getElementById("Erroralert").hidden = false;
+                        //                document.getElementById("error2").innerHTML = "already selected";
+                        //                break;
+
+                        //            }
+                        //        }
+                        //    }
+
+                        //}
+                        //if (Exist == '0') {
+                        document.getElementById("Erroralert").hidden = true;
+                        var newRow = table.rows[1].cloneNode(true);
+
+                        // Now get the inputs and modify their id
+                        var inputs = newRow.getElementsByTagName('input');
+
+
+
+
+                        for (var i = 0, iLen = 1; i < iLen; i++) {
+                            id = len;
+
+                            inputs[0].value = PayinslipNumber.value;
+                            inputs[0].id += len;
+
+                            inputs[1].id += len;
+
+                            inputs[2].id += len;
+
+                            inputs[3].id += len;
+
+                            inputs[4].id += len;
+
+                            inputs[5].id += len;
+
+                            inputs[6].id += len;
+
+                            inputs[7].id += len;
+                            inputs[7].value = "";
+
+                            inputs[8].id += len;
+                            inputs[8].value = "";
+
+                            inputs[9].id += len;
+
+
+
+
+
+
+
+
+
+
+
+                            //TableData[len] = { "ReferenceNumber": inputs[0].value, "AllocatedDate": inputs[1].value, "Department": inputs[2].value, "Status": inputs[4].value }
+
+
+
+
+
+
+
+
+                        }
+
+                        table.appendChild(newRow);
+                        addToArray();
+                    //}
+
+                        HoldOn.close();
+
+
+                    }
+
+
+
+
+                }
+                else {
+                    document.getElementById("Erroralert").hidden = false;
+                    document.getElementById("error2").innerHTML = " Please Add a Payin Slip number";
+                    document.getElementById('PayinslipNumber').style.borderColor = "Red";
+                }
+            }
+
+
+            function deleteRow() {
+                document.getElementById("Erroralert").hidden = true;
+                var index = $(this).last("tr").index()
+
+
+
+                document.getElementById("PayinslipTable").deleteRow(index);
+                addToArray();
+            }
+
+            function addToArray() {
+
+                debugger;
+                $("#PayinslipTable tr").each(function (i, v) {
+                    TableData[i] = Array();
+                    //Selectedoptions[i] = Array();
+                    $(this).find("div.col-md-7").each(function (ii, vv) {
+
+                        var value = $(this).find("input[type='text']").val();
+
+                        if (value == "") {
+                            if (ii == 2) {
+                                value = "N/A"
+                            }
+                            else if (ii == 3) {
+                                value = "N/A"
+                            }
+                            else if (ii == 4) {
+                                value = "N/A"
+                            }
+                            else if (ii == 5) {
+                                value = "N/A"
+                            }
+                            else if (ii == 9) {
+                                value = "N/A"
+                            }
+                            else {
+                                value = "required"
+                            }
+
+                        }
+                        if (ii == 0) {
+                            value = "*" + $(this).find("input[type='text']").val();
+                        }
+
+
+                        TableData[i][ii] = value;
+                        //Selectedoptions[i][ii] = $(this).find("input[type='text']").val();
+
+                    });
+
+                })
+
+                TableData.shift();
+                //Selectedoptions.shift();
+                ;
+                var data = TableData.join();
+
+                document.getElementById("PayinslipNumberData").value = data;
+
+                HoldOn.close();
+
+
+
+            }
+            ///
+   ////RMS code start
+        //function addToArray(payinslipnumber) {
+
+        //    TableData.push(payinslipnumber);
+
+
+        //    var data = TableData.join();
+        //    document.getElementById("PayinslipNumberData").value = data;
+
+
+        //}
+        //function clear()
+        //{
+        //    TableData = [];
+        //    document.getElementById("PayinslipNumberData").value = "";
+        //    document.getElementById("PayinslipNumber").value = "";
+        //    $("#tblPaymentbody").empty();
+        //    HoldOn.close();
+        //}
+    //    function QueryPayInSlip() {
+
+
+
+    //        //addToArray(document.getElementById("PayinslipNumber").value);
+
+    //        var PayinslipNumbers = document.getElementById("PayinslipNumberData").value;
+
+    //        $.ajax
+    //({
+
+    //    url: '/License/QueryPayInSlip',
+    //    data: JSON.stringify({ PayinslipNumbers: PayinslipNumbers}),
+    //    method: 'post',
+    //    dataType: 'json',
+    //    contentType: 'application/json;charset=utf-8',
+    //    success: function (result) {
+    //        if (result != "Error" && result != "[]") {
+
+    //            AddEntry(result);
+    //        }
+    //        else {
+    //            document.getElementById("Erroralert").hidden = false;
+    //            document.getElementById("error2").innerHTML = "Payin Slip number incorrect";
+
+    //            clear();
+
+
+    //        }
+    //    },
+    //    error: function (xhr, textStatus, error) {
+
+    //        document.getElementById("Erroralert").hidden = false;
+    //        document.getElementById("error2").innerHTML = error;
+    //        clear();
+    //    },
+    //})
+            //    };
+            //function AddEntry(result) {
+            //    var jR = JSON.parse(result);
+            //    document.getElementById("PayinslipNumber").value = "";
+            //    $("#tblPayment").find("tr:not(:first)").remove();
+
+            //    for (var i = 0; i < jR.length; i++) {
+            //        var row = $("<tr />")
+            //        $("#tblPayment").append(row);
+            //        row.append($("<td>" + jR[i].PAYINSLIP_NO + "</td>"));
+            //        row.append($("<td>" + jR[i].CUST_ACCT_NO + "</td>"));
+            //        row.append($("<td>" + jR[i].SERVICE_UNIT + "</td>"));
+            //        row.append($("<td>" + jR[i].REQUEST_NO + "</td>"));
+            //        row.append($("<td>" + jR[i].PAYINSLIP_AMOUNT + "</td>"));
+            //        row.append($("<td>" + jR[i].ALLOCATED_AMOUNT + "</td>"));
+            //        row.append($("<td>" + jR[i].PAID_AMOUNT + "</td>"));
+            //        row.append($("<td>" + jR[i].BALANCE_UNALLOCATED_AMOUNT + "</td>"));
+            //        row.append($("<td>" + jR[i].PAYINSLIP_DATE + "</td>"));
+            //        row.append($("<td>" + jR[i].PAID_DATE + "</td>"));
+
+            //    }
+            //    HoldOn.close();
+            //}
+            ////RMS code end
+            function PayInSlipCheck() {
+                initLoadHoldOn("Verifying..Please Wait");
+                //addToArray(document.getElementById("PayinslipNumber").value);
+                TableDataTemp.push(document.getElementById("PayinslipNumber").value);
+
+
+                var data = TableDataTemp.join();
+                document.getElementById("PayinslipTableData").value = data;
+
+                var PayinslipNumbers = document.getElementById("PayinslipTableData").value;
+                var Exist = '0';
+                debugger;
+                for (var i = 0; i < TableDataTemp.length; i++) {
+                    var name = TableDataTemp[i];
+                    for (var ii = 0; ii < TableData.length; ii++) {
+                        var name2 = TableData[ii];
+                        for (var iii = 0; iii < name2.length; iii++) {
+                            var list = name2[iii];
+                            var ret = list.replace('*', '');
+                            if (ret == name) {
+                                Exist = '1';
+                                document.getElementById("Erroralert").hidden = false;
+                                document.getElementById("error2").innerHTML = "Duplicate Payin slip numbers not allowed";
+                                TableDataTemp = [];
+                                break;
+
+
+                            }
+                        }
+                    }
+
+                }
+                if (Exist == '0') {
+
+
+                    $.ajax
+                        ({
+
+                            url: '/License/PayInSlipCheck',
+                            data: JSON.stringify({ PayinslipNumbers: PayinslipNumbers }),
+                            method: 'post',
+                            dataType: 'json',
+                            contentType: 'application/json;charset=utf-8',
+                            success: function (result) {
+                                debugger;
+                                if (result.success) {
+
+                                    document.getElementById("Erroralert").hidden = true;
+
+                                    if (result.msg == "exits") {
+
+                                        document.getElementById("Erroralert").hidden = false;
+                                        document.getElementById("error2").innerHTML = "Payin Slip number has been used \nLicense Number: " + result.licensenum;
+                                        document.getElementById("PayinslipNumber").value = "";
+                                        document.getElementById("PayinslipTableData").value = "";
+
+                                        TableDataTemp = [];
+                                        HoldOn.close();
+                                        //clear();
+                                    }
+                                    else if (result.msg == "Invalid") {
+                                        document.getElementById("Erroralert").hidden = false;
+                                        document.getElementById("error2").innerHTML = "Payin Slip number incorrect";
+                                        document.getElementById("PayinslipNumber").value = "";
+                                        document.getElementById("PayinslipTableData").value = "";
+
+                                        TableDataTemp = [];
+                                        HoldOn.close();
+                                        //clear();
+                                    }
+                                    else {
+
+                                        //QueryPayInSlip();
+                                        insRow();
+                                    }
+
+
+
+                                }
+                                else {
+                                    document.getElementById("Erroralert").hidden = false;
+                                    document.getElementById("error2").innerHTML = "Please try again";
+
+                                    //clear();
+                                }
+                            },
+                            error: function (xhr, textStatus, error) {
+                                document.getElementById("Erroralert").hidden = false;
+                                document.getElementById("error2").innerHTML = error;
+                                //clear();
+                            },
+                        })
+                }
+
+                HoldOn.close();
+            };
+
+
+            $(document).ready(function () {
+                $("#OtherDiv").hide();
+            var picker = new Pikaday({
+                field: document.getElementById('PaymentDatedatetimepicker'),
+                format: 'YYYY/MM/DD HH:MM',
+
+                toString(date, format) {
+                    var today = new Date();
+                    const day = ('0' + (date.getDate())).slice(-2);
+                    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    const year = date.getFullYear();
+                    const hour = today.getHours();
+                    const min = ('0' + today.getMinutes()).slice(-2);
+
+                    return `${year}-${month}-${day} ${hour}:${min}`;
+                }
+            });
+            var picker = new Pikaday({
+                field: document.getElementById('datetimepicker'),
+                format: 'YYYY/MM/DD HH:MM',
+                toString(date, format) {
+                    var today = new Date();
+                    const day = ('0' + (date.getDate())).slice(-2);
+                    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    const year = date.getFullYear();
+                    const hour = today.getHours();
+                    const min = ('0' + today.getMinutes()).slice(-2);
+
+                    return `${year}-${month}-${day} ${hour}:${min}`;
+                }
+            });
+
+        });
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+﻿@using C8.TradeLicense.DataAccessLayer;
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+
+@model PagedList.IPagedList<C8.TradeLicense.Models.DepartmentContact>
+@*@using PagedList;*@
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    var db = new TradeLicenseDbContext();
+}
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+            }
+            else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+                }
+            }
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("Index", "DepartmentContact", FormMethod.Get))
+{
+    <div class="alert alert-info">
+        <h5 style="font-family: italic">Select a search option below.</h5>
+        @Html.RadioButton("selectedSearch", "DepartmentName")&nbsp;Department Name
+        @Html.RadioButton("selectedSearch", "InspectorName")&nbsp;Inspector Name
+        @Html.RadioButton("selectedSearch", "ChiefInspectorName")&nbsp;Chief Inspector Name
+        @Html.TextBox("inputSearch", ViewBag.FilterValue as string)
+        <input type="submit" value="Search" id="btnSearch" />
+        <a href="@Url.Action("Index")">
+            <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+        </a>
+    </div>
+}
+@*<p>
+    @Html.ActionLink("Add User", "Create", null, new { @class = "btn btn-outline-warning" })
+</p>*@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Department Contacts - <span class="badge">@ViewBag.DepartmentContactCount</span></h3>
+    </div>
+    <div class="table-responsive">
+       <table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault()._DepartmentId.DepartmentName)
+        </th>
+        <th>
+            @Html.DisplayName("Name")
+        </th>
+        <th>
+            @Html.DisplayName("Role")
+        </th>
+        <th>
+            @Html.DisplayName("Chief Inspector")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().IsPrinciple)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+                {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item._DepartmentId.DepartmentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </td>
+            @{
+
+                var identityManager = new IdentityManager();
+                var userName = item.User.Username;
+                var userRole = "";
+
+                if (userName != "")
+                {
+                    userRole = identityManager.UserManager.GetRoles(identityManager.CurrentUserId(userName)).FirstOrDefault();
+                    if (userRole == null)
+                    {
+                        userRole = string.Empty;
+                    }
+                }
+                else
+                {
+                    userRole = "Client";
+                }
+            }
+            <td>
+                @Html.DisplayName(userRole)
+            </td>  
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentHeadContact.User.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPrinciple)
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.DepartmentContactId }) |*@
+                @Html.ActionLink("Details", "Details", new { id = item.DepartmentContactId }) 
+
+                @{              
+                    if (item.DepartmentHeadContactId != null || item._DepartmentId.DepartmentStructureType == "Flat")
+                    {
+                        @Html.Raw(" ")@Html.Label("|")@Html.Raw(" ")
+                        @Html.ActionLink("Delete", "Delete", new { id = item.DepartmentContactId })
+                    }                 
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+        <div align="center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Back to Department List", "Index", "Department",null, new { @class = "btn btn-outline-primary" })
+</div>

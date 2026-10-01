@@ -1,0 +1,128 @@
+﻿@model C8.TradeLicense.Models.StatusType
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@*<h2>Create</h2>*@
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Create Title Deed Type</h3>
+            </div>
+            <div class="panel-collapse in">
+                <div class="panel-body">
+                    @*Success message*@
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">
+                            <a class="close" data-dismiss="alert">×</a>
+                            <strong>Success!</strong>@TempData["Success"].ToString()
+                        </div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-block">
+                            <a class="close" data-dismiss="alert">×</a>
+                            <strong>Error!</strong> @TempData["Error"].ToString()
+                        </div>
+                    }
+                    @*<h4>StatusType</h4>
+                    <hr />*@
+                    @Html.ValidationSummary(true)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StatusTypeName, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.StatusTypeName)
+                            @Html.ValidationMessageFor(model => model.StatusTypeName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StatusTypeDescription, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.StatusTypeDescription)
+                            @Html.ValidationMessageFor(model => model.StatusTypeDescription)
+                        </div>
+                    </div>
+
+                    @*  <div class="form-group">
+                            @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsActive)
+                                @Html.ValidationMessageFor(model => model.IsActive)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsDeleted, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsDeleted)
+                                @Html.ValidationMessageFor(model => model.IsDeleted)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsLocked, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsLocked)
+                                @Html.ValidationMessageFor(model => model.IsLocked)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CreatedByUserId, "CreatedByUserId", new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("CreatedByUserId", String.Empty)
+                                @Html.ValidationMessageFor(model => model.CreatedByUserId)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CreatedDateTime, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.CreatedDateTime)
+                                @Html.ValidationMessageFor(model => model.CreatedDateTime)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ModifiedByUserId, "ModifiedByUserId", new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("ModifiedByUserId", String.Empty)
+                                @Html.ValidationMessageFor(model => model.ModifiedByUserId)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ModifiedDateTime, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.ModifiedDateTime)
+                                @Html.ValidationMessageFor(model => model.ModifiedDateTime)
+                            </div>
+                        </div>*@
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-warning" })
+</div>

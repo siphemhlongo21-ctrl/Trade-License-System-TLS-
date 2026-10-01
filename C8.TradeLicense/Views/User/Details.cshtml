@@ -1,0 +1,115 @@
+﻿@model C8.TradeLicense.Models.User
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapseOne">User Details</a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse in">
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.FirstName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.LastName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Username)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Username)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmailAddress)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmailAddress)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LandLine)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.LandLine)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Mobile)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Mobile)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Fax)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Fax)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IpAddress)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IpAddress)
+                    </dd>
+
+                    @*<dt>
+                            @Html.DisplayNameFor(model => model.IsActive)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.IsActive)
+                        </dd>*@
+
+                    @*<dt>
+                            @Html.DisplayNameFor(model => model.IsDeleted)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.IsDeleted)
+                        </dd>*@
+
+                    @*<dt>
+                            @Html.DisplayNameFor(model => model.IsLocked)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.IsLocked)
+                        </dd>*@
+                </dl>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }, new { @class = "btn btn-outline-success" }) |
+    @Html.ActionLink("Back to User List", "Index", null, new { @class = "btn btn-outline-primary" })
+</p>

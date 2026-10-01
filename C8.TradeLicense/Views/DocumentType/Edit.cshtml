@@ -1,0 +1,60 @@
+﻿@model C8.TradeLicense.Models.DocumentType
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@*<h2>Edit</h2>*@
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.DocumentTypeId)
+
+    <div class="form-horizontal">
+        @*<h4>DocumentType</h4>*@
+        @*<hr />*@
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Edit Document Type</h3>
+            </div>
+            <div class="panel-collapse in">
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DocumentTypeName, new { @class = "control-label col-md-2  required-field" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DocumentTypeName)
+                            @Html.ValidationMessageFor(model => model.DocumentTypeName)
+                        </div>
+                    </div>
+                    <div class="form-group " hidden="hidden">
+                        @Html.LabelFor(model => model.DocumentTypeKey, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DocumentTypeKey)
+                            @Html.ValidationMessageFor(model => model.DocumentTypeKey)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DocumentTypeDescription, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DocumentTypeDescription)
+                            @Html.ValidationMessageFor(model => model.DocumentTypeDescription)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-outline-success" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+</div>

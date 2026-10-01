@@ -1,0 +1,268 @@
+﻿@model PagedList.IPagedList<C8.TradeLicense.Models.License>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Approved Licenses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<script type="text/javascript">
+        $(Document).Ready(function () {
+            $('#NewBrowserBtn').on('click', function () {
+                window.open('/License/GeneratePDF', '_blank');
+            });
+        });
+
+        $(function () {
+
+            $('#btnSearch').click(function () {
+                var inp = $("#inputSearch").val();
+                var criteria = $("input[name=SearchCriteria]:checked").val();
+                $(document).trigger("clear-alert-id.errormsg");
+
+                if (criteria == null) {
+                    alert("Please choose a search criteria!");
+                } else {
+                    if (inp.length <= 0) {
+                        alert("Please enter a value to search for!");
+                    }
+                }
+
+            });
+
+            $('#SelectionSearch-form').submit(function (e) {
+                if (!$('#inputSearch').val()) {
+                    e.preventDefault(); // Prevents Form POST when textbox is empty
+                } else
+                    if ($("input[name=SearchCriteria]:checked").val() == null) {
+                        e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                    }
+            });
+        });
+    </script>*@
+
+<style>
+    .btn-outline-info {
+        border: 1px solid white;
+        background-color:white;
+        color:black;
+    }
+
+</style>
+
+
+
+<script type="text/javascript">
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("ApprovedLicenses", "License", FormMethod.Get))
+{
+<div class="alert alert-info">
+    <h4 style="font-family:Arial;color:white" align="center">Select a search option below.</h4>
+    @*License Status : @Html.DropDownList("StatusId", "All License Status") <br/>*@
+    @Html.RadioButton("selectedSearch", "BusinessName")&nbsp;Business Name
+    @Html.RadioButton("selectedSearch", "ClientName")&nbsp;Client Name
+    @Html.RadioButton("selectedSearch", "LicenseNo")&nbsp;License Number
+    @Html.RadioButton("selectedSearch", "Region")&nbsp;Region
+    @Html.TextBox("inputSearch", ViewBag.FilterValue as string, new { @class = "myText" })
+    <input type="submit" class="btn btn-outline-info" value="Search" id="btnSearch" />
+    <a href="@Url.Action("ApprovedLicenses")">
+        <i class="glyphicon glyphicon-refresh" title="Refresh" style="color:white"></i>
+    </a>
+</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert-danger">
+        <a class="close" data-dismiss="alert">×</a>
+        @TempData["Error"].ToString()
+    </div>
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Approved Licenses - <span class="badge">@ViewBag.ApprovedLicenseCount</span></h3>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().LicenseNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Region.RegionName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Business.ProposedTradeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Client.Fullname)
+                </th>
+         
+                <th>
+                    @Html.DisplayNameFor(model => model.First().LicenseType.LicenseTypeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().LicenseIssueDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().LicenseExpiryDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Status.StatusName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().migratedLicense)
+                </th>
+            
+                <th> </th>
+                <th> Actions</th>
+                <th> </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LicenseNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Region.RegionName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Business.ProposedTradeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Client.Fullname)
+                    </td>
+                
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LicenseType.LicenseTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LicenseIssueDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LicenseExpiryDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.StatusName)
+                    </td>
+                    <td align="center">
+                        @if (item.migratedLicense == false)
+                        {
+                            @Html.DisplayName("No")
+                        }
+                        else
+                        {
+                            @Html.DisplayName("Yes")
+                        }
+
+                    </td>
+
+
+                    
+                    <td>
+                        <a href="@Url.Action("Details", new { id = item.LicenseId })">
+                            <i class="glyphicon glyphicon-list" title="View Details"></i>
+                            <span class="sr-only">Details</span>
+                        </a>
+                        <a href="@Url.Action("LicenseDocUploads", new { licenseId = item.LicenseId,Screen = "ApprovedLicenses"  })">
+                            <i class="glyphicon glyphicon-briefcase" title="View Documents"></i>
+                            <span class="sr-only">Documents</span>
+                        </a>
+                        
+
+                       
+                    </td>
+                    @if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator") || User.IsInRole("Licensing Clerk"))
+                    {
+                     <td>
+                         @Html.ActionLink("Revoke/Not Renewed", "RevokeLicence", new { id = item.LicenseId })
+                     </td>           
+                    <td>
+                        @Html.ActionLink("Amend", "LicenseAmendment", new { id = item.LicenseId })
+                    </td>
+                    }
+                    else
+                    {
+                        <td>
+                           
+                        </td>
+                        <td>
+                       
+                        </td>
+                    }
+
+
+                    </tr>
+            }
+
+        </table>
+        <div align="center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("ApprovedLicenses",
+     new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+            @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                @if (Model.HasPreviousPage)
+                {
+                    <a href="@Url.Action("ApprovedLicenses", new { page = 1 })">
+                        <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                    </a>
+                    @Html.Raw(" ");
+                    <a href="@Url.Action("ApprovedLicenses", new { page = Model.PageNumber - 1 })">
+                        <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                    </a>
+                }
+                else
+                {
+                    <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                    @Html.Raw(" ");
+                    <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <a href="@Url.Action("ApprovedLicenses", new { page = Model.PageNumber + 1 })">
+                        <i class="glyphicon glyphicon-forward" title="Next"></i>
+                    </a>
+                    @Html.Raw(" ");
+                    <a href="@Url.Action("ApprovedLicenses", new { page = Model.PageCount })">
+                        <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                    </a>
+
+                }
+                else
+                {
+                    <i class="glyphicon glyphicon-forward" title="Next"></i>
+                    @Html.Raw(" ")
+                    <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                }*@
+        </div>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+﻿@model C8.TradeLicense.ViewModels.ListMigratedLicensesVM
+<h4 style="font-family:Arial;color:white" align="center">Select a search option below.</h4>
+@Html.RadioButton("listMigratedLicensesVM.SelectedSearch", "BusinessName", Model.SelectedSearch == "BusinessName")&nbsp;Business Name
+@Html.RadioButton("listMigratedLicensesVM.SelectedSearch", "ClientName", Model.SelectedSearch == "ClientName")&nbsp;Client Name
+@Html.RadioButton("listMigratedLicensesVM.SelectedSearch", "LicenseNumber", Model.SelectedSearch == "LicenseNumber")&nbsp;License Number
+@Html.RadioButton("listMigratedLicensesVM.SelectedSearch", "Region", Model.SelectedSearch == "Region")&nbsp;Region
+@Html.TextBox("listMigratedLicensesVM.InputSearch", Model.InputSearch, new { @class = "myText" })
+<input type="submit" value="Search" class="btn btn-outline-info" id="btnSearch" />

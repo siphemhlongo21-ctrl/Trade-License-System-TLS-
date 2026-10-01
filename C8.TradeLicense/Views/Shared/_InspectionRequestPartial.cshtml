@@ -1,0 +1,54 @@
+﻿@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.Models
+
+
+
+@{
+    var InspectionRequests = Model.InspectionRequestDetails;
+    var InspectiondocumentsList = Model.InspectionRequestUploadList;
+    var DepartmentContact = Model.DepartmentContacts;
+
+}
+<div>
+    <table>
+        <legend>Department Information</legend>
+        <tr>
+            <td>Deparment </td>
+            <td>: @InspectionRequests.Department.DepartmentName</td>
+        </tr>
+        <tr>
+            <td> Status</td>
+            <td>: @InspectionRequests.Status.StatusName</td>
+        </tr>
+        <tr>
+            <td> Comment </td>
+
+            <td>: @InspectionRequests.Comment</td>
+        </tr>
+        @if (InspectiondocumentsList.Any() || InspectiondocumentsList != null)
+        {
+            foreach (var item in InspectiondocumentsList)
+            {
+                <tr>
+                    <td> Document </td>
+
+
+                       <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                    @*<td style="padding-right: 10px">@item.CreatedDateTime</td>*@
+                </tr>
+            }
+        }
+        <tr>
+            <td> Inspector</td>
+            <td>
+
+                : @Model.DepartmentContactDetails.User.FullName
+            </td>
+        </tr>
+
+
+    </table>
+</div>
+
+
+

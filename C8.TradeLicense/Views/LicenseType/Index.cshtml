@@ -1,0 +1,64 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.LicenseType>
+
+@{
+    ViewBag.Title = "License Types";
+}
+
+@*<h2>Index</h2>*@
+
+<p>
+    
+    @Html.ActionLink("Add License Type", "Create", null, new { @class = "btn btn-outline-warning" })
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">License Types - <span class="badge">@ViewBag.LicenseTypeCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.LicenseTypeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LicenseTypeDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LicenseTypeKey)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LicenseTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LicenseTypeDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LicenseTypeKey)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.LicenseTypeId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.LicenseTypeId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.LicenseTypeId }, new { @class = "btn btn-outline-warning" }) |
+                        @*@Html.ActionLink("View Required Documents", "View", new { id = item.LicenseTypeId })*@
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

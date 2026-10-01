@@ -1,0 +1,241 @@
+﻿@using System.Web.Optimization
+@model C8.TradeLicense.Models.User
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning">
+        <strong>Error</strong> @TempData["Error"].ToString()
+    </div>
+}
+
+<style>
+    .number {
+        background-color: transparent !important;
+        border: 1.5px solid white;
+        border-radius: 50px;
+        color: white !important;
+    }
+
+    .step-app > .step-steps > li > a {
+        display: block;
+        padding: 10px;
+        color: white;
+        background-color: #848484;
+        text-decoration: none;
+        border-right: 1px solid #fff;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 20px;
+        font-size: 25px;
+        line-height: inherit;
+        color: #333;
+        border: 0;
+        background-color: aliceblue;
+        border-bottom: 1px solid #00d0ff;
+    }
+
+    .error {
+        color: tomato;
+    }
+</style>
+
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new { id = "CreateForm", enctype = "multipart/form-data" }))
+{
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseOne">Create User</a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse in">
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.FirstName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LastName, new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.LastName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Username, new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.Username, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Username)
+                        </div>
+                    </div>
+
+                    @* <div class="form-group">
+                            @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.PasswordFor(model => model.Password)
+                                @Html.ValidationMessageFor(model => model.Password)
+                            </div>
+                        </div>*@
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Region, new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model => model.Region, null, "--Select Region--", new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Region)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmailAddress, new { @class = "control-label col-md-2  required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.EmailAddress)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LandLine, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.LandLine, new { @class = "form-control", maxlength = 13 })
+                            @Html.ValidationMessageFor(model => model.LandLine)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Mobile, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", maxlength = 13 })
+                            @Html.ValidationMessageFor(model => model.Mobile)
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Fax, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.Fax, new { @class = "form-control", maxlength = 13 })
+                            @Html.ValidationMessageFor(model => model.Fax)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IpAddress, new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.IpAddress, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IpAddress)
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsActive)
+                                @Html.ValidationMessageFor(model => model.IsActive)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.IsDeleted, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsDeleted)
+                                @Html.ValidationMessageFor(model => model.IsDeleted)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.IsLocked, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsLocked)
+                                @Html.ValidationMessageFor(model => model.IsLocked)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.CreatedByUserId, "CreatedByUserId", new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("CreatedByUserId", String.Empty)
+                                @Html.ValidationMessageFor(model => model.CreatedByUserId)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.CreatedDateTime, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.CreatedDateTime)
+                                @Html.ValidationMessageFor(model => model.CreatedDateTime)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.ModifiedByUserId, "ModifiedByUserId", new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("ModifiedByUserId", String.Empty)
+                                @Html.ValidationMessageFor(model => model.ModifiedByUserId)
+                            </div>
+                        </div>*@
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.ModifiedDateTime, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.ModifiedDateTime)
+                                @Html.ValidationMessageFor(model => model.ModifiedDateTime)
+                            </div>
+                        </div>*@
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button data-direction="finish" class="btn btn-outline-success">Submit</button>
+                            <div hidden="hidden">
+                                <input type="submit" id="Createbtn" value="Submit" class="btn btn-outline-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to User List", "Index", null, new { @class = "btn btn-outline-primary" })
+</div>
+<script type="text/javascript">
+        var form = $("#CreateForm");
+        form.children("div").steps({
+
+            onFinish: function () {
+
+         
+                document.getElementById("Createbtn").click();
+            },
+            onChange: function (event, currentIndex, newIndex) {
+                debugger;
+                //submit(currentIndex, newIndex)
+
+                if (newIndex < currentIndex) {
+                    return true;
+                }
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid();
+
+            }
+        });
+        </script>

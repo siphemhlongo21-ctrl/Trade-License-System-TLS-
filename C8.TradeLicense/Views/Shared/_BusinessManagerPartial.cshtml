@@ -1,0 +1,512 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@using System.Linq
+@model C8.TradeLicense.Models.LicenseApplicationDetails
+
+
+<div>
+    @if (Model.BusinessMangers.Count() < 5)
+    {
+        <button type="button" id="AddOperatorbtn" onclick="onAdd()" class="btn btn-default">Add Operator</button>
+    }
+
+
+    <br />
+    <br />
+    <div hidden="hidden">
+        @Html.TextArea("OperatorTableData", null, new { htmlAttributes = new { @class = "form-control", id = "OperatorTableData" } })
+        @Html.TextArea("EditOperatorTableData", null, new { htmlAttributes = new { @class = "form-control", id = "EditOperatorTableData" } })
+    </div>
+    @if (Model.BusinessMangers.Count() > 0)
+    {
+        <h4 id="modalHeading" runat="server" class="modal-title">Captured Manager Details</h4>
+
+        <table>
+
+            <tr>
+                <th>Business Operator Type</th>
+                <th>Business Operator</th>
+                <th>Operator Identity Or PassportNumber </th>
+                <th>Operator Residential Address </th>
+                <th>Action </th>
+
+
+            </tr>
+            @foreach (var record in Model.BusinessMangers)
+            {
+
+                <tr>
+
+                    <td>@record.BusinessOperator.BusinessOperatorName</td>
+
+                    <td>
+                        @Html.DisplayName(record.NameOfBusinessOperator)
+                    </td>
+                    <td>@record.OperatorIdentityOrPassportNumber </td>
+                    <td>@record.OperatorResidentialAddress</td>
+                    <td>
+                        <a >
+                            <i class="glyphicon glyphicon-pencil" title="Edit" onclick="onOperatorEdit('@record.BusinessMangerId','@record.BusinessOperatorId','@record.NameOfBusinessOperator','@record.OperatorIdentityOrPassportNumber','@record.OperatorResidentialAddress1','@record.OperatorResidentialAddress2','@record.OperatorResidentialAddress3','@record.OperatorResidentialAddressCode')"></i>
+                            <span class="sr-only">Edit</span>
+                        </a>
+                    </td>
+
+                </tr>
+            }
+
+
+        </table>
+
+    }
+
+
+
+    else
+    {
+        <div class="alert alert-danger" id="Erroralert">
+            <a class="close" data-dismiss="alert">×</a>
+
+            <strong><p id="error2">Please add a Business Operator</p></strong>
+        </div>
+    }
+    @if (Model.BusinessMangers.Count() < 5)
+    {
+        <h4 id="NewManger" runat="server" class="modal-title">New Manager Details</h4>
+        <table id="OperatorTable" >
+
+
+
+            <tr>
+                <th>Business Operator Type</th>
+                <th>Business Operator</th>
+                <th>Operator Identity Or PassportNumber </th>
+                <th>Operator Residential Address </th>
+                <th>Action </th>
+            </tr>
+
+
+
+        </table>
+    }
+
+    <div class="modal fade" id="Operatormodal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content" style="width:1000px" >
+                <div class="modal-header">
+                    <h4 id="modalHeading" runat="server" class="modal-title">Operator Details</h4>
+                </div>
+                <div class="form-horizontal" align="left" id="Operatorform">
+                    <div class="form-group" hidden="hidden">
+                        @Html.Label("Business Manger Id", new { @class = "control-label col-md-2  required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBox("BusinessMangerId", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group" id="businessOperator">
+                        @Html.Label("Business Operator Type", new { @class = "control-label col-md-2  required-field" })
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model=> model.BusinessManagerDetails.BusinessOperatorId , Model.BusinessOperatorList, "--Select Operator Type--", new { @class = "form-control", @id = "BusinessOperator", @required = "required" })
+                            <label id="BusinessOperatormsg" class="control-label" style="color:red"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Business Operator", new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBox("NameOfBusinessOperator", null, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessage("NameOfBusinessOperator")
+                            <label id="NameOfBusinessOperatormsg" class="control-label" style="color:red"></label>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.Label("Operator ID No/ Passport", new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBox("OperatorIdentityOrPassportNumber", null, new { @class = "form-control", @required = "required", MinLength = 13, @onkeypress = "return blockSpecialChar(event)", maxlength = 20 })
+                            @Html.ValidationMessage("OperatorIdentityOrPassportNumber")
+                            <label id="OperatorIdentityOrPassportNumbermsg" class="control-label" style="color:red"></label>
+
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <button type="button" class="btn btn-sm btn-primary" style="margin-left:95px;" id="ButtonaddLocationOperator" onclick="ButtonAddLocationOperator()"><i class="glyphicon glyphicon-globe"></i> GIS</button>
+
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Operator Address", null, new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBox("OperatorResidentialAddress1", null, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessage("OperatorResidentialAddress1")
+                            <label id="OperatorResidentialAddress1msg" class="control-label" style="color:red"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*city*@
+                        @Html.Label("City", new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-3">
+                            @Html.TextBox("OperatorResidentialAddress3", null, "", new { @class = "form-control", @required = "required", name = "datalistOpCity", list = "datalistOpCity", Value = "" })
+
+                            <datalist id="datalistOpCity">
+                                <option value="Select">
+                            </datalist>
+                            @Html.ValidationMessage("OperatorResidentialAddress3")
+                            <label id="OperatorResidentialAddress3msg" class="control-label" style="color:red"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @*sub*@
+                        @Html.Label("Suburb", new { @class = "control-label col-md-2 required-field" })
+
+                        <div class="col-md-3">
+                            @Html.TextBox("OperatorResidentialAddress2", null, "", new { @class = "form-control", @required = "required", name = "datalistOpsub", list = "datalistOpsub", Value = "" })
+
+                            <datalist id="datalistOpsub">
+                                <option value="Select">
+                            </datalist>
+                            @Html.ValidationMessage("OperatorResidentialAddress2")
+                            <label id="OperatorResidentialAddress2msg" class="control-label" style="color:red"></label>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        @Html.Label("Code", new { @class = "control-label col-md-2 required-field" })
+                        <div class="col-md-1">
+                            @Html.TextBox("OperatorResidentialAddressCode", null, new { @class = "form-control", @required = "required", maxlength = 4, MinLength = 4, @onkeypress = "return blockSpecialCharandnums(event)" })
+                            @Html.ValidationMessage("OperatorResidentialAddressCode")
+                            <label id="OperatorResidentialAddressCodemsg" class="control-label" style="color:red"></label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer" style="align-content: flex-end">
+                    <button id="EditSavebtn" class="form-control"   type="button">Save</button>
+                    <button id="Savebtn" type="button" class="form-control" >Save</button>
+                    <button id="Cancelbtn" class="form-control" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div hidden="hidden">
+
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+    var Tablearry = 0;
+    var OperatorIndex = 0;
+
+    function checkOperatortablecount()
+    {
+
+        if (Tablearry > 0) {
+            $('#Erroralert').hide();
+        }
+        else
+        {
+            $('#Erroralert').show();
+        }
+        if(Tablearry == 5)
+        {
+            $("#AddOperatorbtn").hide();
+        }
+        else
+        {
+            $("#AddOperatorbtn").show();
+        }
+    }
+    function onAdd() {
+
+        Operatorclear();
+        $('#Operatormodal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+        var Id = 0;
+        document.getElementById("BusinessMangerId").value = Id;
+
+
+        $("#EditSavebtn").hide();
+        $("#Savebtn").show();
+    }
+    function onOperatorEdit(Id,BusinessOperatorId, NameOfBusinessOperator, OperatorIdentityOrPassportNumber, OperatorResidentialAddress1, OperatorResidentialAddress2, OperatorResidentialAddress3, OperatorResidentialAddressCode) {
+
+        Operatorclear();
+        $('#Operatormodal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+        document.getElementById("BusinessMangerId").value = Id
+        document.getElementById("BusinessOperator").value = BusinessOperatorId
+        document.getElementById("NameOfBusinessOperator").value = NameOfBusinessOperator
+        document.getElementById("OperatorIdentityOrPassportNumber").value = OperatorIdentityOrPassportNumber
+        document.getElementById("OperatorResidentialAddress1").value = OperatorResidentialAddress1
+        document.getElementById("OperatorResidentialAddress3").value = OperatorResidentialAddress2
+        document.getElementById("OperatorResidentialAddress2").value = OperatorResidentialAddress3
+        document.getElementById("OperatorResidentialAddressCode").value = OperatorResidentialAddressCode
+        $("#Savebtn").hide();
+        $("#EditSavebtn").show();
+    }
+    function Operatorclear()
+    {
+        document.getElementById("BusinessMangerId").value = ""
+        document.getElementById("BusinessOperator").value =""
+        document.getElementById("NameOfBusinessOperator").value = ""
+        document.getElementById("OperatorIdentityOrPassportNumber").value = ""
+        document.getElementById("OperatorResidentialAddress1").value = ""
+        document.getElementById("OperatorResidentialAddress3").value = ""
+        document.getElementById("OperatorResidentialAddress2").value = ""
+        document.getElementById("OperatorResidentialAddressCode").value = ""
+    }
+    $("#Savebtn").click(function () {
+        var valid = true;
+        if (document.getElementById("BusinessOperator").value == "") {
+            document.getElementById("BusinessOperatormsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("NameOfBusinessOperator").value == "") {
+            document.getElementById("NameOfBusinessOperatormsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorIdentityOrPassportNumber").value == "") {
+            document.getElementById("OperatorIdentityOrPassportNumbermsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddress1").value == "") {
+            document.getElementById("OperatorIdentityOrPassportNumbermsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddress1").value == "") {
+            document.getElementById("OperatorResidentialAddress1msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddress2").value == "") {
+            document.getElementById("OperatorResidentialAddress2msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddress3").value == "") {
+            document.getElementById("OperatorResidentialAddress3msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddressCode").value == "") {
+            document.getElementById("OperatorResidentialAddressCodemsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (valid == true) {
+            $('#Operatormodal').modal('hide')
+
+
+            Operatorinsrow()
+        }
+
+    })
+    $("#EditSavebtn").click(function () {
+        var valid = true;
+        if (document.getElementById("BusinessOperator").value == "") {
+            document.getElementById("BusinessOperatormsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("NameOfBusinessOperator").value == "") {
+            document.getElementById("NameOfBusinessOperatormsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorIdentityOrPassportNumber").value == "") {
+            document.getElementById("OperatorIdentityOrPassportNumbermsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddress1").value == "") {
+            document.getElementById("OperatorIdentityOrPassportNumbermsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddress1").value == "") {
+            document.getElementById("OperatorResidentialAddress1msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddress2").value == "") {
+            document.getElementById("OperatorResidentialAddress2msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddress3").value == "") {
+            document.getElementById("OperatorResidentialAddress3msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("OperatorResidentialAddressCode").value == "") {
+            document.getElementById("OperatorResidentialAddressCodemsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (valid == true) {
+            $('#Operatormodal').modal('hide')
+            EditToOperatorArray()
+        }
+
+    })
+
+    function Operatorinsrow() {
+
+        $("#NewManger").show();
+        $("#OperatorTable").show();
+
+        var table = document.getElementById('OperatorTable');
+        var selectedoption = document.getElementById('BusinessOperator');
+
+
+        if (!table) return;
+        var len = table.rows.length;
+        Tablearry++;
+        if (len == 1) {
+            var newRow = table.insertRow(1);
+
+            var BusinessOperatorType = newRow.insertCell(0);
+            var cellBusinessOperator = newRow.insertCell(1);
+            var cellOperatorIdentity = newRow.insertCell(2);
+            var OperatorResidential = newRow.insertCell(3);
+            var Action = newRow.insertCell(4);
+
+            BusinessOperatorType.innerHTML = '<td style=" width:200px"><input type="hidden" id="BusinessOperatorTypeval" value=" " style="width:10px;border-color:transparent" /><input type="text" value="" id="BusinessOperatorTypetxt" style=" width:200px; border-color:transparent" /> </td>';
+            cellBusinessOperator.innerHTML = '<td><input type="hidden" id="BusinessOperatorval" value=" " style="width:10px;border-color:transparent" /><input type="text" value="" id="BusinessOperatortxt" style=" width:200px; border-color:transparent" /> </td>';
+            cellOperatorIdentity.innerHTML = ' <td><input type="hidden" id="OperatorIdentityval" value=" " style="width:10px;border-color:transparent" /><input type="text" value="" id="OperatorIdentitytxt" style=" width:200px;border-color:transparent" /> </td>';
+            OperatorResidential.innerHTML = '<td><input type="hidden" id="OperatorResidentialval" value=" " style="width:10px;border-color:transparent" /><input type="text" id="OperatorResidentialtxt" value=" " style="width:200px;border-color:transparent" /></td>';
+            Action.innerHTML = '<td><span id = "delbtn"><button class="glyphicon glyphicon-remove" title="Delete" type="button" onclick="deleteOperatorRow()"></button><span class="sr-only">Delete</span> </span > </td >';
+
+            document.getElementById('BusinessOperatorTypeval').value = "*" + document.getElementById("BusinessOperator").value;
+            document.getElementById('BusinessOperatorTypetxt').value = selectedoption.options[selectedoption.selectedIndex].text;
+            document.getElementById('BusinessOperatorval').value = document.getElementById("NameOfBusinessOperator").value;
+            document.getElementById('BusinessOperatortxt').value = document.getElementById("NameOfBusinessOperator").value;
+            document.getElementById('OperatorIdentityval').value = document.getElementById("OperatorIdentityOrPassportNumber").value;
+            document.getElementById('OperatorIdentitytxt').value = document.getElementById("OperatorIdentityOrPassportNumber").value;
+            document.getElementById('OperatorResidentialval').value = document.getElementById("OperatorResidentialAddress1").value + "," + document.getElementById("OperatorResidentialAddress3").value + "," + document.getElementById("OperatorResidentialAddress2").value + "," + document.getElementById("OperatorResidentialAddressCode").value;
+            document.getElementById('OperatorResidentialtxt').value = document.getElementById("OperatorResidentialAddress1").value + " " + document.getElementById("OperatorResidentialAddress3").value + " " + document.getElementById("OperatorResidentialAddress2").value + " " + document.getElementById("OperatorResidentialAddressCode").value;
+
+
+            addToOperatorArray();
+
+
+        }
+        else {
+
+            var newRow = table.rows[1].cloneNode(true);
+            // Now get the inputs and modify their id
+            var inputs = newRow.getElementsByTagName('input');
+
+            for (var i = 0, iLen = 1; i < iLen; i++) {
+                id = len;
+
+                inputs[0].value = "*" + document.getElementById("BusinessOperator").value;
+                inputs[0].id += len;
+                inputs[1].value = selectedoption.options[selectedoption.selectedIndex].text;
+                inputs[1].id += len;
+                inputs[2].value = document.getElementById("NameOfBusinessOperator").value;
+                inputs[2].id += len;
+                inputs[3].value = document.getElementById("NameOfBusinessOperator").value;
+                inputs[3].id += len;
+                inputs[4].value = document.getElementById("OperatorIdentityOrPassportNumber").value;
+                inputs[4].id += len;
+                inputs[5].value = document.getElementById("OperatorIdentityOrPassportNumber").value;
+                inputs[5].id += len;
+                inputs[6].value = document.getElementById("OperatorResidentialAddress1").value + "," + document.getElementById("OperatorResidentialAddress3").value + "," + document.getElementById("OperatorResidentialAddress2").value + "," + document.getElementById("OperatorResidentialAddressCode").value;
+                inputs[6].id += len;
+                inputs[7].value = document.getElementById("OperatorResidentialAddress1").value + " " + document.getElementById("OperatorResidentialAddress3").value + " " + document.getElementById("OperatorResidentialAddress2").value + " " + document.getElementById("OperatorResidentialAddressCode").value;
+                inputs[7].id += len;
+
+
+
+
+
+            }
+            table.appendChild(newRow);
+            addToOperatorArray();
+        }
+
+
+    }
+
+
+
+    function deleteOperatorRow() {
+
+        var table = document.getElementById('OperatorTable');
+
+
+        if (!table) return;
+        var len = table.rows.length;
+
+
+        if (len == 1) {
+            $("#NewManger").hide();
+            $("#OperatorTable").hide();
+        }
+
+        Tablearry--;
+        var index = $(this).last("tr").index()
+
+        document.getElementById("OperatorTable").deleteRow(index);
+        addToOperatorArray();
+
+    }
+    function addToOperatorArray() {
+
+
+        $("#OperatorTable tr").each(function (i, v) {
+            OperatorTableDataArray[i] = Array();
+
+            $(this).find("td").each(function (ii, vv) {
+
+
+                OperatorTableDataArray[i][ii] = $(this).find("input[type='hidden']").val();
+
+
+            });
+
+        })
+
+        OperatorTableDataArray.shift();
+
+        var data = OperatorTableDataArray.join();
+
+        document.getElementById("OperatorTableData").value = data;
+        checkOperatortablecount();
+
+
+    }
+    function EditToOperatorArray() {
+
+
+        EditOperatorTableDataArray[OperatorIndex] = Array();
+
+        $('#Operatorform :input').each(function (ii, vv) {
+
+            if (ii == 0) {
+                EditOperatorTableDataArray[OperatorIndex][ii] = "*" + vv.value;
+            }
+            else
+            {
+                EditOperatorTableDataArray[OperatorIndex][ii] = vv.value;
+            }
+
+
+        });
+
+        var data = EditOperatorTableDataArray.join();
+
+        document.getElementById("EditOperatorTableData").value = data;
+
+        OperatorIndex++
+
+    }
+
+
+
+</script>

@@ -1,0 +1,139 @@
+﻿@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.Models
+
+@{
+
+    var inspectionResponse =Model.InspectionResponses;
+    var DepartmentContact = Model.DepartmentContacts;
+    var InspectorDocs = Model.InspectionResponseDocuments;
+
+}
+<div>
+    <legend>Department Information</legend>
+    <table>
+
+        <tr>
+            <td>Department Name  </td>
+            <td>Status</td>
+            <td>
+                Clerk
+            </td>
+            <td>
+                Captured By Clerk
+            </td>
+
+            <td>
+                Adhoc inspection
+            </td>
+            <td>Comment </td>
+            <td>Inspector</td>
+            <td>Report</td>
+
+        </tr>
+        @if (inspectionResponse != null)
+        {
+            foreach (var InspectionResp in inspectionResponse)
+            {
+                if (InspectionResp != null)
+                {
+                    <tr>
+                        <!-- Check for null in InspectionRequest and Department -->
+                        <td>
+                            @(InspectionResp.InspectionRequest.Department.DepartmentName ?? "N/A")
+                        </td>
+
+                        <!-- Check for null in InspectionRequest and Status -->
+                        <td>
+                            @(InspectionResp.InspectionRequest.Status.StatusName ?? "N/A")
+                        </td>
+
+                        <!-- Check for null in Clerk -->
+                        <td>
+                            @(InspectionResp.Clerk ?? "N/A")
+                        </td>
+
+                        <!-- Check for null in CapturedByClerk -->
+                        <td>
+                            @if (InspectionResp.CapturedByClerk == false)
+                            {
+                                @Html.DisplayName("No")
+                            }
+                            else
+                            {
+                                @Html.DisplayName("Yes")
+                            }
+                        </td>
+
+                        <!-- Check for null in AdhocInspector -->
+                        <td>
+                            @if (InspectionResp.AdhocInspector == false)
+                            {
+                                @Html.DisplayName("No")
+                            }
+                            else
+                            {
+                                @Html.DisplayName("Yes")
+                            }
+                        </td>
+
+                        <!-- Check for null in Comment -->
+                        <td>
+                            @(InspectionResp.Comment ?? "N/A")
+                        </td>
+
+                        <!-- Check for null in DepartmentContact -->
+                        @if (DepartmentContact != null)
+                        {
+                            foreach (var DepartmentCont in DepartmentContact)
+                            {
+                                if (DepartmentCont != null && DepartmentCont.DepartmentContactId == InspectionResp.InspectionRequest.DepartmentContactId)
+                                {
+                                    <td>
+                                        @(DepartmentCont.User.FullName ?? "N/A")
+                                    </td>
+                                }
+                            }
+                        }
+
+                        <!-- Check for null in InspectorDocs -->
+                        <td style="padding-right: 10px">
+                            @if (InspectorDocs != null && InspectorDocs.Any())
+                            {
+                                foreach (var Report in InspectorDocs)
+                                {
+                                    if (Report != null && Report.referenceId == InspectionResp.InspectionResponseId)
+                                    {
+                                        <a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@Report.FilePath">@Report.FileName</a>
+                                        break;
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">Null inspection response encountered.</td>
+                    </tr>
+                }
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8">No inspection response data available.</td>
+            </tr>
+        }
+        </td>
+        </tr>
+
+
+
+
+
+    </table>
+</div>
+
+
+

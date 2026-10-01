@@ -1,0 +1,162 @@
+﻿@model C8.TradeLicense.Models.Department
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning">
+        <strong>Error</strong> @TempData["Error"].ToString()
+    </div>
+}
+
+<div id="errorNewUsers" class="alert alert-warning" style="display:none;">
+    <strong>Please <a href="@Url.Action("Index","User")">assign new users</a> to the Chief Inspector Role</strong>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var currentStructureType = '@ViewBag.CurrentStructureType';
+        var departmentHeadContacts = '@ViewBag.DepartmentHeadContacts';
+        var availableChiefInspectors = '@ViewBag.AvailableChiefInspectors';
+
+        $("#radbtnHierarchy").on("click", function () {
+            if (currentStructureType === "Flat") {
+                if (departmentHeadContacts == 0) {
+                    if (availableChiefInspectors == 0) {
+                        $("#errorNewUsers").show();
+                        $('#btnSubmit').attr("disabled", true);
+                    }
+                    $("#newChiefInspectorsIdGroup").show();
+                    $("#currentChiefInspectorsIdGroup").hide();
+                }
+                else {
+                    $("#currentChiefInspectorsIdGroup").show();
+                    $("#newChiefInspectorsIdGroup").hide();
+                    $("#errorNewUsers").hide();
+                    $('#btnSubmit').attr("disabled", false);
+                }
+            }
+        });
+
+
+        $("#radbtnFlat").on("click", function () {
+            $("#currentChiefInspectorsIdGroup").hide();
+            $("#newChiefInspectorsIdGroup").hide();
+            $("#errorNewUsers").hide();
+            $('#btnSubmit').attr("disabled", false);
+        });
+    });
+
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseOne">Edit Department</a>
+                </h4>
+            </div>
+
+            @Html.HiddenFor(model => model.DepartmentId)
+            @Html.HiddenFor(model => model.IsActive)
+            @Html.Hidden("currentStructureType", (string)ViewBag.CurrentStructureType)
+
+            <div class="panel-collapse in">
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepartmentName, "Name", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.DepartmentName, new { maxlength = 35 })
+                            @Html.ValidationMessageFor(model => model.DepartmentName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepartmentDescription, "Description", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.DepartmentDescription, new { maxlength = 35 })
+                            @Html.ValidationMessageFor(model => model.DepartmentDescription)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepartmentKey, "Key", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.DepartmentKey, new { maxlength = 10 })
+                            @Html.ValidationMessageFor(model => model.DepartmentKey)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RegionId, "RegionId", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("RegionId", null, "Select Region.", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.RegionId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepartmentStructureType, "Department Structure", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div>
+                                <label>@Html.RadioButtonFor(model => model.DepartmentStructureType, "Hierarchy", new { @id = "radbtnHierarchy" }) Hierarchy</label> @Html.ValidationMessageFor(model => model.DepartmentStructureType, null, new { @style = "padding-left:4.8em;" })
+                            </div>
+                            <div>
+                                <label>@Html.RadioButtonFor(model => model.DepartmentStructureType, "Flat", new { @id = "radbtnFlat" }) Flat</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="currentChiefInspectorsIdGroup" class="form-group" style="display:none;">
+                        @Html.Label("Chief Inspector", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("ddlChiefInspector", new SelectList(ViewBag.CurrentChiefInspectorRole, "UserId", "FullName"))
+                        </div>
+                    </div>
+
+                    <div id="newChiefInspectorsIdGroup" class="form-group" style="display:none;">
+                        @Html.Label("Chief Inspector", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("ddlChiefInspector", new SelectList(ViewBag.UsersForChiefInspectorRole, "UserId", "FullName"))
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsActive)
+                                @Html.ValidationMessageFor(model => model.IsActive)
+                            </div>
+                        </div>*@
+
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.IsLocked, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsLocked)
+                                @Html.ValidationMessageFor(model => model.IsLocked)
+                            </div>
+                        </div>*@
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input id="btnSubmit" type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-warning" })
+</div>

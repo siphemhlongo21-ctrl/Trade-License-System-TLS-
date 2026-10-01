@@ -1,0 +1,339 @@
+﻿@model PagedList.IPagedList<Business>
+@using System.Collections
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@using PagedList.Mvc;
+@using C8.TradeLicense.Keys;
+@{
+    ViewBag.Title = "Index";
+    var client = (Client)ViewData["ClientData"];
+
+    var db = new TradeLicenseDbContext();
+}
+@*<script src="/Scripts/jquery.cookie.js"></script>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var divData = document.getElementById("clientInfo");
+        if (divData != null) {
+            $("#radbtnExistingClient").prop("checked", true);
+            $("#existingClientGroup").show();
+
+                $("#newClientGroup").hide();
+        }
+
+        //L.M 20141114a - Get radio buttons selection
+        //var checkedExisting = $.cookie("checkedExisting");
+        //if (checkedExisting) {
+        //    if (checkedExisting == "true") {
+        //        $("#radbtnExistingClient").prop("checked", true);
+        //        $("#existingClientGroup").show();
+        //        $("#newClientGroup").hide();
+        //    }
+        //}
+
+        var date = new Date();
+        var minutes = 0.5;
+        date.setTime(date.getTime() + (minutes * 60 * 1000));
+
+        $("#radbtnExistingClient").on("click", function () {
+            if ($('#radbtnExistingClient').is(':checked'))
+                //$.cookie("checkedExisting", this.checked, { expires: date });
+            //  document.cookie="checkedExisting;expires = date";
+            $("#existingClientGroup").show();
+            $("#newClientGroup").hide();
+
+        });
+
+        $('#dropClients').change(function () {
+            $("#btnGetClient").show();
+        });
+        $("#btnGetClient").hide();
+
+        $("#radbtnNewClient").on("click", function () {
+            if ($('#radbtnNewClient').is(':checked'))
+                $("#newClientGroup").show();
+            $("#existingClientGroup").hide();
+        });
+    });
+
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+
+</script>
+<br />
+<div id="clientTypeGroup" class="form-group">
+    <div class="alert alert-info">
+        <h5 style="font-family: italic">Select an option below to create a new Business.</h5>
+        @* LM.20141113a - Keep radio button selection after POST *@
+
+        <div>
+            @Html.RadioButton("clientStatus", "Existing client", new { id = "radbtnExistingClient" })&nbsp; Add business for existing customer
+        </div>
+
+        <div>
+            @Html.RadioButton("clientStatus", "New Customer", new { id = "radbtnNewClient" })&nbsp; Add business for new Customer
+        </div>
+
+        <br />
+        <div id="addNewBusiness">
+            <div id="existingClientGroup" class="form-group" style="display: none;">
+
+                @using (Html.BeginForm("Index", "Business", FormMethod.Post))
+                {
+
+                    @Html.DropDownList("dropdownClient",
+                            new SelectList((IEnumerable)ViewData["RegisteredClients"], "ClientId", "FullName"), "---Select customer---", new { id = "dropClients" , @class="form-control", @style="width:350px;"})
+                    <br />
+                    <input id="btnGetClient" type="submit" value="Get Customer" class="btn btn-default" />
+
+                    if (Request.HttpMethod == "POST")
+                    {
+                        <div id="exist" class="form-group">
+                            <div id="clientInfo">
+                                @Html.Partial("~/Views/Shared/_ClientPartial.cshtml", client)
+                            </div>
+                            <br />
+                            <a class="btn btn-default" href="@Url.Action("Create", "Business", new { id = @client.ClientId })">
+                                <span class="font-icon-group"></span>Add Business
+                            </a>
+                        </div>
+                    }
+
+                }
+
+            </div>
+            <div id="newClientGroup" class="form-group " style="display: none;">
+                <a class="btn btn-default" href="@Url.Action("Create", "Client")">
+                    <span class="font-icon-group"></span>Add Customer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Index", "Business", FormMethod.Get))
+{
+
+    <div class="alert alert-info">
+        <h5 style="font-family: italic">Select a search option below.</h5>
+        @*License Status : @Html.DropDownList("StatusId", "All License Status") <br/>*@
+        @Html.RadioButton("selectedSearch", "BusinessName")&nbsp;Business Name
+        @Html.RadioButton("selectedSearch", "ClientName")&nbsp;Customer Name
+        @Html.RadioButton("selectedSearch", "IDPassportNumber")&nbsp;ID/Passport
+        @Html.TextBox("inputSearch", ViewBag.FilterValue as string)
+        <input type="submit" value="Search" id="btnSearch" />
+        <a href="@Url.Action("Index")">
+            <i class="glyphicon glyphicon-refresh" title="Refresh"></i>
+        </a>
+    </div>
+}
+    @if (TempData["Success"] != null)
+    {
+<div class="alert alert-success">
+    <a class="close" data-dismiss="alert">×</a>
+    <strong>@TempData["Success"].ToString()</strong>
+    <ul id="outstandingDocumentList"></ul>
+</div>
+    }
+    else
+    {
+        if (TempData["Error"] != null)
+        {
+<div class="alert alert-danger">
+    <a class="close" data-dismiss="alert">×</a>
+    <h4 class="alert-heading">Warning!</h4>
+    @TempData["Error"].ToString()
+</div>
+        }
+
+@*if (ViewBag.OustandingDocuments.Count > 0)
+    {
+        <div class="alert alert-warning">
+            <a class="close" data-dismiss="alert">×</a>
+            <strong>Outstanding Documents</strong>
+            <ul id="outstandingDocumentList"></ul>
+        </div>
+    }*@
+    }
+
+<div class="panel panel-default" id="collapseOne">
+    <div class="panel-heading">
+        <h3 class="panel-title">Registered Businesses - <span class="badge">@ViewBag.BusinessCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Client.IdentityOrPassportNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Client.Fullname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ProposedTradeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().BusinessType.BusinessTypeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().OperationStructureTypeId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ResidentialAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().BusinessStatus.StatusName)
+                </th>
+                <th>Action</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Client.IdentityOrPassportNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Client.Fullname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProposedTradeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BusinessType.BusinessTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OperationStructureType.OperationStructureTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResidentialAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BusinessStatus.StatusName)
+                    </td>
+                    <td style="width: 20px">
+                           @{
+
+
+                               if (item.BusinessStatusId == db.Status.Where(s => s.StatusKey == StatusKeys.BusinessApproved).Select(s => s.StatusId).FirstOrDefault())
+                               {
+                                   if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator"))
+                                   {
+                                <a href="@Url.Action("Edit", new { id = item.BusinessId })">
+                                    <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+                                    <span class="sr-only">Edit</span>
+                                </a>
+                                   }
+                               }
+                               else
+                               {
+                                <a href="@Url.Action("Edit", new { id = item.BusinessId })">
+                                    <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+                                    <span class="sr-only">Edit</span>
+                                </a>
+                               }
+
+                        }
+
+                       
+   
+
+                        <a href="@Url.Action("Details", new { id = item.BusinessId })">
+                            <i class="glyphicon glyphicon-list" title="View Details"></i>
+                            <span class="sr-only">Details</span>
+                        </a>
+                   @{
+                       if (ViewBag.CanAction)
+                       {
+                    <a href="@Url.Action("Delete", new {id = item.BusinessId})">
+                        <i class="glyphicon glyphicon-remove" title="Delete" style="color:red"></i>
+                    </a>
+                            <span class="sr-only">Delete</span>
+                }
+                        }
+                        @{
+
+                var hasLicense = db.Licenses.Where(l => l.BusinessId == item.BusinessId && l.IsDeleted == false && l.IsActive).Select(l => l.BusinessId).FirstOrDefault(); /*&& (l.IsDeleted == false && l.IsActive)*/
+                if (item.BusinessStatusId == db.Status.Where(s => s.StatusKey == StatusKeys.BusinessApproved).Select(s => s.StatusId).FirstOrDefault())  /* && hasLicense == null*/
+                {
+                    <a href="@Url.Action("Create", "License", new {id = item.BusinessId})">
+                        <i class="glyphicon glyphicon-plus" title="Add License"></i>
+                        <span class="sr-only">Add License</span>
+                    </a>
+                }
+
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <div align="center" style="-moz-box-shadow: dodgerblue">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index",new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = ViewBag.CurrentFilter }))
+            @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                @if (Model.HasPreviousPage)
+                    {
+                        <a href="@Url.Action("Index", new { page = 1 })">
+                            <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                        </a>
+                        @Html.Raw(" ");
+                        <a href="@Url.Action("Index", new { page = Model.PageNumber - 1 })">
+                            <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                        @Html.Raw(" ");
+                        <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                    }
+
+                    @if (Model.HasNextPage)
+                    {
+                        <a href="@Url.Action("Index", new { page = Model.PageNumber + 1 })">
+                            <i class="glyphicon glyphicon-forward" title="Next"></i>
+                        </a>
+                        @Html.Raw(" ");
+                        <a href="@Url.Action("Index", new { page = Model.PageCount })">
+                            <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                        </a>
+
+                    }
+                    else
+                    {
+                        <i class="glyphicon glyphicon-forward" title="Next"></i>
+                        @Html.Raw(" ")
+                        <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                    }*@
+        </div>
+    </div>
+</div>
+

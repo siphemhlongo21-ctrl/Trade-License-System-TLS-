@@ -1,0 +1,230 @@
+﻿@using System.Web.Optimization
+@model C8.TradeLicense.Models.User
+
+@{
+    ViewBag.Title = "EditRole";
+}
+
+<div id="errorNewChiefInspectorUsers" class="alert alert-warning" style="display:none;">
+    <strong>Please<a href="@Url.Action("Index","User")"> assign new users</a> to the Chief Inspector Role</strong>
+</div>
+
+<div id="errorNewInspectorUsers" class="alert alert-warning" style="display:none;">
+    <strong>Please<a href="@Url.Action("Index","User")"> assign new users</a> to the Inspector Role</strong>
+</div>
+
+<div class="alert alert-warning" id="roleAlert" style="display:none;">
+    <a id="roleError" href="#" class="alert-link"></a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var userRole = '@ViewBag.CurrentRole';
+        var isAssigned = @ViewBag.IsAssigned.ToString().ToLower();
+
+        if(isAssigned)
+        {
+            if(userRole === "Chief Inspector")
+            {
+                var chiefInspectorForDepartment = '@ViewBag.AvailableDepartmentChiefInspector';
+                var unassignedChiefInspector = '@ViewBag.AvailableChiefInspector';
+                $("#assignNewDepartmentHead").val("true");
+                $("#btnSubmit").attr("disabled", true);
+
+                if (unassignedChiefInspector == 0) {
+                    $("#errorNewChiefInspectorUsers").show();              
+                }
+                else {
+                    $("#errorNewChiefInspectorUsers").hide();
+
+                    if (chiefInspectorForDepartment == 1) {
+                        $("#roleAlert").html("User is currently assigned to a department. Please assign a new chief inspector");
+                        $("#roleAlert").show();
+                        $("#btnSubmit").attr("disabled", false);
+                        $("#inspectorUserIdGroup").show();
+                    }
+                    else
+                    {
+                        $("#roleAlert").html("User is currently assigned to a department. Please assign an existing/new department chief inspector");
+                        $("#roleAlert").show();
+                        $("#chiefInspectorRadGroup").show();
+                    }
+
+                    $("#ddlRoleName").change(function () {
+                        $("input:radio").each(function(){
+                            if($(this).is(":checked")){
+                                $(this).prop('checked', false);
+                            }
+                        });
+
+                        $("#chiefInspectorRadGroup").hide();
+                        $("#inspectorUserIdGroup").hide();
+                        $("#departmentChiefInspectorUserIdGroup").hide();
+
+                        if ($('option:selected', this).text() === "Chief Inspector") {                         
+                            $("#errorNewChiefInspectorUsers").hide();
+                            $("#roleAlert").hide();
+                            $("#btnSubmit").attr("disabled", false);
+                            $("#assignNewDepartmentHead").val("false");
+                        }
+                        else {
+                            $("#btnSubmit").attr("disabled", true);
+
+                            if(chiefInspectorsForDepartment > 1)
+                            {
+                                $("#chiefInspectorRadGroup").show();
+                            }
+                            else
+                            {
+                                $("#inspectorUserIdGroup").show();
+                                $("#btnSubmit").attr("disabled", false);
+                            }
+
+                            $("#assignNewDepartmentHead").val("true");
+                            $("#roleAlert").show();                     
+                        }
+                    });
+
+
+                    $("input:radio").on('change', function() {
+                        if($(this).is(":checked")){
+                            $("#btnSubmit").attr("disabled", false);
+
+                            if(this.value === "Existing")
+                            {
+                                $("#departmentChiefInspectorUserIdGroup").show();
+                                $("#inspectorUserIdGroup").hide();                       
+                            }
+                            else
+                            {
+                                $("#inspectorUserIdGroup").show();
+                                $("#departmentChiefInspectorUserIdGroup").hide();
+                            }
+                        }
+                        else
+                        {
+                            $("#btnSubmit").attr("disabled", true);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                var unassignedInspectors = '@ViewBag.AvailableInspectors';
+           
+                if(unassignedInspectors == 0)
+                {
+                    $("#errorNewInspectorUsers").show();
+                    $("#btnSubmit").attr("disabled", true);
+                }
+                else
+                {
+                    $("#errorNewInspectorUsers").hide();
+                    $("#roleAlert").html("User is currently assigned to a department. Please assign a new inspector");
+                    $("#roleAlert").show();
+                    $("#inspectorUserIdGroup").show();
+                    $("#assignNewDepartmentHead").val("true");
+                    $("#lblInspector").text("New Inspector:");
+
+                    $("#ddlRoleName").change(function () {
+                        if ($('option:selected', this).text() === "Inspector") {                         
+                            $("#roleAlert").hide();
+                            $("#inspectorUserIdGroup").hide();
+                            $("#assignNewDepartmentHead").val("false");
+                        }
+                        else {
+                            $("#roleAlert").show();
+                            $("#inspectorUserIdGroup").show();
+                            $("#assignNewDepartmentHead").val("true");                             
+                        }
+                    });
+                }
+            }
+        }
+    });
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.Hidden("UserGuidId", (object)ViewBag.UserGuidId)
+        @Html.Hidden("AssignNewChiefInspector", false, new { id = "assignNewDepartmentHead" })
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseOne">Edit Role</a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="form-group" hidden="hidden">
+                            @Html.Label("Userid:", new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBox("UserId", (string)ViewBag.UserId, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        @Html.Label("Username:", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBox("UserName", (string)ViewBag.UserName, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Current Role:", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBox("CurrentUserRole", (string)ViewBag.CurrentRole, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("New Role:", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("ddlRoleName", new SelectList(ViewBag.Roles, "Name", "Name"), new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div id="chiefInspectorRadGroup" class="form-group" style="display:none;">
+                        @Html.Label("Chief Inspector:", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div>
+                                <label>@Html.RadioButton("radNewDepartmentHead", "Existing") Existing</label>
+                            </div>
+                            <div>
+                                <label>@Html.RadioButton("radNewDepartmentHead", "New") New</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="inspectorUserIdGroup" class="form-group" style="display:none;">
+                        @Html.Label("New Chief Inspector:", new {@id = "lblInspector", @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("ddlUserList", new SelectList(ViewBag.UserList, "UserId", "FullName"), new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    @*<div id="departmentChiefInspectorUserIdGroup" class="form-group" style="display:none;">
+                        @Html.Label("New Chief Inspector:", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("ddlDepartmentUserList", new SelectList(ViewBag.DepartmentChiefInspector, "DepartmentContactId", "User.FullName"), new { @class = "form-control" })
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input id="btnSubmit" type="submit" value="Save" class="btn btn-outline-success" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        @Html.ActionLink("Back to User List", "Index", null, new { @class = "btn btn-outline-primary" })
+    </div>
+}
+

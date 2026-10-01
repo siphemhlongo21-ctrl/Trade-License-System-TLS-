@@ -1,0 +1,611 @@
+﻿@model C8.TradeLicense.Models.License
+
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "Edit License";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+
+    var client = (Client)ViewData["ClientData"];
+    var business = (Business)ViewData["BusinessData"];
+    var licenseType = (LicenseType)ViewData["LicenseType"];
+    var itemType = (ItemType)ViewData["ItemType"];
+    var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+    var license = (License)ViewData["LicenseInfo"];
+    var db = new TradeLicenseDbContext();
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>Trading License</title>
+
+    <style>
+        .number {
+            background-color: transparent !important;
+            border: 1.5px solid white;
+            border-radius: 50px;
+            color: white !important;
+        }
+
+        .step-app > .step-steps > li > a {
+            display: block;
+            padding: 10px;
+            color: white;
+            background-color: #848484;
+            text-decoration: none;
+            border-right: 1px solid #fff;
+        }
+
+        legend {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 25px;
+            line-height: inherit;
+            color: #333;
+            border: 0;
+            background-color: aliceblue;
+            border-bottom: 1px solid #00d0ff;
+        }
+           .error {
+        color: tomato;
+    }
+    </style>
+</head>
+
+
+<br />
+<br />
+<br />
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <script>
+            $(document).ready(function () {
+                var currentItemType = $("#ddlItemTypeName option:selected").text();
+                $("#ClientId").val('@client.ClientId');
+        if (currentItemType !== "Item 2") {
+            $("#fingerprint_verification").hide();
+        }
+
+        var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(ViewBag.OustandingDocuments))';
+        var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+        var groupList = [];
+
+        $.each(outstandingDocuments, function (index, value) {
+            groupList.push('<li>' + value + '</li>');
+        });
+
+        if (groupList.length > 0) {
+            $('#outstandingDocumentList').append(groupList.join(''));
+            $('#documentAlert').show();
+        }
+
+    });
+    </script>
+
+    @using (Html.BeginForm("Edit", "License", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+  
+
+        <div id="demo">
+            <div class="step-app">
+                <ul class="step-steps">
+                    <li><a href="#step1"><span class="number">1</span>License Holders Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step3"><span class="number">3</span>Documentation <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step4"> <span class="number">4</span>License Details<span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                    <li><a href="#step5"> <span class="number">5</span>Payment</a></li>
+                   
+                </ul>
+                <div class="step-content">
+                    <div class="step-tab-panel" id="step1" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_ClientPartial.cshtml")
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="step-tab-panel" id="step2" align="center">
+                        <br />
+                        <br />
+                        <br />
+                        @Html.Partial("~/Views/Shared/_BusinessPartial.cshtml")
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step3">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">Business Documents</legend>
+
+
+                        @if (documentsList.Any())
+                        {
+                            <strong>Uploaded Documents</strong>
+
+                            <table class="table-bordered">
+                                <tr>
+                                    <th>Document Type</th>
+                                    @* <th>FileName</th>*@
+                                    <th>Created Date</th>
+                                </tr>
+                                @foreach (var item in documentsList)
+                                {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                        @*   <td style="padding-right: 10px">@Html.ActionLink(item.FileName, "Download", "Client", new { id = item.FileUploadId, file = item.FileName, clientId = Model.ClientId }, htmlAttributes: null)</td>*@
+                                        <td style="padding-right: 10px">@item.CreatedDateTime</td>
+
+                                    </tr>
+
+                                }
+                            </table>
+                        }
+
+
+                        @if (ViewBag.OustandingDocuments.Count > 0)
+                        {
+                            <strong>Outstanding Documents</strong>
+                            <ul id="outstandingDocumentList"></ul>
+                            <br />
+                            @Html.Partial("~/Views/Shared/_UploadPartial.cshtml", documentTypes)
+
+                        }
+                        <br />
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step4">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">License Details</legend>
+                        @Html.HiddenFor(model => model.LicenseId)
+                   
+                        @Html.HiddenFor(model => model.ItemTypeId)
+                        @Html.HiddenFor(model => model.StatusId)
+                      
+                        <div class="form-group" hidden="hidden">
+                            @Html.LabelFor(model => model.ClientId, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.ClientId, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ClientId)
+                            </div>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                License Type :
+                            </dt>
+                            <dd>
+                                <div class="col-md-3">
+                                    @Html.Label(licenseType.LicenseTypeName)
+                                    <div hidden="hidden">
+                                        @Html.Editor("LicenseTypeId", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.Editor("BusinessID", new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+
+                                </div>
+                            </dd>
+                            <dt>
+                                Region :
+                            </dt>
+                            <dd>
+                                <div class="col-md-3">
+
+                                    @Html.DropDownList("RegionId", null, "Select Region", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RegionId)
+                                </div>
+                            </dd>
+                            <dt>
+                                Item Type :
+                            </dt>
+                            <dd>
+                                <div class="col-md-3">
+                                    @Html.Label(itemType.ItemTypeName)
+                                    @Html.Hidden(itemType.ItemTypeId.ToString(),new { htmlAttributes = new { name = "ItemTypeId",id= "ItemTypeId", @class = "form-control" } })
+
+                                </div>
+                            </dd>
+                            <dt>
+                                Item Sub-Category :
+
+                            </dt>
+                            <dd>
+                                <div class="col-md-3">
+                                    @Html.DropDownList("ItemSubCategoryId", null, "Select Sub Category", new { @class = "form-control  required-field" })
+                                    @Html.ValidationMessageFor(model => model.ItemSubCategoryId)
+                                </div>
+                            </dd>
+                            <dt>
+                                Item Condition :
+                            </dt>
+                            <dd>
+                                <div class="col-md-3">
+                                    @Html.DropDownList("ItemConditionId", null, "Select Item Condition", new { @class = "form-control  required-field" })
+                                    @Html.ValidationMessageFor(model => model.ItemConditionId)
+                                </div>
+                            </dd>
+
+                            <dt hidden="hidden"> 
+                                Inspections Done ? :
+                            </dt>
+                            <dd  hidden="hidden">
+                                <div class="col-md-3">
+                                    @Html.CheckBox("inspectionsCompleteCheck")
+                                </div>
+                            </dd>
+                        </dl>
+                        <div class="form-group" hidden>
+                            <div class="col-md-offset-2 col-md-10" align="right">
+                                <input type="submit" id="createLicense" value="Create" class="btn btn-outline-success" />
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="step-tab-panel" id="step5">
+                        <br />
+                        <br />
+                        <br />
+                        <legend align="center">Payment Details</legend>
+                        <div>
+
+
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+
+                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+
+                                       
+
+                                            <table class="table">
+
+                                                <tr>
+
+                                                    <th>
+                                                        @Html.DisplayName("Pay in slip Number")
+                                                    </th>
+                                                   
+                                                    <th>
+                                                        @Html.DisplayName("Customer Account Number")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Service Unit")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Request Number")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Pay in slip Amount")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Allocated Amount")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Paid Amount")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Unallocated Amount")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Pay In Slip Date")
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayName("Paid Date")
+                                                    </th>
+
+
+                                                </tr>
+
+                                                @foreach (var item in @ViewBag.payment)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.PAYINSLIP_NO
+                                                        </td>
+                                                       
+                                                        <td>
+                                                            @item.CUST_ACCT_NO
+                                                        </td>
+                                                        <td>
+                                                            @item.SERVICE_UNIT
+                                                        </td>
+                                                        <td>
+                                                            @item.REQUEST_NO
+                                                        </td>
+                                                        <td>
+                                                            @item.PAYINSLIP_AMOUNT
+                                                        </td>
+                                                        <td>
+                                                            @item.ALLOCATED_AMOUNT
+                                                        </td>
+                                                        <td>
+                                                            @item.PAID_AMOUNT
+                                                        </td>
+                                                        <td>
+                                                            @item.BALANCE_UNALLOCATED_AMOUNT
+                                                        </td>
+                                                        <td>
+                                                            @item.PAYINSLIP_DATE 
+                                                        </td>
+                                                        <td>
+                                                            @item.PAID_DATE
+                                                        </td>
+
+
+
+
+
+                                                    </tr>
+                                                }
+
+                                            </table>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+
+
+                    
+
+                    
+                   
+
+                </div>
+                
+                <div class="step-footer">
+                    <div align="left" class="col-lg-3">
+                        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
+                    </div>
+                    <div align="center" class="col-lg-6">
+                        <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                        <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                        <button data-direction="finish" class="btn btn-outline-success">Finish</button>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    }
+    <script src="~/Scripts/jquery-steps.js"></script>
+
+    <script type="text/javascript">
+        $('#demo').steps({
+            onFinish: function () { document.getElementById("createLicense").click(); }
+        });
+
+        $("table").addClass("table table-bordered")
+
+        @*var TableData = new Array();
+        function insRow() {
+
+            var table = document.getElementById('DepartmentTable');
+            var selectedoption = document.getElementById('DepartmentList');
+
+
+            if (!table) return;
+            var len = table.rows.length;
+            debugger;
+            var Userselected = new Array();
+           var DepartmentUser = @Html.Raw(ViewBag.DepartmentUser);
+    //Loop through statesAvailable
+
+            $.each(DepartmentUser, function (value)
+            {
+
+                i = DepartmentUser.index;
+
+               var t = DepartmentUser[i];
+
+
+})
+            if (len == 1) {
+                var newRow = table.insertRow(1);
+
+
+                var cellRefnum = newRow.insertCell(0);
+                //var cellAllocatedDate = newRow.insertCell(1);
+                //var cellStatus = newRow.insertCell(2);
+                //var cellDepartmentName = newRow.insertCell(3);
+                //var cellUser = newRow.insertCell(4);
+                //var cellComment = newRow.insertCell(5);
+                //var cellUpload = newRow.insertCell(6);
+                //var cellaction = newRow.insertCell(7);
+
+
+
+
+
+                cellRefnum.innerHTML ='<div class="content"><div class="form-group">@Html.Label("Reference Number", new { @class = "control-label col-md-2" })<div class="col-md-4"><input type="hidden" id="Refnum" value=" " style="border-color:transparent" /><input type="text" value="" id="RefnumName" class="form-control" /></div></div><div class="form-group">@Html.Label("Allocated Date", new { @class = "control-label col-md-2" })<div class="col-md-4"> <input type="hidden" id="AllocatedDate" value=" " style="border-color:transparent" /><input type="text" value="" id="AllocatedDateName" class="form-control" /></div></div><br><div class="form-group">@Html.Label("Department", new { @class = "control-label col-md-2" })<div class="col-md-4"> <input type="hidden" id="DepartmentName" value=" " style="border-color:transparent" /><input type="text" value="" id="Departmenttext" class="form-control" /></div></div><div class="form-group">@Html.Label("Status", new { @class = "control-label col-md-2" })<div class="col-md-4"> <input type="hidden" id="Status" value=" " style="border-color:transparent" /><input type="text" value="" id="StatusName" class="form-control" /></div></div><div class="form-group">@Html.Label("Comment", new { @class = "control-label col-md-2" })<div class="col-md-4"> <input type="hidden" id="CommentName" value=" " style="border-color:transparent" /><textarea value="" id="Comment" class="form-control" /></div></div><div class="form-group">@Html.Label("User", new { @class = "control-label col-md-2" })<div class="col-md-4"> <input type="hidden" id="User" value=" " style="border-color:transparent" /><input type="text" value="" id="UserName" class="form-control" /></div></div><div class="form-group">@Html.Label("Upload", new { @class = "control-label col-md-2" })<div class="col-md-4"> <input type="file" name="files" id="file"/> </div></div> </div><span id = "delbtn"><button class="glyphicon glyphicon-remove" title="Delete" type="button" onclick="deleteRow()"></button><span class="sr-only">Delete</span>'
+                //cellRefnum.innerHTML = '<td><input type="hidden" id="Refnum" value=" " style="border-color:transparent" /><input type="text" value="" id="RefnumName" style=" width:100px; border-color:transparent" /> </td>';
+                //cellAllocatedDate.innerHTML = ' <td><input type="hidden" id="AllocatedDate" value=" " style="border-color:transparent" /><input type="text" value="" id="AllocatedDateName" style=" width:100px;border-color:transparent" /> </td>';
+                //cellStatus.innerHTML = '<td><input type="hidden" id="DepartmentName" value=" " style="border-color:transparent" /><input type="text" id="Departmenttext" value=" " style="border-color:transparent" /></td>';
+                //cellDepartmentName.innerHTML = '<td><input type="hidden" id="Status" value=" " style="border-color:transparent" /> <input type="text" id="StatusName" value=" " style="border-color:transparent" /></td>';
+                //cellUser.innerHTML = '<td><input type="hidden" id="User" value=" " style="border-color:transparent" /> <input type="text" id="UserName" value=" " style="border-color:transparent" /></td>';
+                //cellComment.innerHTML = '<td><input type="hidden" id="Comment" value=" " style="border-color:transparent" /> <input type="text" id="CommentName" value=" " style="border-color:transparent" /></td>';
+                //cellUpload.innerHTML = '<td><input type="file" name="files" id="file"/> </td>';
+                //cellaction.innerHTML = ' <td><span id = "delbtn"><button class="glyphicon glyphicon-remove" title="Delete" type="button" onclick="deleteRow()"></button><span class="sr-only">Delete</span> </span > </td >';
+
+                   document.getElementById('RefnumName').value ="Ref0200"
+                document.getElementById('AllocatedDateName').value = "@ViewBag.currentdate"
+                    document.getElementById('Refnum').value ="*Ref0200"
+                document.getElementById('AllocatedDate').value = "@ViewBag.currentdate"
+                document.getElementById('Status').value = "6"
+                document.getElementById('StatusName').value = "Inspection Pending"
+                document.getElementById('DepartmentName').value = selectedoption.value
+
+                document.getElementById('Departmenttext').value = selectedoption.options[selectedoption.selectedIndex].text;
+
+
+                    //TableData[len] = { "ReferenceNumber": document.getElementById('Refnum').value, "AllocatedDate": document.getElementById('AllocatedDate').value, "Department": document.getElementById('DepartmentName').value , "Status": document.getElementById('Status').value }
+
+
+
+
+
+
+
+
+            }
+
+
+
+            else {
+
+               var newRow = table.rows[1].cloneNode(true);
+
+
+                // Now get the inputs and modify their id
+                var inputs = newRow.getElementsByTagName('input');
+
+
+
+
+                for (var i = 0, iLen = 1; i < iLen; i++) {
+
+                    inputs[0].id += len;
+                    inputs[0].value = "*Ref0200";
+                    inputs[1].id += len;
+                    inputs[1].value = "Ref0200"
+                    inputs[2].id += len;
+                    inputs[2].value = "@ViewBag.currentdate";
+                    inputs[3].id += len;
+                    inputs[3].value = "@ViewBag.currentdate";
+                    inputs[4].id += len;
+                    inputs[4].value = selectedoption.value;
+                    inputs[5].id += len;
+                    inputs[5].value = selectedoption.options[selectedoption.selectedIndex].text;
+                    inputs[6].id += len;
+                    inputs[6].value = "6";
+                    inputs[7].id += len;
+                    inputs[7].value = "Inspection Pending";
+                    inputs[8].id += len;
+                    inputs[8].value = "";
+                    inputs[9].id += len;
+                    inputs[9].value = " ";
+                    inputs[10].id += len;
+                    inputs[10].value = "";
+                    inputs[11].id += len;
+                    inputs[11].value = " ";
+
+
+
+
+                        //TableData[len] = { "ReferenceNumber": inputs[0].value, "AllocatedDate": inputs[1].value, "Department": inputs[2].value, "Status": inputs[4].value }
+
+
+
+
+
+
+
+
+                }
+
+
+                table.appendChild(newRow);
+
+
+
+
+
+
+
+            }
+
+
+            $("#DepartmentTable tr").each(function (i, v) {
+                TableData[i] = Array();
+                $(this).find("div.col-md-4").each(function (ii, vv) {
+                    debugger;
+                    var r = $(this);
+                    TableData[i][ii] = $(this).find("input[type='hidden']").val();
+                });
+            })
+            save();
+
+        }
+
+
+
+        function deleteRow() {
+            var index = $(this).last("tr").index()
+            document.getElementById("DepartmentTable").deleteRow(index);
+        }
+
+        function save() {
+
+            TableData.shift();
+            var data = TableData.join();
+            document.getElementById("DepartmentTableData").value = data;
+            debugger;
+            var t = document.getElementById("DepartmentTableData").value;
+
+        }*@
+
+
+        $(document).ready(function () {
+            var picker = new Pikaday({
+                field: document.getElementById('PaymentDatedatetimepicker'),
+                format: 'YYYY/MM/DD HH:MM',
+                toString(date, format) {
+                    var today = new Date();
+                    const day = ('0' + (date.getDate())).slice(-2);
+                    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    const year = date.getFullYear();
+                    const hour = today.getHours();
+                    const min = ('0' + today.getMinutes()).slice(-2);
+                  
+                    return `${year}-${month}-${day} ${hour}:${min}`;
+                }
+            });
+            var picker = new Pikaday({
+                field: document.getElementById('datetimepicker'),
+                format: 'YYYY/MM/DD HH:MM',
+                toString(date, format) {
+                    var today = new Date();
+                    const day = ('0' + (date.getDate())).slice(-2);
+                    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    const year = date.getFullYear();
+                    const hour = today.getHours();
+                    const min = ('0' + today.getMinutes()).slice(-2);
+                  
+                    return `${year}-${month}-${day} ${hour}:${min}`;
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

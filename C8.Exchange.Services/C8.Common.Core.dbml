@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?><Database Name="CommonCore_GoLive" Class="C8_Common_CoreDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=YOUR_SERVER;Initial Catalog=YOUR_DATABASE;Persist Security Info=True;User ID=YOUR_USER;MultipleActiveResultSets=True" SettingsObjectName="C8.Exchange.Services.Properties.Settings" SettingsPropertyName="CommonCore_GoLiveConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.tb_ReferenceTypes" Member="tb_ReferenceTypes">
+    <Type Name="tb_ReferenceType">
+      <Column Name="ReferenceTypeId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ReferenceTypeName" Type="System.String" DbType="VarChar(512) NOT NULL" CanBeNull="false" />
+      <Column Name="ReferenceTypeDescription" Type="System.String" DbType="VarChar(1024)" CanBeNull="true" />
+      <Column Name="ReferenceTypeKey" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tb_EmailTemplates" Member="tb_EmailTemplates">
+    <Type Name="tb_EmailTemplate">
+      <Column Name="EmailTemplateID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ApplicationID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EmailTemplateName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailTemplateDescription" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EmailTemplateKey" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailFrom" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailSubject" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailBody" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Variables" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsHTML" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ToVariable" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="CcVariable" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="HasVariables" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SendAsOneEmail" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Function Name="dbo.pr_INSERT_EmailQueue" Method="pr_INSERT_EmailQueue">
+    <Parameter Name="ApplicationId" Parameter="applicationId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="EmailAccountId" Parameter="emailAccountId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ToList" Parameter="toList" Type="System.String" DbType="VarChar(512)" />
+    <Parameter Name="CcList" Parameter="ccList" Type="System.String" DbType="VarChar(512)" />
+    <Parameter Name="BccList" Parameter="bccList" Type="System.String" DbType="VarChar(512)" />
+    <Parameter Name="Subject" Parameter="subject" Type="System.String" DbType="VarChar(1024)" />
+    <Parameter Name="Body" Parameter="body" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="IsHtml" Parameter="isHtml" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="FailureCount" Parameter="failureCount" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ReferenceId" Parameter="referenceId" Type="System.String" DbType="VarChar(32)" />
+    <Parameter Name="ReferenceTypeId" Parameter="referenceTypeId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="HasAttachments" Parameter="hasAttachments" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="pr_INSERT_EmailQueueResult">
+      <Column Name="" Member="Column1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.pr_SELECT_ApplicationByKey" Method="pr_SELECT_ApplicationByKey">
+    <Parameter Name="ApplicationKey" Parameter="applicationKey" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="IsActive" Parameter="isActive" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="IsDeleted" Parameter="isDeleted" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="pr_SELECT_ApplicationByKeyResult">
+      <Column Name="ApplicationID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApplicationKey" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApplicationName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ApplicationDescription" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="ApplicationURL" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.pr_SELECT_EmailAccount" Method="pr_SELECT_EmailAccount">
+    <Parameter Name="EmailAccountId" Parameter="emailAccountId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="IsActive" Parameter="isActive" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="IsDeleted" Parameter="isDeleted" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="pr_SELECT_EmailAccountResult">
+      <Column Name="EmailAccountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApplicationId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EmailAccountDescription" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailAddress" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ServiceUrl" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordExpiredDays" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordExpiredDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordNeverExpires" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DeleteServerEmail" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CanRecieve" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CanSend" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CheckUndeliverable" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AccountFailureCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MaxFailureCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DisableAccount" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.pr_SELECT_EmailTemplates" Method="pr_SELECT_EmailTemplates">
+    <Parameter Name="IsActive" Parameter="isActive" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="IsDeleted" Parameter="isDeleted" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="pr_SELECT_EmailTemplatesResult">
+      <Column Name="EmailTemplateID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApplicationID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EmailTemplateName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailTemplateDescription" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EmailTemplateKey" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailFrom" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailSubject" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailBody" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Variables" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsHTML" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ToVariable" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="CcVariable" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="HasVariables" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SendAsOneEmail" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.pr_SELECT_EmailTemplatesByApplication" Method="pr_SELECT_EmailTemplatesByApplication">
+    <Parameter Name="ApplicationID" Parameter="applicationID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="IsActive" Parameter="isActive" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="IsDeleted" Parameter="isDeleted" Type="System.Boolean" DbType="Bit" />
+    <ElementType Name="pr_SELECT_EmailTemplatesByApplicationResult">
+      <Column Name="EmailTemplateID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApplicationID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EmailTemplateName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailTemplateDescription" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EmailTemplateKey" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailFrom" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailSubject" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailBody" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Variables" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsHTML" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ToVariable" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="CcVariable" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="HasVariables" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SendAsOneEmail" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+</Database>

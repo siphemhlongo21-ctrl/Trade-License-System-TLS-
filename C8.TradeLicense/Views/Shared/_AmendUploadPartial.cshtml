@@ -1,0 +1,225 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@model C8.TradeLicense.Models.LicenseApplicationDetails
+
+@{
+
+    var clientDocuments = Model.ClientOustandingDocuments;
+    var BussinessDocuments = Model.BussinessOustandingDocuments;
+}
+<script type="text/javascript">
+    //TODO: Validating File Types
+    var validFilesTypes = [".bmp", ".gif", ".png", ".jpg", ".jpeg", ".doc", ".xls", ".pdf", ".docx", ".xlsx", ".txt"];
+    $(document).bind("change", "#file", function (e) {
+        var file = $('input[type=file]').val();
+        var isValidFile = false;
+        if (file) {
+            var ext = file.substring(file.lastIndexOf("."), file.length).toLowerCase();
+            for (var i = 0; i < validFilesTypes.length; i++) {
+                if (ext == validFilesTypes[i]) {
+                    isValidFile = true;
+                    break;
+                }
+            }
+            if (!isValidFile) {
+                alert("Invalid File. Refer supported file types below:\n\n" + validFilesTypes.join(", "));
+                $('#file').replaceWith($('#file').clone());
+            }
+        }
+    });
+</script>
+
+<form action="_AmendUploadPartial.cshtml" method="post" enctype="multipart/form-data">
+
+    <table class="table-responsive" id="clientDocumentsdiv">
+        <tr>
+            <th></th>
+            <th>File Type</th>
+            <th>Comments</th>
+            <th>Upload</th>
+
+        </tr>
+        @{ int count = 0;}
+        @foreach (var item in clientDocuments)
+        {
+            <tr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tr>
+            <tr id="@item.DocumentKey">
+                <td>@Html.HiddenFor(modelItem => item.DocumentId)</td>
+                @if ((@item.DocumentName == "Other") || (@item.DocumentName == "Fingerprint Verification") || (@item.DocumentName == "Events Management"))
+                {
+                    <td style="">
+                        <label id="item.DocumentName" class="">@item.DocumentName </label>
+                        &nbsp;&nbsp;&nbsp;
+                    </td>
+                }
+                else
+                {
+                    <td style="">
+                        <label id="item.DocumentName" class="required-field">@item.DocumentName </label>
+                        &nbsp;&nbsp;&nbsp;
+                    </td>
+                }
+                <td style="">
+                    <div class="col-md-4">
+                        <input type="text" name="@item.DocumentKey+[_comment]" id="comment[@count]" onfocusout="addToclientArray()" class="" />
+                    </div>
+                </td>
+                <td style="">
+                    <input type="file" name="files[@count]" id="file" class="" />
+                </td>
+           
+
+            </tr>
+            count++;
+        }
+    </table>
+
+    <table class="table-responsive" id="BussinessDocumentsdiv">
+        <tr>
+            <th></th>
+            <th>File Type</th>
+            <th>Comments</th>
+            <th>Upload</th>
+
+        </tr>
+
+        @foreach (var item in BussinessDocuments)
+        {
+            <tr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tr>
+            <tr id="@item.DocumentKey">
+                <td>@Html.HiddenFor(modelItem => item.DocumentId)</td>
+                @if ((@item.DocumentName == "Other") || (@item.DocumentName == "Fingerprint Verification"))
+                {
+                    <td style="">
+                        <label id="item.DocumentName" class="">@item.DocumentName </label>
+                        &nbsp;&nbsp;&nbsp;
+                    </td>
+                }
+                else
+                {
+                    <td style="">
+                        <label id="item.DocumentName" class="required-field">@item.DocumentName </label>
+                        &nbsp;&nbsp;&nbsp;
+                    </td>
+                }
+                <td style="">
+                    <div class="col-md-4">
+                        <input type="text" name="@item.DocumentKey+[_comment]" id="comment[@count]" onfocusout="addToBussinesstArray()" class="" />
+                    </div>
+                </td>
+                <td style="">
+                    <input type="file" name="files[@count]" id="file" class="" />
+                </td>
+           
+            </tr>
+            count++;
+        }
+    </table>
+    <div hidden="hidden">
+        @Html.Editor("BussinessComment", null, new { htmlAttributes = new { @class = "form-control", id = "BussinessComment" } })
+    </div>
+    <div hidden="hidden">
+        @Html.Editor("clientComment", null, new { htmlAttributes = new { @class = "form-control", id = "clientComment" } })
+    </div>
+
+    <script type="text/javascript">
+        var BussinessTableData = [];
+        var clientTableData = [];
+
+        function addToclientArray() {
+
+
+            $("#clientDocumentsdiv tr").each(function (i, v) {
+                clientTableData[i] = Array();
+                $(this).find("td").each(function (ii, vv) {
+
+                    $(this).find("div.col-md-4").each(function (iii, vvv) {
+
+
+                        value = $(this).find("input[type='text']").val();
+                        if (value != undefined) {
+                            if (value == "") {
+                                value = "*" + "N/A"
+
+                            }
+                            else {
+                                value = "*" + $(this).find("input[type='text']").val();
+                            }
+
+
+                            clientTableData[i][iii] = value;
+                        }
+                    }
+
+
+
+
+
+                    )
+                });
+
+            })
+
+            clientTableData.shift();
+
+            var data = clientTableData.join();
+            debugger;
+            document.getElementById("clientComment").value = data;
+
+
+
+
+
+        }
+
+
+        function addToBussinesstArray() {
+
+
+            $("#BussinessDocumentsdiv tr").each(function (i, v) {
+                BussinessTableData[i] = Array();
+                $(this).find("td").each(function (ii, vv) {
+
+                    $(this).find("div.col-md-4").each(function (iii, vvv) {
+
+
+                        value = $(this).find("input[type='text']").val();
+                        if (value != undefined) {
+                            if (value == "") {
+                                value = "*" + "N/A"
+
+                            }
+                            else {
+                                value = "*" + $(this).find("input[type='text']").val();
+                            }
+
+
+                            BussinessTableData[i][iii] = value;
+                        }
+                    }
+
+
+
+
+
+                    )
+                });
+
+            })
+
+            BussinessTableData.shift();
+
+            var data = BussinessTableData.join();
+            debugger;
+            document.getElementById("BussinessComment").value = data;
+
+
+
+
+
+        }
+    </script>
+
+</form>
+
+

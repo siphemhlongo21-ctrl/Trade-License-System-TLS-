@@ -1,0 +1,60 @@
+﻿
+@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@{
+    var business = Model.ClientBusinessesList;
+}
+
+<div>
+
+
+    <table class="table">
+        <tr>
+            <th>Trade Name</th>
+            <th>Business Type</th>
+            <th>Title Deed Type</th>
+            <th>Residential Address</th>
+
+            <th>Action</th>
+        </tr>
+
+        @foreach (var entry in business)
+        {
+
+            <tr>
+                <td>@Html.DisplayFor(modelItem => entry.ProposedTradeName)</td>
+                <td>@Html.DisplayFor(modelItem => entry.BusinessType.BusinessTypeName)</td>
+                <td>@Html.DisplayFor(modelItem => entry.TitleDeedType.TitleDeedTypeName)</td>
+                <td>@Html.DisplayFor(modelItem => entry.ResidentialAddress)</td>
+
+                <td>
+                    @if (User.IsInRole("System Admin") || User.IsInRole("Licensing Manager") || User.IsInRole("Licensing Administrator"))
+                    {
+                        <a href="@Url.Action("Edit", "Business", new { id = entry.BusinessId })">
+                            <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+                            <span class="sr-only">Edit</span>
+                        </a>
+                    }
+
+                    @{
+                        var db = new TradeLicenseDbContext();
+                        var hasLicense = db.Licenses.Where(l => l.BusinessId == entry.BusinessId).Select(l => l.BusinessId).FirstOrDefault();
+                        if (entry.BusinessStatusId == db.Status.Where(s => s.StatusKey == "BusinessApproved").Select(s => s.StatusId).FirstOrDefault()
+                            && hasLicense == null)
+                        {
+                            <a href="@Url.Action("Create", "License", new { id = entry.BusinessId })">
+                                <i class="glyphicon glyphicon-plus" title="Add License"></i>
+                                <span class="sr-only">Add License</span>
+                            </a>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+
+
+    </table>
+
+
+</div>

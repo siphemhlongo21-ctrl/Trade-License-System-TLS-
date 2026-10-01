@@ -1,0 +1,46 @@
+﻿
+@using C8.TradeLicense.Models
+
+@*@model C8.TradeLicense.Models.LicenseApplicationDetails*@
+@model C8.TradeLicense.Models.Client
+
+@{
+    Client client = Model;
+}
+<div>
+    <table>
+        <legend>Customer Information</legend>
+        <tr>
+            <td>ID Number </td>
+            <td>: @client.IdentityOrPassportNumber</td>
+        </tr>
+        <tr>
+            <td>Name </td>
+            <td>: @client.Fullname</td>
+        </tr>
+        <tr>
+            <td>Residential Address</td>
+            <td>: @client.ResidentialAddress1, @client.ResidentialAddress2, @client.ResidentialAddress3, @client.ResidentialAddressCode</td>
+        </tr>
+        <tr>
+            <td>CellPhone Number</td>
+            <td>: @client.CellphoneNumber</td>
+        </tr>
+        <tr>
+            <td>Alternative CellPhone Number</td>
+            <td>: @client.AltCellphoneNumber</td>
+        </tr>
+        <tr>
+            <td>Telephone Number</td>
+            <td>: @client.TelephoneNumber</td>
+        </tr>
+        <tr>
+            <td>Email Address</td>
+            <td>: @client.EmailAddress</td>
+        </tr>
+
+    </table>
+</div>
+
+
+

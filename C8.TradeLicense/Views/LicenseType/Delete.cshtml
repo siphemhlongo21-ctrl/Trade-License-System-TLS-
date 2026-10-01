@@ -1,0 +1,100 @@
+﻿@model C8.TradeLicense.Models.LicenseType
+
+@{
+    ViewBag.Title = "Delete";
+}
+<h4>Delete License Type</h4>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        @* <dt>
+            @Html.DisplayNameFor(model => model.CreatedByUser.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedByUser.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedByUser.FirstName)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseTypeDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseTypeDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+        @* <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsDeleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsDeleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsLocked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsLocked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedDateTime)
+        </dd>*@
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-outline-success" />
+            |
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+        </div>
+    }
+</div>

@@ -1,0 +1,90 @@
+﻿@model C8.TradeLicense.ViewModels.ListMigratedLicensesVM
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.DataAccessLayer
+@using PagedList.Mvc;
+<script type="text/javascript">
+
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=listMigratedLicensesVM.SelectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=listMigratedLicensesVM.SelectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+
+</script>
+@{
+    ViewBag.Title = "Migrated Licenses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+    var db = new TradeLicenseDbContext();
+}
+
+<style>
+    .btn-outline-info {
+        border: 1px solid white;
+        background-color: white;
+        color: black;
+    }
+</style>
+@using (Html.BeginForm("LicenseApproved", "MigratedLicenses", FormMethod.Get))
+{
+    @Html.Partial("~/Views/Shared/_UIMessagePartial.cshtml",Model)
+
+<div class="alert alert-info">
+    @Html.Partial("~/Views/Shared/_MigratedLicensesSearchOptions.cshtml", Model)
+    <a href="@Url.Action("LicenseApproved")">
+        <i class="glyphicon glyphicon-refresh" style="color:white" title="Refresh"></i>
+    </a>
+</div>
+}
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"> License Applications - <span class="badge">@Model.LicenseCount</span></h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                @if (@Model.LicenseCount > 0)
+                {
+                    @Html.Partial("~/Views/Shared/_MigratedLicenses.cshtml", Model.MigratedLicenses)
+                    <div align="center">
+
+                        Page @(Model.MigratedLicenses.PageCount < Model.MigratedLicenses.PageNumber ? 0 : Model.MigratedLicenses.PageNumber) of @Model.MigratedLicenses.PageCount
+                        @Html.PagedListPager(Model.MigratedLicenses, Page => Url.Action("LicenseApproved",
+     new { Page, SelectedSearch = Model.SelectedSearch, InputSearch = Model.InputSearch, }))
+
+
+
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,428 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@model IEnumerable<C8.TradeLicense.Models.License>
+@using C8.TradeLicense.Models
+@{
+    ViewBag.Title = "_ItemLicenseTemplate";
+}
+@{
+    var Manager = (IEnumerable<BusinessManger>)ViewData["Manager"];
+    var business = (Business)ViewData["Business"];
+    var license = (License)ViewData["License"];
+    var conditions = (IEnumerable<LicenseApplicationConditions>)ViewData["Conditions"];
+
+}
+<style>
+    .watermark {
+        position: fixed;
+        width: 500px;
+        height: 500px;
+        opacity: 0.2;
+        z-index: 99;
+    }
+</style>
+@*<h3>Print Business License</h3>*@
+@{
+
+}
+<div id="container">
+    @* Head Section *@
+    <div style="float: left;">
+        <img src="@Url.Content("~/content/themes/base/images/eThekwiniLogo.png")" style="width: 140px; max-height: 150px;" />
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <p style="text-indent: 80px; font-size: 30px; text-align: center; margin-top: 2px"><b>ETHEKWINI</b></p>
+                    <p style="text-indent: 80px; font-size: 30px; text-align: center; margin-top: 0px"><b>MUNICIPALITY</b></p>
+                    <p style="font-size: 18px; text-indent: 60px; text-align: center; margin-top: 2px;">
+                        LICENCE IN TERMS OF THE BUSINESS ACT, 1991
+                        <br />
+                        &nbsp;&nbsp;(ACT 71 OF 1991) @Html.Label(license.ItemType.ItemTypeName.ToUpper()) OF SCHEDULE 1
+                    </p>
+                    <p style="font-size: 18px; text-indent: 60px; text-align: center; margin-top: 2px;">
+                        @Html.Label(license.ItemType.ItemTypeDescription.ToUpper())
+                      
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                @*<td>
+                    <p style="font-size: 18px; text-indent: 60px; text-align: center; margin: 6px">@Html.Label(license.LicenseType.LicenseTypeDescription)</p>
+                </td>*@
+            </tr>
+        </table>
+    </div>
+    @* Body Section *@
+    <div id="mainContent" style="clear: both; margin-top:2.0pt">
+     
+        <div style="float: left;" class="watermark">
+            <img src="@Url.Content("~/content/themes/base/images/eThekwiniwatermark.png")" style="width: 900px; max-height: 700px;  text-align: center;" />
+        </div>
+
+        <table>
+          
+            <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                <td style='padding: 8px'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            <b>BUSINESS LICENSE NUMBER: </b>
+                        </span>
+                    </p>
+                </td>
+                <td style='padding: 8px'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            <b>@Html.Label(license.LicenseNumber.ToUpper())</b>
+                        </span>
+                    </p>
+                </td>
+
+            </tr>
+            <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                <td style='padding: 8px'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            <b>BUSINESS LICENSE VALID DATE:</b>
+                        </span>
+                    </p>
+                </td>
+                <td style='padding: 8px'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            <b>@Html.Label(license.LicenseIssueDateTime.Value.ToString("dd MMMM yyyy").ToUpper())</b>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+            <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                <td style='padding: 8px;  text-align: left'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            BUSINESS
+                            TRADING NAME: 
+                        </span>
+                    </p>
+                </td>
+                <td style='padding: 8px;text-align: left'>
+                    <p  style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            <b>@Html.Label(business.ProposedTradeName.ToUpper())</b>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+
+            @if (business.ResidentialShopOrUnitNumber != null)
+            {
+                <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                    <td style='padding: 8px;  text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                BUSINESS
+                                ADDRESS:  
+                            </span>
+                        </p>
+                    </td>
+
+
+                    <td style='padding: 8px;  text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                <b>
+                                    Unit No. : @Html.Label(business.ResidentialShopOrUnitNumber.ToString())
+                                </b>
+
+                            </span>
+
+                        </p>
+                        <p>
+                            <b>
+
+
+
+
+                                @Html.Label(business.ResidentialAddress1.ToUpper())
+
+                                @Html.Label(business.ResidentialAddress2.ToUpper())
+
+                                @Html.Label(business.ResidentialAddress3.ToUpper())
+
+                                @Html.Label(business.ResidentialAddressCode.ToString().ToUpper())
+
+
+                            </b>
+                        </p>
+                    </td>
+
+
+                </tr>
+
+
+            }
+            else
+            {
+                <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                    <td style='padding: 8px;  text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                BUSINESS
+                                ADDRESS:  
+                            </span>
+                        </p>
+                    </td>
+
+
+                    <td style='padding: 8px;  text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+
+                        <p>
+                            <b>
+
+
+
+
+                                @Html.Label(business.ResidentialAddress1.ToUpper())
+
+                                @Html.Label(business.ResidentialAddress2.ToUpper())
+
+                                @Html.Label(business.ResidentialAddress3.ToUpper())
+
+                                @Html.Label(business.ResidentialAddressCode.ToString().ToUpper())
+
+
+                            </b>
+                        </p>
+
+                        </span>
+                    </td>
+
+
+                </tr>
+            }
+            @*<tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                <td style='padding: 8px;  text-align: left'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            BUSINESS
+                            LICENSE CATEGORY:   
+                        </span>
+                    </p>
+                </td>
+                <td style='padding: 8px;text-align: left'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            <b>@Html.Label(license.LicenseType.LicenseTypeDescription.ToUpper()) <b> (</b> @Html.Label(license.ItemType.ItemTypeName.ToUpper())<b>)</b></b>
+                        </span>
+                    </p>
+                </td>
+            </tr>*@
+            <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                <td style='padding: 8px;  text-align: left'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            TYPE
+                            OF THE BUSINESS:  
+                        </span>
+                    </p>
+                </td>
+                <td style='padding: 8px;text-align: left'>
+                    <p class=MsoNormal style='margin-bottom:2.0pt;'>
+                        <span style='font-family:"Arial ",sans-serif'>
+                            <b>@Html.Label(license.ItemSubCategory.ItemSubCategoryName.ToUpper())</b>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+            @if (license.Client.CustomerType == "Individual")
+            {
+                <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                    <td style='padding: 8px;  text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                NAME
+                                OF LICENSE HOLDER:
+                            </span>
+                        </p>
+                    </td>
+                    <td style='padding: 8px;text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                <b>@Html.Label(license.Client.Fullname.ToUpper())</b>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                    <td style='padding: 8px;  text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                IDENTITY
+                                NUMBER OF LICENSE HOLDER:
+                            </span>
+                        </p>
+                    </td>
+                    <td style='padding: 8px;text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                <b>@Html.Label(license.Client.IdentityOrPassportNumber.ToUpper())</b>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                    <td style='padding: 8px;  text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                NAME
+                                OF LICENSE HOLDER:
+                            </span>
+                        </p>
+                    </td>
+                    <td style='padding: 8px;text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                <b>@Html.Label(license.Client.BusinessName.ToUpper())</b>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                    <td style='padding: 8px;  text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                CLOSE CORPORATION/COMPANY REGISTRATION NUMBER OF LICENSE HOLDER:
+                            </span>
+                        </p>
+                    </td>
+                    <td style='padding: 8px;text-align: left'>
+                        <p class=MsoNormal style='margin-bottom:2.0pt'>
+                            <span style='font-family:"Arial ",sans-serif'>
+                                <b>@Html.Label(license.Client.RegNumber.ToUpper())</b>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+            }
+          
+        </table>
+
+        @if (license.ItemType.ItemTypeName == "Item 2")
+            {
+                if (Manager.Any())
+                {
+                    foreach (var person in Manager)
+                    {
+                     <table style="width:800px">
+                    <tr class=MsoNormal style='margin-bottom:2.0pt;font-size:14.667px'>
+                        <td style='padding: 8px;text-align: left'>
+                            <p class=MsoNormal style='margin-bottom:2.0pt'>
+                                <span style='font-family:"Arial ",sans-serif'>
+                                    MANAGER’S
+                                    NAME:
+                                </span>
+                            </p>
+                        </td>
+                        <td style="width:200px">
+                            <p class=MsoNormal style='margin-bottom:2.0pt'>
+                                <span style='font-family:"Arial ",sans-serif'>
+                                    <b>@Html.Label(person.NameOfBusinessOperator.ToUpper())</b>
+                                </span>
+                            </p>
+                        </td>
+                        <td>
+                            <p class=MsoNormal style='margin-bottom:2.0pt'>
+                                <span style='font-family:"Arial ",sans-serif'>
+                                    IDENTITY
+                                    NUMBER OF MANAGER:
+                                </span>
+                            </p>
+                        </td>
+                        <td>
+                            <p class=MsoNormal style='margin-bottom:2.0pt'>
+                                <span style='font-family:"Arial ",sans-serif'>
+                                    <b>@Html.Label(person.OperatorIdentityOrPassportNumber.ToUpper())</b>
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                     </table>
+                }
+            }
+        }
+
+
+
+
+                <p class=MsoNormal style='margin-bottom:2.0pt'>
+                    <b>
+                        <u>
+                            <span style='font-family:
+"Arial ",sans-serif;font-size:14.667px'>BUSINESS LICENSE CONDITIONS</span>
+                        </u>
+                    </b>
+                </p>
+                @foreach (var item in conditions)
+                {
+                    <p style="font-size:13.333px">
+                        <b>
+                            @item.ConditionName
+                        </b>
+                    </p>
+                }
+
+
+                @* Footer Section *@
+                <div id="footer" style="position: relative; bottom: -2px;">
+                    <div id="upperFooter">
+                        @*style="margin-bottom: 350px"*@
+                        <div style="float: left">
+                            <br />
+                            <br />
+                            <br />
+                            <p style="text-decoration: overline;">
+                                LICENSING AUTHORITY
+                            </p>
+                            <p>DATE OF FIRST ISSUE:&nbsp; @Html.Label(license.LicenseIssueDateTime.Value.ToString("dd MMMM yyyy")) </p>
+
+                        </div>
+                        <div style="float: right">
+                            @Html.TextBox("signature", "", new { style = "width:400px; height:300px" })
+                        </div>
+                    </div>
+                    <div id="lowerFooter" style="clear: both;  ">
+                        @* both; margin-bottom: 350px*@
+                        <div style="float: left">
+                            <p style="font-size: 12px">
+                                <b>ANNUAL NOTIFICATION OF CARRYING ON OF BUSINESS</b>
+                                <br />
+                                Every license holder shall lodge the completed and signed forms;
+                                <br />
+                                With the relevant Licensing Authority not later than 15:00 on the last
+                                <br />
+                                working day of January in each year.
+                            </p>
+                        </div>
+                        <div style="float: right">
+                            <p style="font-size: 12px">
+                                <b>COMPLIANCE WITH OTHER LAWS</b>
+                                <br />
+                                Your attention is drawn to the provisions of Section 2(11) of the Act, which
+                                <br />
+                                reads as follows:
+                                <br />
+                                The issue of a license shall not relieve the license holder of complying with
+                                <br />
+                                an law or legal requirement in connection with the business or premises concerned.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    @*</fieldset>*@
+

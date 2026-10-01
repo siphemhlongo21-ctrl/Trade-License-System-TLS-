@@ -1,0 +1,86 @@
+﻿@model C8.TradeLicense.Models.Department
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning">
+        <strong>Error</strong> @TempData["Error"].ToString()
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseOne">Create Department</a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepartmentName, "Name", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.DepartmentName, new { maxlength = 35 })
+                            @Html.ValidationMessageFor(model => model.DepartmentName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepartmentDescription, "Description", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.DepartmentDescription, new { maxlength = 35 })
+                            @Html.ValidationMessageFor(model => model.DepartmentDescription)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepartmentKey, "Key", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.DepartmentKey, new { maxlength = 10 })
+                            @Html.ValidationMessageFor(model => model.DepartmentKey)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RegionId, "RegionId", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DropDownList("RegionId", null, "Select Region.", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.RegionId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DepartmentStructureType, "Structure Type", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div>
+                                <label>@Html.RadioButtonFor(model => model.DepartmentStructureType, "Hierarchy", true) Hierarchy</label> @Html.ValidationMessageFor(model => model.DepartmentStructureType, null, new { @style = "padding-left:4.8em;" })
+                            </div>
+                            <div>
+                                <label>@Html.RadioButtonFor(model => model.DepartmentStructureType, "Flat") Flat</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-warning" })
+</div>

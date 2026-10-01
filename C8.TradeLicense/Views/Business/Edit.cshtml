@@ -1,0 +1,899 @@
+﻿@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.Models
+@using Microsoft.Ajax.Utilities
+@using C8.TradeLicense.DataAccessLayer;
+
+@{
+    ViewBag.Title = "Edit";
+    var client = Model.CustomerDetails;
+    var documentTypes = Model.BussinessDocuments;
+    var documentsList = Model.ClientUploadList;
+    var license = Model.LicenseDetails ;
+    var issueDate = "None";
+    var expiryDate = "None";
+    var db = new TradeLicenseDbContext();
+    if (license != null)
+    {
+        issueDate = license.LicenseIssueDateTime != null ? Convert.ToDateTime(license.LicenseIssueDateTime).ToShortDateString() : "Not issued";
+        expiryDate = license.LicenseExpiryDate != null ? Convert.ToDateTime(license.LicenseExpiryDate).ToShortDateString() : "----";
+    }
+
+}
+
+<style>
+    .number {
+        background-color: transparent !important;
+        border: 1.5px solid white;
+        border-radius: 50px;
+        color: white !important;
+    }
+
+    .step-app > .step-steps > li > a {
+        display: block;
+        padding: 10px;
+        color: white;
+        background-color: #848484;
+        text-decoration: none;
+        border-right: 1px solid #fff;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 20px;
+        font-size: 25px;
+        line-height: inherit;
+        color: #333;
+        border: 0;
+        background-color: aliceblue;
+        border-bottom: 1px solid #00d0ff;
+    }
+
+    .error {
+        color: tomato;
+    }
+
+</style>
+
+<script type="text/javascript">
+
+    window.onload = $('#BusinessOperator').change();
+
+    $(document).ready(function () {
+        $("#OperatorTable").hide();
+        $("#NewManger").hide();
+        $("#newemployee").hide();
+        $("#EmployeeTable").hide();
+
+        var currentItemType = $("#ddlItemTypeName option:selected").text();
+        if (currentItemType !== "Item 2") {
+            $("#fingerprint_verification").hide();
+        }
+
+        var jsonOustandingDocumentList = '@Html.Raw(Json.Encode(Model.ClientOustandingDocuments))';
+        var outstandingDocuments = JSON.parse(jsonOustandingDocumentList);
+        var groupList = [];
+
+        $.each(outstandingDocuments, function (index, value) {
+            groupList.push('<li>' + value + '</li>');
+        });
+
+        if (groupList.length > 0) {
+            $('#outstandingDocumentList').append(groupList.join(''));
+            $('#documentAlert').show();
+        }
+
+    });
+    function Setstreet(element) {
+
+
+        var options = {};
+        options.url = "/Search/StreetName";
+        options.type = "GET";
+        options.data = { "criteria": $(element).val() };
+        options.dataType = "json";
+        options.success = function (data) {
+
+
+            $("#dataliststreet").empty();
+            for (var i = 0; i < data.length; i++) {
+
+
+
+
+                $("#dataliststreet").append("<option value='" +
+                data[i].STRNAME + "'></option>");
+
+            }
+        };
+        $.ajax(options);
+
+    }
+    function findcity(datalist, element, sub) {
+
+        if ($("#" + sub).val() != undefined) {
+            document.getElementById(sub).value = "";
+        }
+
+        var city = $(element).val();
+        SetSub('', datalist, city)
+    }
+    function getPCode(element, Pcode) {
+        if ($("#" + Pcode).val() != undefined) {
+            document.getElementById(Pcode).value = 0;
+        }
+
+        var options = {};
+        options.url = "/Search/Postalcode";
+        options.type = "GET";
+        options.data = { "criteria": criteria };
+        options.dataType = "json";
+        options.success = function (data) {
+
+
+            if (data.PostalCode != null) {
+                document.getElementById(Pcode).value = data.PostalCode;
+            }
+        };
+
+        $.ajax(options);
+    }
+    function SetSub(element, datalist, city) {
+        if (city == '') {
+            criteria = $(element).val()
+
+        }
+        else {
+            criteria = ""
+
+        }
+
+        var options = {};
+        options.url = "/Search/GetSubList";
+        options.type = "GET";
+        options.data = { "criteria": criteria, "city": city };
+        options.dataType = "json";
+        options.success = function (data) {
+
+
+            $('#' + datalist).empty();
+            for (var i = 0; i < data.length; i++) {
+
+
+
+                $('#' + datalist).append("<option value='" +
+                data[i].SUBURB + "'></option>");
+            }
+        };
+        $.ajax(options);
+    }
+    function Setcity(element, datalist) {
+
+
+        var options = {};
+        options.url = "/Search/GetCityList";
+        options.type = "GET";
+        options.data = { "criteria": $(element).val() };
+        options.dataType = "json";
+        options.success = function (data) {
+
+
+            $('#' + datalist).empty();
+            for (var i = 0; i < data.length; i++) {
+
+
+
+                $('#' + datalist).append("<option value='" +
+                data[i].DISTRICT + "'></option>");
+            }
+        };
+        $.ajax(options);
+    }
+
+    $("#ClientId").val('@client.ClientId');
+    var currentItemType = $("#ddlItemTypeName option:selected").text();
+    if (currentItemType !== "Item 2") {
+        $("#fingerprint_verification").hide();
+    }
+
+    /// This Function executes when BusinessOperator is changed
+    function Selfempoyed(value) {
+
+        if (value == "Owner") {
+
+                @*$("#NameOfEmployer").val('@client.Fullname');
+                $("#EmployerResidentialAddress1").val('@client.ResidentialAddress1');
+                sub('@client.ResidentialAddress3', 'EmployerResidentialAddress2', 'EmployerResidentialAddress')
+
+                $("#EmployerResidentialAddress3").val('@client.ResidentialAddress3').change();
+                $("#EmployerResidentialAddressCode").val('@client.ResidentialAddressCode');*@
+
+            document.getElementById("NameOfEmployer").required = false;
+            document.getElementById("EmployerResidentialAddress1").required = false;
+            document.getElementById("EmployerResidentialAddress2").required = false;
+            document.getElementById("EmployerResidentialAddress3").required = false;
+            document.getElementById("EmployerResidentialAddressCode").required = false;
+
+            document.getElementById("lblNameOfEmployer").className = "control-label col-md-2";
+            document.getElementById("lblEmployerResidentialAddress1").className = "control-label col-md-2";
+            document.getElementById("lblEmployerResidentialAddress2").className = "control-label col-md-2";
+            document.getElementById("lblEmployerResidentialAddress3").className = "control-label col-md-2";
+            document.getElementById("lblEmployerResidentialAddressCode").className = "control-label col-md-2";
+
+            //$("#NameOfEmployer").attr("readonly", "readonly");
+            //$("#EmployerResidentialAddress1").attr("readonly", "readonly");
+            //$("#EmployerResidentialAddress2").attr("readonly", "readonly");
+            //$("#EmployerResidentialAddress3").attr("readonly", "readonly");
+            //$("#EmployerResidentialAddressCode").attr("readonly", "readonly");
+        } else {
+
+            document.getElementById("lblNameOfEmployer").className = "required-field control-label col-md-2";
+            document.getElementById("lblEmployerResidentialAddress1").className = "required-field control-label col-md-2";
+            document.getElementById("lblEmployerResidentialAddress2").className = "required-field control-label col-md-2";
+            document.getElementById("lblEmployerResidentialAddress3").className = "required-field control-label col-md-2";
+            document.getElementById("lblEmployerResidentialAddressCode").className = "required-field control-label col-md-2";
+            document.getElementById("NameOfEmployer").required = true;
+            document.getElementById("EmployerResidentialAddress1").required = true;
+            document.getElementById("EmployerResidentialAddress2").required = true;
+            document.getElementById("EmployerResidentialAddress3").required = true;
+            document.getElementById("EmployerResidentialAddressCode").required = true;
+
+            $("#NameOfEmployer").removeAttr("readonly");
+            $("#EmployerResidentialAddress1").removeAttr("readonly");
+            $("#EmployerResidentialAddress2").removeAttr("readonly");
+            $("#EmployerResidentialAddress3").removeAttr("readonly");
+            $("#EmployerResidentialAddressCode").removeAttr("readonly");
+
+            $("#NameOfEmployer").val("");
+            $("#EmployerResidentialAddress1").val("");
+            $("#EmployerResidentialAddress2").val("");
+            $("#EmployerResidentialAddress3").val("");
+            //$("#EmployerResidentialAddressCode").val("");
+        }
+    }
+    function checkaddress() {
+        var isChecked = $('#isSame').is(':checked');
+        if (isChecked) {
+
+
+
+
+            var v1 = $("#PostalAddress1").val();
+            if (v1.length != 0) {
+                $("#ResidentialAddress1").val($("#PostalAddress1").val());
+
+                $('#ResidentialAddress1').prop("disabled", true);
+                $("#ResidentialAddress1").css("color", "black");
+                $("#ResidentialAddress1-error").attr("hidden", true);
+
+            }
+            var v2 = $("#PostalAddress2").val();
+            if (v2.length != 0) {
+                $("#ResidentialAddress2").val($("#PostalAddress2").val());
+
+                $('#ResidentialAddress2').prop("disabled", true);
+                $("#ResidentialAddress2").css("color", "black");
+                $("#ResidentialAddress2-error").attr("hidden", true);
+
+            }
+            var v3 = $("#PostalAddress3").val();
+
+            if (v3.length != 0) {
+                $("#ResidentialAddress3").val($("#PostalAddress3").val());
+
+                $('#ResidentialAddress3').prop("disabled", true);
+                $("#ResidentialAddress3").css("color", "black");
+                $("#ResidentialAddress3-error").attr("hidden", true);
+
+            }
+            var v4 = $("#PostalAddressCode").val();
+
+            if (v4.length == 4) {
+
+
+                $("#ResidentialAddressCode").val($("#PostalAddressCode").val());
+
+                $('#ResidentialAddressCode').prop("disabled", true);
+                $("#ResidentialAddressCode").css("color", "black");
+                $("#ResidentialAddressCode-error").attr("hidden", true);
+            }
+
+        } else {
+            $('#ResidentialAddress1').prop("disabled", false);
+            $('#ResidentialAddress2').prop("disabled", false);
+            $('#ResidentialAddress3').prop("disabled", false);
+            $('#ResidentialAddressCode').prop("disabled", false);
+            $("#ResidentialAddress1").val("");
+            $("#ResidentialAddress2").val("");
+            $("#ResidentialAddress3").val("");
+            $("#ResidentialAddressCode").val("");
+            $('#postalAddress').show();
+        }
+    }
+
+    // ResidentialAddress is the same as PostalAddress checkbox
+    $(function () {
+
+        $("#ddlBusinessType").change(function () {
+
+            var businessType = $("#ddlBusinessType option:selected").text();
+
+            if (businessType == "PTY(LTD)") {
+                $("#pty").show();
+            }
+            else {
+                $("#pty").hide();
+            }
+        });
+        $('#BusinessOperator').change(function () {
+
+            var selection = $('option:selected', this).text();
+
+            Selfempoyed(selection)
+
+            if (selection == "Owner") {
+                @*alert(@client.Fullname);*@
+                $("#NameOfBusinessOperator").val('@client.Fullname');
+                $("#OperatorIdentityOrPassportNumber").val('@client.IdentityOrPassportNumber');
+                $("#OperatorResidentialAddress1").val('@client.ResidentialAddress1');
+
+
+
+                $("#OperatorResidentialAddress2").val('@client.ResidentialAddress2')
+                $("#OperatorResidentialAddress3").val('@client.ResidentialAddress3')
+                $("#OperatorResidentialAddressCode").val('@client.ResidentialAddressCode');
+
+                $("#NameOfBusinessOperator").attr("readonly", "readonly");
+                $("#OperatorIdentityOrPassportNumber").attr("readonly", "readonly");
+                $("#OperatorResidentialAddress1").attr("readonly", "readonly");
+                $("#OperatorResidentialAddress2").attr("readonly", "readonly");
+                $("#OperatorResidentialAddress3").attr("readonly", "readonly");
+                $("#OperatorResidentialAddressCode").attr("readonly", "readonly");
+
+                //$('span.number:eq(3)').html(4);
+                //$("ul.step-steps li:contains('Employee Details')").hide();
+
+
+
+            } else {
+
+                $("#NameOfBusinessOperator").removeAttr("readonly");
+                $("#OperatorIdentityOrPassportNumber").removeAttr("readonly");
+                $("#OperatorResidentialAddress1").removeAttr("readonly");
+                $("#OperatorResidentialAddress2").removeAttr("readonly");
+                $("#OperatorResidentialAddress3").removeAttr("readonly");
+                $("#OperatorResidentialAddressCode").removeAttr("readonly");
+
+                $("#NameOfBusinessOperator").val("");
+                $("#OperatorIdentityOrPassportNumber").val("");
+                $("#OperatorResidentialAddress1").val("");
+                $("#OperatorResidentialAddress2").val("");
+                $("#OperatorResidentialAddress3").val("");
+                $("#OperatorResidentialAddressCode").val("");
+                //$('span.number:eq(4)').html(5);
+                //$("ul.step-steps li:contains('Employee Details')").show();
+
+
+            }
+        });
+        $('#isSame').change(function () {
+            var isChecked = $(this).is(':checked');
+            if (isChecked) {
+                isSame = "true";
+
+
+                var v1 = $("#PostalAddress1").val();
+
+                if (v1.length != 0) {
+                    $("#ResidentialAddress1").val($("#PostalAddress1").val());
+
+                    $('#ResidentialAddress1').prop("disabled", true);
+                    $("#ResidentialAddress1").css("color", "black");
+                    $("#ResidentialAddress1-error").attr("hidden", true);
+
+                }
+                var v2 = $("#PostalAddress2").val();
+                if (v2.length != 0) {
+                    $("#ResidentialAddress2").val($("#PostalAddress2").val());
+
+                    $('#ResidentialAddress2').prop("disabled", true);
+                    $("#ResidentialAddress2").css("color", "black");
+                    $("#ResidentialAddress2-error").attr("hidden", true);
+
+                }
+                var v3 = $("#PostalAddress3").val();
+
+                if (v3.length != 0) {
+                    $("#ResidentialAddress3").val($("#PostalAddress3").val());
+
+                    $('#ResidentialAddress3').prop("disabled", true);
+                    $("#ResidentialAddress3").css("color", "black");
+                    $("#ResidentialAddress3-error").attr("hidden", true);
+
+                }
+                var v4 = $("#PostalAddressCode").val();
+
+                if (v4.length == 4) {
+
+
+                    $("#ResidentialAddressCode").val($("#PostalAddressCode").val());
+
+                    $('#ResidentialAddressCode').prop("disabled", true);
+                    $("#ResidentialAddressCode").css("color", "black");
+                    $("#ResidentialAddressCode-error").attr("hidden", true);
+                }
+            }
+            else {
+                $('#ResidentialAddress1').prop("disabled", false);
+                $('#ResidentialAddress2').prop("disabled", false);
+                $('#ResidentialAddress3').prop("disabled", false);
+                $('#ResidentialAddressCode').prop("disabled", false);
+                $("#ResidentialAddress1").val("");
+                $("#ResidentialAddress2").val("");
+                $("#ResidentialAddress3").val("");
+                $("#ResidentialAddressCode").val("");
+                $('#postalAddress').show();
+
+                $("#ResidentialAddressCode-error").attr("hidden", false);
+                $("#ResidentialAddress1-error").attr("hidden", false);
+                $("#ResidentialAddress3-error").attr("hidden", false);
+                $("#ResidentialAddress2-error").attr("hidden", false);
+            }
+        });
+        $("#ddlItemTypeName").change(function () {
+
+            var itemType = $("#ddlItemTypeName option:selected").text();
+            var itemTypeId = $("#ddlItemTypeName option:selected").val();
+
+            if (itemType === "Item 2") {
+                $("#fingerprint_verification").show();
+                $("#itemTypeValue").val("Item2");
+            }
+            else {
+                $("#fingerprint_verification").hide();
+                $("#itemTypeValue").val("Item1");
+            }
+
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ReloadItemSubCategory", "Business")',
+                dataType: 'json',
+                data: { itemTypeId: itemTypeId },
+                success: function (data) {
+
+                    var dropdown = $("#ddlItemSubCategoryName");
+                    dropdown.empty(); // Clear existing options
+
+                    // Add a default option
+                    dropdown.append($('<option></option>').val('').text('---Select Sub Category---'));
+
+                    // Add options based on the data received
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.ItemSubCategoryId).text(item.ItemSubCategoryName));
+                    });
+                }
+            });
+
+        });
+        $("#ItemTypeId").change(function () {
+            var itemType = $("#ItemTypeId option:selected").text();
+
+            if (itemType === "Item 2") {
+                $("#fingerprint_verification").show();
+                $("#itemTypeValue").val("Item2");
+            }
+            else {
+                $("#fingerprint_verification").hide();
+                $("#itemTypeValue").val("Item1");
+            }
+        });
+    });
+    $(function () {
+        $("#pty").hide();
+        //$("#accordion1").hide();
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+@using (Html.BeginForm("Edit", "Business", FormMethod.Post, new { enctype = "multipart/form-data", @id = "businessForm" }))
+{
+    @Html.AntiForgeryToken()
+
+
+
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.BusinessDetails.ItemType.ItemTypeName)
+    @Html.HiddenFor(model => model.BusinessDetails.BusinessId)
+    @Html.HiddenFor(model => model.BusinessDetails.ClientId)
+    @Html.HiddenFor(model => model.BusinessDetails.BusinessStatusId)
+    @Html.HiddenFor(model => model.BusinessDetails.IsActive)
+    @Html.HiddenFor(model => model.BusinessDetails.IsDeleted)
+    @Html.HiddenFor(model => model.BusinessDetails.IsLocked)
+
+
+
+    <h2 align="center">Update Business </h2>
+
+    <div id="demo">
+        @*Tabs on form*@
+        <div class="step-app">
+            <ul class="step-steps">
+                <li><a href="#step1"><span class="number">1</span>Customer Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                <li><a href="#step2"><span class="number">2</span>Business Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                <li><a href="#step3"><span class="number">3</span>Operator Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                <li><a href="#step4"> <span class="number">4</span>Employee Details <span class="glyphicon glyphicon-arrow-right"></span></a></li>
+                <li><a href="#step5"> <span class="number">5</span> Business Document </a></li>
+            </ul>
+            <div class="step-content">
+                <div class="step-tab-panel" id="step1" align="center">
+                    @Html.Partial("~/Views/Shared/_ClientPartial.cshtml",client)
+
+                </div>
+                <div class="step-tab-panel" id="step2" align="center">
+                    <legend align="center">Business Details</legend>
+                    <div class="form-horizontal" align="left">
+
+                        <div class="form-group" hidden="hidden">
+                            @Html.LabelFor(model => model.BusinessDetails.ClientId, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.ClientId, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.ClientId)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.ProposedTradeName, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.ProposedTradeName, new { @class = "form-control", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.ProposedTradeName)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.BusinessTypeId, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.BusinessDetails.BusinessTypeId, Model.BusinessTypeList, "--Select Business Type--", new { @class = "form-control", id = "ddlBusinessType" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.BusinessTypeId)
+                            </div>
+                        </div>
+                        <div class="form-group" id="pty">
+                            @Html.LabelFor(model => model.BusinessDetails.KnownAs, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.KnownAs, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.KnownAs)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.PostalAddress1, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.PostalAddress1, new { @id = "PostalAddress1", @class = "form-control", @required = "required", onchange = "checkaddress()" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.PostalAddress1)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @*city*@
+                            @Html.LabelFor(model => model.BusinessDetails.PostalAddress3, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.PostalAddress3, new { @id = "PostalAddress3", @class = "form-control", @required = "required", name = "datalistCity", oninput = "Setcity(this,'datalistCity')", Onchange = "findcity('datalistsub',this,'PostalAddress2'),checkaddress()", list = "datalistCity" })
+
+                                <datalist id="datalistCity">
+                                    <option value="Select">
+                                </datalist>
+
+
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.PostalAddress3)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @*sub*@
+                            @Html.LabelFor(model => model.BusinessDetails.PostalAddress2, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.PostalAddress2, new { @id = "PostalAddress2", @class = "form-control", @required = "required", name = "datalistsub", oninput = "SetSub(this,'datalistsub','')", Onchange = "getPCode(this, 'PostalAddressCode'),checkaddress()", list = "datalistsub" })
+
+                                <datalist id="datalistsub">
+                                    <option value="Select">
+                                </datalist>
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.PostalAddress2)
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.PostalAddressCode, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-1">
+                                @Html.TextBoxFor(model => model.BusinessDetails.PostalAddressCode, new { @id = "PostalAddressCode", @class = "form-control", @required = "required", maxlength = 4, MinLength = 4, onchange = "checkaddress()" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.PostalAddressCode)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.ResidentialShopOrUnitNumber, new { @class = "control-label col-md-2 ", maxlength = 4 })
+                            <div class="col-md-1">
+                                @Html.TextBoxFor(model => model.BusinessDetails.ResidentialShopOrUnitNumber, new { @class = "form-control", maxlength = 4 })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.ResidentialShopOrUnitNumber)
+                            </div>
+                        </div>
+
+                        <div id="postalAddress">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BusinessDetails.ResidentialAddress1, new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-3">
+                                    @Html.TextBoxFor(model => model.BusinessDetails.ResidentialAddress1, new { @id = "ResidentialAddress1", @class = "form-control", @required = "required" })
+
+                                    @Html.ValidationMessageFor(model => model.BusinessDetails.ResidentialAddress1)
+                                </div>
+                                <div>
+                                    @Html.Label("Same as postal address", new { style = "font-style: italic; font-weight: normal; color: Red" })
+                                    @Html.CheckBoxFor(model => model.BusinessDetails.SameAs, new { id = "isSame", title = "Check if business address is same as postal address" })
+                                    @*@Html.CheckBox("isSame", new { id = "isSame", title = "Check if business address is same as postal address" })*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @*city*@
+                                @Html.LabelFor(model => model.BusinessDetails.ResidentialAddress3, new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-3">
+                                    @Html.TextBoxFor(model => model.BusinessDetails.ResidentialAddress3, new { @id = "ResidentialAddress3", @class = "form-control", @required = "required", name = "datalistRCity", oninput = "Setcity(this,'datalistRCity')", Onchange = "findcity('datalistRsub',this,'ResidentialAddress2')", list = "datalistRCity" })
+
+                                    <datalist id="datalistRCity">
+                                        <option value="Select">
+                                    </datalist>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @*sub*@
+                                @Html.LabelFor(model => model.BusinessDetails.ResidentialAddress2, new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-3">
+                                    @Html.TextBoxFor(model => model.BusinessDetails.ResidentialAddress2, new { @id = "ResidentialAddress2", @class = "form-control", @required = "required", name = "datalistRsub", oninput = "SetSub(this,'datalistRsub','')", Onchange = "getPCode(this, 'ResidentialAddressCode')", list = "datalistRsub" })
+
+                                    <datalist id="datalistRsub">
+                                        <option value="Select">
+                                    </datalist>
+                                    @Html.ValidationMessageFor(model => model.BusinessDetails.ResidentialAddress2)
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BusinessDetails.ResidentialAddressCode, new { @class = "control-label col-md-2 required-field" })
+                                <div class="col-md-1">
+                                    @Html.TextBoxFor(model => model.BusinessDetails.ResidentialAddressCode, new { @id = "ResidentialAddressCode", @class = "form-control", @required = "required", maxlength = 4, MinLength = 4 })
+                                    @Html.ValidationMessageFor(model => model.BusinessDetails.ResidentialAddressCode)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.TelephoneNumber, new { @class = "control-label col-md-2 ", @style = "padding-top:20px" })
+
+                            <div class="col-md-3">
+
+                                @Html.Editor("TelephoneNumber", new { htmlAttributes = new { @class = "form-control", maxlength = 10, MinLength = 10, @onkeypress = "return blockSpecialCharandnums(event)" } })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.TelephoneNumber)
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.FaxNumber, new { @class = "control-label col-md-2  ", @style = "padding-top:20px" })
+
+
+                            <div class="col-md-3">
+
+                                @Html.Editor("FaxNumber", new { htmlAttributes = new { @class = "form-control", maxlength = 10, MinLength = 10, @onkeypress = "return blockSpecialCharandnumsr(event)" } })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.FaxNumber)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.CellphoneNumber, new { @class = "control-label col-md-2  required-field" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.CellphoneNumber, new { @class = "form-control", maxlength = 10, MinLength = 10, @required = "required", @onkeypress = "return blockSpecialCharandnums(event)" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.CellphoneNumber)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.AltCellphoneNumber, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.AltCellphoneNumber, new { @class = "form-control", maxlength = 10, MinLength = 10, @onkeypress = "return blockSpecialCharandnums(event)" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.AltCellphoneNumber)
+                            </div>
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            @Html.LabelFor(model => model.BusinessDetails.TitleDeedTypeId, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.BusinessDetails.TitleDeedTypeId, Model.TitleDeedTypeList, "--Select Title Deed Type--",
+                            new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.TitleDeedTypeId)
+                            </div>
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            @Html.LabelFor(model => model.BusinessDetails.RatesAccountNumber, new { @class = "control-label col-md-2 " })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.BusinessDetails.RatesAccountNumber, new { @class = "form-control", @onkeypress = "return blockSpecialCharandnums(event)", maxlength = 30 })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.RatesAccountNumber)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.OperationStructureTypeId, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.BusinessDetails.OperationStructureTypeId, Model.OperationStructureTypeList, "---Select Operation Structure Type---", new { @class = "form-control", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.OperationStructureTypeId)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BusinessDetails.ItemTypeId, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.BusinessDetails.ItemTypeId, Model.ItemTypeList, "---Select Item Type---", new { @class = "form-control", id = "ddlItemTypeName", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.BusinessDetails.ItemTypeId)
+                                @Html.Hidden("itemTypeValue")
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.LicenseDetails.ItemSubCategoryId, new { @class = "control-label col-md-2 required-field" })
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.LicenseDetails.ItemSubCategoryId, Model.ItemSubCategoryList, "---Select Sub Category---", new { @class = "form-control", id = "ddlItemSubCategoryName", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.LicenseDetails.ItemSubCategoryId)
+                                @Html.Hidden("itemSubCategoryValue")
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="step-tab-panel" id="step3">
+                    <legend align="center">Operator Details</legend>
+                    @Html.Partial("~/Views/Shared/_BusinessManagerPartial.cshtml")
+
+                </div>
+
+                <div class="step-tab-panel" id="step4">
+                    <legend align="center">Employee Details</legend>
+                    @Html.Partial("~/Views/Shared/_BusinessEmployeePartial.cshtml")
+
+                </div>
+                <div class="step-tab-panel" id="step5">
+                    <legend align="center">Required Documents</legend>
+
+                    @if (documentTypes.Count() > 0)
+                    {
+                        @Html.Partial("~/Views/Shared/_UploadPartial.cshtml", documentTypes)
+                    }
+
+
+                    @if (documentsList.Any())
+                    {
+
+                        <table class="table-bordered">
+                            <tr>
+                                <th>Document Type</th>
+                                <th>FileName</th>
+                                <th>Created Date</th>
+                                <th>Comment</th>
+                            </tr>
+                            @foreach (var item in documentsList)
+                            {
+                                <tr>
+                                    <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                       <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+                                    <td style="padding-right: 10px">@item.Uploadeddate</td>
+                                    <td style="padding-right: 10px">@item.Comments</td>
+
+                                    @*@if (Model.BusinessStatusId == db.Status.Where(s => s.StatusKey == "BusinessApproved").Select(s => s.StatusId).FirstOrDefault())
+                                        {
+                                            <td style="padding-right: 10px">
+                                                <a href="@Html.Action("DeleteFile", "Business", new { id = @item.FileUploadId, Model })">
+                                                    <i class="glyphicon glyphicon-remove" title="Delete"></i>
+                                                    <span class="sr-only">Delete</span>
+                                                </a>
+                                            </td>
+                                        }*@
+
+                                </tr>
+
+                            }
+                        </table>
+                    }
+
+
+
+                </div>
+                <br />
+                <br />
+                <br />
+            </div>
+            <div class="step-footer">
+                <div align="left" class="col-lg-3">
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+                </div>
+                <div align="center" class="col-lg-6">
+                    <button data-direction="prev" class="btn btn-outline-primary">Previous</button>
+                    <button data-direction="next" class="btn btn-outline-primary">Next</button>
+                    <button data-direction="finish" class="btn btn-outline-success">Finish</button>
+                </div>
+                <div class="col-lg-3" align="right">
+                    <input type="submit" value="Save" id="submitBusiness" class="btn btn-default" hidden />
+                    &nbsp;
+                    @{
+                        if (Request.HttpMethod == "POST")
+                        {
+
+                            var hasLicense = db.Licenses.Where(l => l.BusinessId == Model.BusinessDetails.BusinessId && l.LicenseExpiryDate > DateTime.Now).Select(l => l.BusinessId).FirstOrDefault();
+                            if (Model.BusinessDetails.BusinessStatusId == db.Status.Where(s => s.StatusKey == "BusinessApproved").Select(s => s.StatusId).FirstOrDefault()
+                                && hasLicense == null)
+                            {
+                                <a class="btn btn-default" href="@Url.Action("Create", "License", new { id = Model.BusinessDetails.BusinessId })">
+                                    <span class="font-icon-group"></span>Add License
+                                </a>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+}
+<script src="~/Scripts/jquery-steps.js"></script>
+
+<script>
+    var form = $("#businessForm");
+
+    form.children("div").steps({
+
+        onFinish: function () {
+            initLoadHoldOn("Updating Business..Please Wait");
+            $('#ResidentialAddress1').prop("disabled", false);
+            $('#ResidentialAddress2').prop("disabled", false);
+            $('#ResidentialAddress3').prop("disabled", false);
+            $('#ResidentialAddressCode').prop("disabled", false);
+
+            document.getElementById("submitBusiness").click();
+        },
+
+        onChange: function (event, currentIndex, newIndex) {
+        
+
+            if (newIndex < currentIndex) {
+                return true;
+            }
+
+            form.validate().settings.ignore = ":disabled,:hidden";
+            return form.valid();
+        }
+    });
+    var OperatorTableDataArray = new Array();
+    var EmployeeTableDataArray = new Array();
+    var EditEmployeeTableDataArray = new Array()
+    var EditOperatorTableDataArray = new Array();
+    var Id = 0;
+    document.getElementById("BusinessEmployeeId").value = Id;
+    document.getElementById("BusinessMangerId").value = Id;
+    $("table").addClass("table table-bordered")
+</script>
+
+
+

@@ -1,0 +1,133 @@
+﻿@using System.Web.Optimization
+@model C8.TradeLicense.ViewModels.LoginViewModel
+@{
+
+    //Layout = null;
+    Layout = "~/Views/Shared/_login.cshtml";
+    ViewBag.Title = "Log in";
+}
+<!doctype html>
+<html class="login-html" lang="">
+<head>
+
+</head>
+
+<body class="body-custom mb-0">
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+    })
+    </script>
+    
+    <div class="user-onboarding">
+        <div class="container">
+
+            <div class="login-container row d-flex justify-content-between">
+                <div class="col-sm-6 align-self-md-center login-content">
+                    <h1 class="newlogin-logo">
+                        Apply for
+                        <span>Business License</span>
+                    </h1>
+                    <hr>
+                    <!--h3 class="pmd-display5 text-white">The Bootstrap 4 Admin Theme by Propeller is a full featured premium HRMS Admin theme built using Propeller Pro framework.</h3-->
+                    <p class="lead">
+                        The purpose of this Unit is to ensure that all businesses in those sectors in eThekwini municipal area comply with the Business Act, 1991 (Act No. 71 of 1991) which states that no person/ business may conduct a business without a business license.  Businesses who fail to comply with the legislation, by trading without a licence and by contravening their licence conditions will be prosecuted.
+                        <h3 class="pmd-display5 text-white">IT IS A CRIMINAL OFFENCE TO TRADE WITHOUT A LICENCE.  Members of the public are therefore urged to obtain a  business license before they open their businesses.</h3>
+                    </p>
+                </div>
+                <div class="col-sm-6 align-self-md-center">
+                    <div class="new-logincard card pmd-card">
+                        <div class="login-card">
+                            <div class="card-header">
+                                @*<center><img src="/Content/images/logo.png"></center>*@
+                                <h2 class="card-title">
+                                    <center>Trade License System</center>
+                                </h2>
+
+                                <!--p class="card-subtitle">An admin theme based on Bootstrap 4 and Google’s Material Design Standards</p-->
+                            </div>
+                            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input hidden type="text" id="returnUrl" name="returnUrl" value="@ViewBag.ReturnUrl"/>
+                                <form>
+                                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                                    <div class="card-body">
+
+                                        <div class="input-group pmd-input-group pmd-input-group-icon mb-3">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="material-icons md-dark pmd-sm">perm_identity</i>
+                                                </div>
+                                            </div>
+
+                                            <div class="pmd-textfield pmd-textfield-floating-label">
+                                                <label for="UserName">User Name</label>
+                                                @*<input type="text" class="form-control" aria-describedby="basic-addon3" name="UserName" id="UserName">*@
+                                                @Html.TextBoxFor(m => m.UserName, null, new { @class = "form-control", @Value = "" })
+                                                @Html.ValidationMessageFor(m => m.UserName)
+                                                @*@Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group pmd-input-group pmd-input-group-icon">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="material-icons md-dark pmd-sm">lock_outline</i>
+                                                </div>
+                                            </div>
+                                            <div class="pmd-textfield pmd-textfield-floating-label">
+                                                <label for="Password">Password</label>
+                                                <input type="password" class="form-control" aria-describedby="basic-addon3" name="Password" id="Password">
+                                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", @Value = "" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <div class="form-group clearfix">
+                                            @*<div class="float-left">
+                            <div class="custom-control custom-checkbox pmd-checkbox">
+                                @Html.CheckBoxFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe)
+
+                            </div>
+                        </div>*@
+                                            <span class="float-right">
+
+
+                                                <a href="~/Account/ForgotPassword" class="forgot-password text-primary">Forgot password?</a>
+                                            </span>
+                                        </div>
+
+                                        <input value="Login" type="submit" id="Login2" class="btn pmd-ripple-effect btn-primary btn-block btn-lg pmd-btn-raised m-0">
+
+
+                                        @*<p class="mt-3 mb-0 mb-0">
+                        Don't have an account?
+                        <a href="~/Account/Register" class="login-register text-primary">Sign Up</a>.
+                    </p>*@
+                                    </div>
+                                </form>
+                            }
+                        </div>
+
+
+
+                        @*@RenderPage("~/Views/Account/Register.cshtml")
+                            @RenderPage("~/Views/Account/ForgotPassword.cshtml")*@
+                    </div>
+                </div>
+            </div>
+            <div class="position-relative">
+                <footer class="pmd-footer login-footer text-white">
+                    ©
+                    <span class="auto-update-year"></span>
+                    <a href="#" target="_blank" class="text-white"><strong>eThekwini Municipality </strong></a> 
+                </footer>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

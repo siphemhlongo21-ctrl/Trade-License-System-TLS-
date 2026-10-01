@@ -1,0 +1,217 @@
+﻿@model C8.TradeLicense.Models.License
+@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.Keys;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+
+    var documentTypes = (IEnumerable<Document>)ViewData["Documents"];
+    var documentsList = (IEnumerable<FileUpload>)ViewData["UploadList"];
+
+    var db = new TradeLicenseDbContext();
+    License License = db.Licenses.Find(Model.LicenseId);
+
+    var statusApprovedLicense = db.Status.Where(s => s.StatusKey == StatusKeys.LicenseApproved).Select(s => s.StatusId).FirstOrDefault();
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error</strong> @TempData["Error"].ToString()
+    </div>
+}
+@*<h2>Create</h2>*@
+<style>
+    .number {
+        background-color: transparent !important;
+        border: 1.5px solid white;
+        border-radius: 50px;
+        color: white !important;
+    }
+
+    .step-app > .step-steps > li > a {
+        display: block;
+        padding: 10px;
+        color: white;
+        background-color: #848484;
+        text-decoration: none;
+        border-right: 1px solid #fff;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 20px;
+        font-size: 25px;
+        line-height: inherit;
+        color: #333;
+        border: 0;
+        background-color: aliceblue;
+        border-bottom: 1px solid #00d0ff;
+    }
+
+    .error {
+        color: tomato;
+    }
+</style>
+@using (Html.BeginForm("Uploadlicense", "License", FormMethod.Post, new { enctype = "multipart/form-data",Id= "Uploadlicense" }))
+{
+    @Html.AntiForgeryToken()
+    <div id="demo">
+        <div class="form-horizontal">
+            @*<h4>Condition</h4>
+                <hr />*@
+            @Html.ValidationSummary(true)
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">License Document Upload</h3>
+                </div>
+                <div class="panel-collapse in">
+                    <div class="panel-body">
+                        <div class="form-group" hidden="hidden">
+                            @Html.LabelFor(model => model.LicenseId, new { @class = "control-label col-md-2" })
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(model => model.LicenseId, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.LicenseId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                
+                        @if (documentsList.Any())
+                        {
+                            <legend align="center"> Uploaded Document </legend>
+                            <table class="table-bordered">
+                                <tr>
+                                    <th>Document Type </th>
+                                    <th>FileName</th>
+
+                                    <th>Created Date</th>
+                                </tr>
+                                @foreach (var item in documentsList)
+                                {
+                                    <tr>
+                                        <td style="padding-right: 10px">@item.Document.DocumentName </td>
+                                           <td style="padding-right: 10px"><a target="_blank" href="@C8.TradeLicense.Keys.ActionLinkKeys.SharePointDownload@item.FilePath">@item.FileName</a></td>
+
+
+
+                                        <td style="padding-right: 10px">@item.Uploadeddate</td>
+                                    </tr>
+
+                                }
+                            </table>
+                        }
+                        <br />
+                        <br />
+                        <br />
+                        <div class="form-group" id="uploadReportGroup">
+                            @foreach (var item in @documentTypes)
+                            {
+                                <legend align="center"> Upload Document </legend>
+                                <label class="control-label col-md-2">
+                                    @item.DocumentName
+                                </label>
+
+                                <div class="col-md-10">
+                                    <input type="file" name="file" id="file" />
+                                </div>
+                            }
+
+                        </div>
+
+
+
+                      
+                        <div align="left" class="col-lg-3" style="background-color:white">
+                            @Html.ActionLink("Back ", "Details", "License", new { id = License.LicenseId }, new { @class = "btn btn-outline-primary" })
+                        </div>
+                        <div align="center" class="col-lg-6" style="background-color:white">
+
+                            <button type="button" onclick="onFinish()" class="btn btn-outline-success">Submit</button>
+                           
+                        </div>
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                    <div class="form-group" hidden>
+                        <div class="col-md-offset-2 col-md-5">
+                            <input type="submit" value="Uploadlicense" id="Createbtn" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+        <div class="modal fade" id="Msgmodal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 id="modalHeading" runat="server" class="modal-title">Upload Alert</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label runat="server">License Cannot be deleted once uploaded.</label>
+                        <span id="spanTimeLeft" style="color: red; font-size:large; display:none"> </span>
+                        <label runat="server"> Click continue to Proceed.</label>
+
+                    </div>
+                    <div class="modal-footer" style="align-content: flex-end">
+                        <button id="btn" class="form-control" data-dismiss="modal" onclick="submit()">Continue</button>
+                        <button id="btn" class="form-control" data-dismiss="modal">Cancel</button>
+              
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-steps.js"></script>
+        <script type="text/javascript">
+          
+            function onFinish() {
+                debugger;
+
+                $('#Msgmodal').modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                    show: true
+                });
+
+
+            }
+  
+
+            function submit() {
+                debugger;
+                document.getElementById("Createbtn").click();
+
+            }
+            $(document).ready(function () {
+                //TODO: Validating File Types
+                var validFilesTypes = [".bmp", ".gif", ".png", ".jpg", ".jpeg", ".doc", ".xls", ".pdf", ".docx", ".xlsx"];
+                $(document).bind("change", "#file", function (e) {
+                    var file = $('input[type=file]').val();
+                    var isValidFile = false;
+                    if (file) {
+                        var ext = file.substring(file.lastIndexOf("."), file.length).toLowerCase();
+                        for (var i = 0; i < validFilesTypes.length; i++) {
+                            if (ext == validFilesTypes[i]) {
+                                isValidFile = true;
+                                break;
+                            }
+                        }
+                        if (!isValidFile) {
+                            alert("Invalid File. Refer supported file types below:\n\n" + validFilesTypes.join(", "));
+                            $('#file').replaceWith($('#file').clone());
+                        }
+                    }
+                });
+            })
+        </script>

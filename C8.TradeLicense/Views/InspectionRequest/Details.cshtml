@@ -1,0 +1,52 @@
+﻿@model C8.TradeLicense.Models.InspectionRequest
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapseOne">Inspection Request Details</a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse collapse in">
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OverrideOrderIndex)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.OverrideOrderIndex)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LicenseType.LicenseTypeName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.LicenseType.LicenseTypeName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Department.DepartmentName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Department.DepartmentName)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.InspectionRequestId }, new { @class = "btn btn-outline-warning" }) |
+    @Html.ActionLink("Back to List", "Index",null, new { @class = "btn btn-outline-warning" })
+</p>

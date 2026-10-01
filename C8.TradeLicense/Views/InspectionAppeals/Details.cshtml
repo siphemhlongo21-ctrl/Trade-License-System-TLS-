@@ -1,0 +1,218 @@
+﻿@model C8.TradeLicense.Models.InspectionAppeal
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>InspectionAppeal</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.InspectionRequest.RefNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InspectionRequest.RefNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.License.LicenseNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.License.LicenseNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status.StatusName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status.StatusName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InspectionResponseId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InspectionResponseId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IdentityOrPassportNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdentityOrPassportNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Surname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Surname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Individual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Individual)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nationality)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nationality)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NationalityOther)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NationalityOther)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpiryPermit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpiryPermit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResidentialAddress1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResidentialAddress1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResidentialAddress2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResidentialAddress2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResidentialAddress3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResidentialAddress3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResidentialAddressCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResidentialAddressCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalAddress1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostalAddress1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalAddress2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostalAddress2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalAddress3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostalAddress3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalAddressCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostalAddressCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TelephoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TelephoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CellphoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CellphoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FaxNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FaxNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Reason)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AppealDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AppealDateTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.InspectionAppealId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

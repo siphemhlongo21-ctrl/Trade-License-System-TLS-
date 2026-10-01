@@ -1,0 +1,332 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@using System.Linq
+@model C8.TradeLicense.Models.LicenseApplicationDetails
+
+
+<div>
+
+
+    <button type="button" onclick="onAddCondition()" class="btn btn-default">Add Condition</button>
+
+
+    <br />
+    <br />
+
+    <div id="conditionTableDiv" style="@(Model.LicenseApplicationConditions.Count() < 1 ? "display: none;" : "display:")">
+        <h4 id="modalHeading" runat="server" class="modal-title">Captured Condition Details</h4>
+
+
+
+        <table id="capturedConditionTable">
+
+            <tr>
+                <th>Condition Name</th>
+                <th>Edit</th>
+                <th>Remove</th>
+
+
+            </tr>
+            @foreach (var record in Model.LicenseApplicationConditions)
+            {
+
+                <tr>
+
+                    <td>@record.ConditionName</td>
+
+                    <td>
+                        <a>
+                            <i class="glyphicon glyphicon-pencil" title="Edit" onclick="onEditCondition('@record.LicenseApplicationConditionsId', '@record.ConditionId')"></i>
+                            <span class="sr-only">Edit</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a>
+                            <i class="glyphicon glyphicon-remove" title="Remove" onclick="onRemoveCondition('@record.LicenseApplicationConditionsId', '@record.ConditionId')"></i>
+                            <span class="sr-only">Remove</span>
+                        </a>
+                    </td>
+
+                </tr>
+            }
+
+
+        </table>
+    </div>
+
+
+
+    <div class="alert alert-danger" id="ErroralertCondition" style="@(Model.LicenseApplicationConditions.Count() > 0 ? "display: none;" : "")">
+        <a class="close" data-dismiss="alert">×</a>
+
+        <strong><p id="errorCondition">Please add a condition</p></strong>
+    </div>
+
+
+    <table id="ConditionTable" hidden="hidden">
+
+        <tr>
+            <th>Condition Name</th>
+            <th>Action </th>
+        </tr>
+
+    </table>
+
+
+
+    <div class="modal fade" id="Conditionmodal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content" style="width:1000px">
+                <div class="modal-header">
+                    <h4 id="modalHeading" runat="server" class="modal-title">Condition Details</h4>
+                </div>
+                <div class="form-horizontal" align="left" id="Conditionform">
+                    <div class="form-group" hidden="hidden">
+                        @Html.Label("License Condition Id", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBox("LicenseApplicationConditionsId", null, new { @class = "form-control" })
+
+                            @Html.ValidationMessage("LicenseApplicationConditionsId")
+                        </div>
+
+                    </div>
+
+                    <div class="form-group" hidden="hidden">
+                        @Html.Label("Condition Id", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBox("ConditionId", null, new { @class = "form-control" })
+
+                            @Html.ValidationMessage("ConditionId")
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group" id="conditionName">
+                        @Html.Label("Condition Name", new { @class = "control-label col-md-2  required-field" })
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model => model.ConditionDetails.ConditionId,Model.LicenseConditionList , "--Select a Condition--", new { @class = "form-control", @id = "LicenseCondition", @required = "required" })
+                            <label id="LicenseApplicationConditionmsg" class="control-label" style="color:red"></label>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer" style="align-content: flex-end">
+                    <button id="licenseEditSavebutton" class="form-control" type="button">Save</button>
+                    <button id="licenseSavebutton" class="form-control" type="button">Save</button>
+                    <button id="licenseCancelbtn" class="form-control" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+
+    function onAddCondition() {
+
+        Conditionclear();
+        $('#Conditionmodal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+        var Id = 0;
+        document.getElementById("ConditionId").value = Id;
+        $("#licenseEditSavebutton").hide();
+        $("#licenseSavebutton").show();
+
+    }
+
+    function onEditCondition(licenseApplicationConditionsId, conditionId) {
+
+        Conditionclear();
+        $('#Conditionmodal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+
+        document.getElementById("LicenseApplicationConditionsId").value = licenseApplicationConditionsId;
+        document.getElementById("ConditionId").value = conditionId;
+        document.getElementById("LicenseCondition").value = conditionId;
+        document.getElementById('ErroralertCondition').style.display = "none";
+        document.getElementById("errorCondition").innerHTML = "";
+
+        $("#licenseSavebutton").hide();
+        $("#licenseEditSavebutton").show();
+
+    }
+
+
+    function onRemoveCondition(licenseApplicationConditionsId, conditionId) {
+
+        $('#ErroralertCondition').hide();
+        document.getElementById("errorCondition").innerHTML = "";
+
+        $.ajax
+            ({
+
+                url: '/License/LicenseAmendmentRemoveCondition',
+                data: JSON.stringify({ licenseApplicationConditionsId: licenseApplicationConditionsId, conditionId: conditionId }),
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                success: function (result) {
+
+                    if (result.success) {
+
+                        if (result.licenseApplicationConditions.length < 1) {
+                            $('#conditionTableDiv').hide();
+                            $('#ErroralertCondition').show();
+                            document.getElementById("errorCondition").innerHTML = "Please add a condition";
+
+
+                        } else {
+
+                            refreshConditionTable(result.licenseApplicationConditions);
+                        }
+
+
+
+
+                    }
+
+                },
+                error: function (xhr, textStatus, error) {
+
+                },
+            });
+
+
+    }
+    function Conditionclear() {
+
+        document.getElementById("ConditionId").value = "";
+        document.getElementById("LicenseCondition").value = "";
+
+    }
+
+    function refreshConditionTable(licenseApplicationConditions) {
+
+        var tableBody = $('#capturedConditionTable tbody');
+        tableBody.empty();
+
+        var newRow = '<tr><th>Condition Name</th><th>Edit</th><th>Remove</th></tr>';
+        tableBody.append(newRow);
+
+        $.each(licenseApplicationConditions, function (index, condition) {
+
+            newRow = "<tr>" +
+                "<td>" + condition.ConditionName + "</td>" +
+                "<td><a><i class='glyphicon glyphicon-pencil' title='Edit' onclick='onEditCondition(" + condition.LicenseApplicationConditionsId + "," + condition.ConditionId + ")'></i></a> <span class='sr-only'>Edit</span></td>" +
+                "<td><a><i class='glyphicon glyphicon-remove' title='Remove' onclick='onRemoveCondition(" + condition.LicenseApplicationConditionsId + "," + condition.ConditionId + ")'></i></a> <span class='sr-only'>Remove</span></td>" +
+                "</tr>";
+            tableBody.append(newRow);
+        });
+
+    }
+
+    $("#licenseSavebutton").click(function () {
+        var valid = true;
+        var conditionId = document.getElementById("LicenseCondition").value;
+        var licenseId = document.getElementById("LicenseDetails_LicenseId").value;
+
+        if (conditionId == "") {
+            document.getElementById("LicenseApplicationConditionmsg").innerHTML = "This Field is required";
+            valid = false;
+        }
+
+
+        if (valid == true) {
+            document.getElementById("LicenseApplicationConditionmsg").innerHTML = "";
+            $('#Conditionmodal').modal('hide');
+            $('#ErroralertCondition').hide();
+            document.getElementById('conditionTableDiv').style.display = "";
+
+            $.ajax
+                ({
+
+                    url: '/License/LicenseAmendmentAddCondition',
+                    data: JSON.stringify({ licenseId: licenseId, conditionId: conditionId }),
+                    method: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8',
+                    success: function (result) {
+
+                        if (result.success) {
+                            if (result.msg != 'exit') {
+                                refreshConditionTable(result.licenseApplicationConditions);
+                            } else {
+                                document.getElementById('ErroralertCondition').style.display = "";
+                                document.getElementById("errorCondition").innerHTML = "Condition is already linked";
+                            }
+
+                        }
+
+
+                    },
+                    error: function (xhr, textStatus, error) {
+
+                    },
+                });
+        }
+
+
+    })
+    $("#licenseEditSavebutton").click(function () {
+        var valid = true;
+        var licenseApplicationConditionsId = document.getElementById("LicenseApplicationConditionsId").value;
+        var conditionId = document.getElementById("LicenseCondition").value;
+        var licenseId = document.getElementById("LicenseDetails_LicenseId").value;
+
+        if (conditionId == "") {
+            document.getElementById("LicenseApplicationConditionmsg").innerHTML = "This Field is required";
+            valid = false;
+        }
+
+        if (valid == true) {
+            document.getElementById("LicenseApplicationConditionmsg").innerHTML = "";
+            $('#Conditionmodal').modal('hide')
+
+            $.ajax
+                ({
+
+                    url: '/License/LicenseAmendmentEditCondition',
+                    data: JSON.stringify({ licenseApplicationConditionsId: licenseApplicationConditionsId, licenseId: licenseId, conditionId: conditionId }),
+                    method: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8',
+                    success: function (result) {
+
+                        if (result.success) {
+
+                            refreshConditionTable(result.licenseApplicationConditions);
+                        }
+
+
+                    },
+                    error: function (xhr, textStatus, error) {
+
+                    },
+                });
+
+
+        }
+
+
+    });
+
+    $("#licenseCancelbtn").click(function () {
+
+        document.getElementById("LicenseApplicationConditionmsg").innerHTML = "";
+    });
+
+</script>

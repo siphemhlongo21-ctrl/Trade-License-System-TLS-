@@ -1,0 +1,58 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Error";
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Error</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <style>
+        .error-template {
+            padding: 40px 15px;
+            text-align: center;
+        }
+
+        .error-actions {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+            .error-actions .btn {
+                margin-right: 10px;
+            }
+    </style>
+</head>
+<body style="background-color:#ecf0f5">
+    <form id="form1">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="error-template">
+                        <h1>Oops!</h1>
+                        <h3>Sorry, an error occurred while processing your request.</h3>
+                        <div class="error-actions">
+
+                            <a href="~/Home/Index" id="Home" class="btn btn-default btn-lg"><span class="glyphicon glyphicon"></span><strong>Go To Home Page</strong></a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; @DateTime.Now.Year </strong> All rights
+            reserved.
+        </footer>
+
+    </form>
+</body>
+</html>
+
+

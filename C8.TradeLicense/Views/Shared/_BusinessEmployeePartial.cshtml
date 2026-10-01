@@ -1,0 +1,468 @@
+﻿@using C8.TradeLicense.DataAccessLayer
+@using C8.TradeLicense.Models
+@using System.Linq
+@model C8.TradeLicense.Models.LicenseApplicationDetails
+
+
+
+@{
+    int Tablearry = 0;
+
+
+}
+<div>
+
+
+    <button type="button" onclick="onAddEmployee()" class="btn btn-default">Add Employee</button>
+
+
+    <br />
+    <br />
+    <div hidden="hidden">
+        @Html.TextArea("EditEmployeeTableData", null, new { htmlAttributes = new { @class = "form-control", id = "EditEmployeeTableData" } })
+        @Html.TextArea("EmployeeTableData", null, new { htmlAttributes = new { @class = "form-control", id = "EmployeeTableData" } })
+    </div>
+    @if (Model.BusinessEmployees.Count() > 0)
+    {
+        <h4 id="modalHeading" runat="server" class="modal-title">Captured Employee Details</h4>
+
+        <table>
+
+            <tr>
+                <th>Employee Name</th>
+                <th>Employee Address</th>
+                <th>City</th>
+                <th>Suburb </th>
+                <th>Code </th>
+                <th>Action </th>
+
+
+            </tr>
+            @foreach (var record in Model.BusinessEmployees)
+            {
+
+                <tr>
+
+                    <td>@record.NameOfEmployer</td>
+
+                    <td>
+                        @Html.DisplayName(record.EmployerResidentialAddress1)
+                    </td>
+                    <td>@record.EmployerResidentialAddress3 </td>
+                    <td>@record.EmployerResidentialAddress2</td>
+                    <td>@record.EmployerResidentialAddressCode</td>
+                    <td>
+                        <a>
+                            <i class="glyphicon glyphicon-pencil" title="Edit" onclick="onEditEmployee('@record.BusinessEmployeeId', '@record.NameOfEmployer', '@record.EmployerResidentialAddress1', '@record.EmployerResidentialAddress2', '@record.EmployerResidentialAddress3', '@record.EmployerResidentialAddressCode')"></i>
+                            <span class="sr-only">Edit</span>
+                        </a>
+                    </td>
+
+                </tr>
+            }
+
+
+        </table>
+
+    }
+
+
+
+    <h4 id="newemployee" runat="server" class="modal-title">New Employee Details</h4>
+    <table id="EmployeeTable">
+
+        <tr>
+            <th>Employee Name</th>
+            <th>Employee Address</th>
+            <th>City</th>
+            <th>Suburb </th>
+            <th>Code </th>
+            <th>Action </th>
+        </tr>
+
+
+
+    </table>
+
+
+
+    <div class="modal fade" id="Employeemodal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content" style="width:1000px">
+                <div class="modal-header">
+                    <h4 id="modalHeading" runat="server" class="modal-title">Employee Details</h4>
+                </div>
+                <div class="form-horizontal" align="left" id="Employeeform">
+                    <div class="form-group" hidden="hidden">
+                        @Html.Label("Business Employee Id", new { @class = "control-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.TextBox("BusinessEmployeeId", null, new { @class = "form-control" })
+
+                            @Html.ValidationMessage("BusinessEmployeeId")
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.Label("Employee Name", new { @class = "control-label col-md-2 required-field", id = "lblNameOfEmployer" })
+                        <div class="col-md-3">
+                            @Html.TextBox("NameOfEmployer", null, new { @class = "form-control" })
+
+                            @Html.ValidationMessage("NameOfEmployer")
+                            <label id="NameOfEmployermsg" class="control-label" style="color:red"></label>
+                        </div>
+
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <button type="button" class="btn btn-sm btn-primary" style="margin-left:95px;" id="ButtonAddLocationEmployee" onclick="ButtonAddLocationAddressEmployee()"><i class="glyphicon glyphicon-globe"></i> GIS</button>
+
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Employee Address", new { @class = "control-label col-md-2 required-field", id = "lblEmployerResidentialAddress1" })
+                        <div class="col-md-3">
+
+                            @Html.TextBox("EmployerResidentialAddress1", null, new { @class = "form-control" })
+                            @Html.ValidationMessage("EmployerResidentialAddress1")
+                            <label id="EmployerResidentialAddress1msg" class="control-label" style="color:red"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*city*@
+                        @Html.Label("City", new { @class = "control-label col-md-2 required-field", id = "lblEmployerResidentialAddress3" })
+                        <div class="col-md-3">
+                            @Html.TextBox("EmployerResidentialAddress3", null, new { @class = "form-control", @required = "required", name = "datalistEmpCity", list = "datalistEmpCity" })
+
+                            <datalist id="datalistEmpCity">
+                                <option value="Select">
+                            </datalist>
+                            @Html.ValidationMessage("EmployerResidentialAddress3")
+                            <label id="EmployerResidentialAddress3msg" class="control-label" style="color:red"></label>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        @*sub*@
+                        @Html.Label("Suburb", new { @class = "control-label col-md-2 required-field", id = "lblEmployerResidentialAddress2" })
+                        <div class="col-md-3">
+                            @Html.TextBox("EmployerResidentialAddress2", null, new { @class = "form-control", @required = "required", name = "datalistEmpsub", list = "datalistEmpsub" })
+
+                            <datalist id="datalistEmpsub">
+                                <option value="Select">
+                            </datalist>
+                            <label id="EmployerResidentialAddress2msg" class="control-label" style="color:red"></label>
+                            @Html.ValidationMessage("EmployerResidentialAddress2msg")
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.Label("Code", new { @class = "control-label col-md-2 required-field", id = "lblEmployerResidentialAddressCode" })
+                        <div class="col-md-1">
+                            @Html.TextBox("EmployerResidentialAddressCode", null, new { @class = "form-control", maxlength = 4, MinLength = 4, @onkeypress = "return blockSpecialCharandnums(event)" })
+                            @Html.ValidationMessage("EmployerResidentialAddressCode")
+                            <label id="EmployerResidentialAddressCodemsg" class="control-label" style="color:red"></label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer" style="align-content: flex-end">
+                    <button id="EditSavebutton" class="form-control" type="button">Save</button>
+                    <button id="Savebutton" class="form-control" type="button">Save</button>
+                    <button id="Cancelbtn" class="form-control" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div hidden="hidden">
+
+
+
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+    var EmployeeIndex = 0;
+    function onAddEmployee() {
+
+        Employeeclear();
+        $('#Employeemodal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+        var Id = 0;
+        document.getElementById("BusinessEmployeeId").value = Id;
+        $("#EditSavebutton").hide();
+        $("#Savebutton").show();
+
+    }
+    function onEditEmployee(Id, NameOfEmployer, EmployerResidentialAddress1, EmployerResidentialAddress2, EmployerResidentialAddress3, EmployerResidentialAddressCode) {
+
+        Employeeclear();
+        $('#Employeemodal').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+        document.getElementById("BusinessEmployeeId").value = Id
+        document.getElementById("NameOfEmployer").value = NameOfEmployer
+        document.getElementById("EmployerResidentialAddress1").value = EmployerResidentialAddress1
+        document.getElementById("EmployerResidentialAddress3").value = EmployerResidentialAddress3
+        document.getElementById("EmployerResidentialAddress2").value = EmployerResidentialAddress2
+        document.getElementById("EmployerResidentialAddressCode").value = EmployerResidentialAddressCode
+        $("#Savebutton").hide();
+        $("#EditSavebutton").show();
+
+    }
+
+    function Employeeclear() {
+
+        document.getElementById("BusinessEmployeeId").value = ""
+        document.getElementById("NameOfEmployer").value = ""
+        document.getElementById("EmployerResidentialAddress1").value = ""
+        document.getElementById("EmployerResidentialAddress3").value = ""
+        document.getElementById("EmployerResidentialAddress2").value = ""
+        document.getElementById("EmployerResidentialAddressCode").value = ""
+    }
+    $("#Savebutton").click(function () {
+        var valid = true;
+        if (document.getElementById("NameOfEmployer").value == "") {
+            document.getElementById("NameOfEmployermsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("EmployerResidentialAddress1").value == "") {
+            document.getElementById("EmployerResidentialAddress1msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("EmployerResidentialAddress2").value == "") {
+            document.getElementById("EmployerResidentialAddress2msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("EmployerResidentialAddress3").value == "") {
+            document.getElementById("EmployerResidentialAddress3msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("EmployerResidentialAddressCode").value == "") {
+            document.getElementById("EmployerResidentialAddressCodemsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+
+        if (valid == true) {
+            $('#Employeemodal').modal('hide')
+            EmployeeInsrow()
+        }
+
+
+    })
+    $("#EditSavebutton").click(function () {
+        var valid = true;
+        if (document.getElementById("NameOfEmployer").value == "") {
+            document.getElementById("NameOfEmployermsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("EmployerResidentialAddress1").value == "") {
+            document.getElementById("EmployerResidentialAddress1msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("EmployerResidentialAddress2").value == "") {
+            document.getElementById("EmployerResidentialAddress2msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("EmployerResidentialAddress3").value == "") {
+            document.getElementById("EmployerResidentialAddress3msg").innerHTML = "This Field is required"
+            valid = false;
+        }
+        if (document.getElementById("EmployerResidentialAddressCode").value == "") {
+            document.getElementById("EmployerResidentialAddressCodemsg").innerHTML = "This Field is required"
+            valid = false;
+        }
+
+        if (valid == true) {
+            $('#Employeemodal').modal('hide')
+            EditEmployeeArray()
+
+        }
+
+
+    })
+
+    function EmployeeInsrow() {
+
+        $('#Erroralert').hide();
+        $("#newemployee").show();
+        $("#EmployeeTable").show();
+        var table = document.getElementById('EmployeeTable');
+        var selectedoption = document.getElementById('BusinessOperator');
+
+
+        if (!table) return;
+        var len = table.rows.length;
+
+
+        if (len == 1) {
+            var newRow = table.insertRow(1);
+
+
+            var EmployerName = newRow.insertCell(0);
+            var cellEmployerAddress = newRow.insertCell(1);
+            var cellCity = newRow.insertCell(2);
+            var cellSuburb = newRow.insertCell(3);
+            var cellCode = newRow.insertCell(4);
+            var Action = newRow.insertCell(5);
+
+
+
+
+            EmployerName.innerHTML = '<td><input type="hidden" id="EmployerNameval" value=" " style="border-color:transparent" /><input type="text" value="" id="EmployerNametxt" style=" width:100px; border-color:transparent" /> </td>';
+            cellEmployerAddress.innerHTML = '<td><input type="hidden" id="EmployerAddressval" value=" " style="border-color:transparent" /><input type="text" value="" id="EmployerAddresstxt" style=" width:100px; border-color:transparent" /> </td>';
+            cellCity.innerHTML = ' <td><input type="hidden" id="Cityval" value=" " style="border-color:transparent" /><input type="text" value="" id="Citytxt" style=" width:100px;border-color:transparent" /> </td>';
+            cellSuburb.innerHTML = '<td><input type="hidden" id="Suburbval" value=" " style="border-color:transparent" /><input type="text" id="Suburbtxt" value=" " style="border-color:transparent" /></td>';
+            cellCode.innerHTML = '<td><input type="hidden" id="Codeval" value=" " style="border-color:transparent" /><input type="text" id="Codetxt" value=" " style="border-color:transparent" /></td>';
+            Action.innerHTML = '<td><span id = "delbtn"><button class="glyphicon glyphicon-remove" title="Delete" type="button" onclick="deleteEmployeeRow()"></button><span class="sr-only">Delete</span> </span > </td >';
+
+
+
+            document.getElementById('EmployerNameval').value = "*" + document.getElementById("NameOfEmployer").value;
+            document.getElementById('EmployerNametxt').value = document.getElementById("NameOfEmployer").value;
+            document.getElementById('EmployerAddressval').value = document.getElementById("EmployerResidentialAddress1").value;
+            document.getElementById('EmployerAddresstxt').value = document.getElementById("EmployerResidentialAddress1").value;
+            document.getElementById('Cityval').value = document.getElementById("EmployerResidentialAddress3").value;
+            document.getElementById('Citytxt').value = document.getElementById("EmployerResidentialAddress3").value;
+            document.getElementById('Suburbval').value = document.getElementById("EmployerResidentialAddress2").value;
+            document.getElementById('Suburbtxt').value = document.getElementById("EmployerResidentialAddress2").value;
+            document.getElementById('Codeval').value = document.getElementById("EmployerResidentialAddressCode").value;
+            document.getElementById('Codetxt').value = document.getElementById("EmployerResidentialAddressCode").value;
+
+            addToEmployeeArray();
+
+
+        }
+
+        else {
+
+
+            var newRow = table.rows[1].cloneNode(true);
+            // Now get the inputs and modify their id
+            var inputs = newRow.getElementsByTagName('input');
+
+
+
+
+            for (var i = 0, iLen = 1; i < iLen; i++) {
+                id = len;
+
+                inputs[0].value = "*" + document.getElementById("NameOfEmployer").value;
+                inputs[0].id += len;
+                inputs[1].value = document.getElementById("NameOfEmployer").value;
+                inputs[1].id += len;
+                inputs[2].value = document.getElementById("EmployerResidentialAddress1").value;
+                inputs[2].id += len;
+                inputs[3].value = document.getElementById("EmployerResidentialAddress1").value;
+                inputs[3].id += len;
+                inputs[4].value = document.getElementById("EmployerResidentialAddress3").value;
+                inputs[4].id += len;
+                inputs[5].value = document.getElementById("EmployerResidentialAddress3").value;
+                inputs[5].id += len;
+                inputs[6].value = document.getElementById("EmployerResidentialAddress2").value;
+                inputs[6].id += len;
+                inputs[7].value = document.getElementById("EmployerResidentialAddress2").value;
+                inputs[7].id += len;
+                inputs[8].value = document.getElementById("EmployerResidentialAddressCode").value;
+                inputs[8].id += len;
+                inputs[9].value = document.getElementById("EmployerResidentialAddressCode").value;
+                inputs[9].id += len;
+
+
+            }
+            table.appendChild(newRow);
+            addToEmployeeArray();
+        }
+
+
+    }
+
+
+
+    function deleteEmployeeRow() {
+
+        var table = document.getElementById('EmployeeTable');
+
+
+        if (!table) return;
+        var len = table.rows.length;
+
+
+        if (len == 1) {
+            $("#newemployee").hide();
+            $("#EmployeeTable").hide();
+        }
+
+        var index = $(this).last("tr").index()
+
+
+        document.getElementById("EmployeeTable").deleteRow(index);
+        addToEmployeeArray();
+    }
+    function addToEmployeeArray() {
+
+
+        $("#EmployeeTable tr").each(function (i, v) {
+            EmployeeTableDataArray[i] = Array();
+
+            $(this).find("td").each(function (ii, vv) {
+
+
+                EmployeeTableDataArray[i][ii] = $(this).find("input[type='hidden']").val();
+
+
+            });
+
+        })
+
+        EmployeeTableDataArray.shift();
+
+
+        var data = EmployeeTableDataArray.join();
+
+        document.getElementById("EmployeeTableData").value = data;
+
+
+
+    }
+
+    function EditEmployeeArray() {
+
+        EditEmployeeTableDataArray[EmployeeIndex] = Array();
+
+        $('#Employeeform :input').each(function (ii, vv) {
+
+            if (ii == 0) {
+                EditEmployeeTableDataArray[EmployeeIndex][ii] = "*" + vv.value;
+            }
+            else {
+                EditEmployeeTableDataArray[EmployeeIndex][ii] = vv.value;
+            }
+
+
+        });
+
+        var data = EditEmployeeTableDataArray.join();
+
+        document.getElementById("EditEmployeeTableData").value = data;
+
+        EmployeeIndex++
+
+    }
+
+
+
+</script>

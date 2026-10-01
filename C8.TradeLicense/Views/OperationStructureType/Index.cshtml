@@ -1,0 +1,49 @@
+﻿@model IEnumerable<C8.TradeLicense.Models.OperationStructureType>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<p>
+
+    @Html.ActionLink("Add Operation Structure Type ", "Create", null, new { @class = "btn btn-outline-warning" })
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Operation Structure Types - <span class="badge">@ViewBag.OperationTypeCount</span></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OperationStructureTypeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OperationStructureTypeDescription)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OperationStructureTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OperationStructureTypeDescription)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.OperationStructureTypeId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.OperationStructureTypeId }, new { @class = "btn btn-outline-warning" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.OperationStructureTypeId }, new { @class = "btn btn-outline-warning" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

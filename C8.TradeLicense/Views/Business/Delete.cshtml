@@ -1,0 +1,302 @@
+﻿@model C8.TradeLicense.Models.Business
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div class="alert alert-warning">
+    <h3>Warning!</h3>
+    <h4>Are you sure you want to delete this business? </h4>
+    <h5 class="has-error">NB: License for this business will no longer be valid.</h5>  
+</div>
+
+<div class="panel-group" id="accordionClient">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordionClient" href="#collapseOne">Business Information</a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <hr />
+                <dl class="dl-horizontal">
+          @*          <dt>
+                        @Html.DisplayNameFor(model =>  model.BusinessOperationType.BusinessOperationTypeName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.BusinessOperationType.BusinessOperationTypeName)
+                    </dd>*@
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BusinessType.BusinessTypeName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.BusinessType.BusinessTypeName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Client.IdentityOrPassportNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Client.IdentityOrPassportNumber)
+                    </dd>
+     
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OperationStructureType.OperationStructureTypeName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.OperationStructureType.OperationStructureTypeName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.TitleDeedType.TitleDeedTypeName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TitleDeedType.TitleDeedTypeName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ProposedTradeName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ProposedTradeName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PostalAddress1)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PostalAddress1)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PostalAddress2)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PostalAddress2)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PostalAddress3)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PostalAddress3)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PostalAddressCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PostalAddressCode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ResidentialShopOrUnitNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ResidentialShopOrUnitNumber)
+                    </dd>
+
+                   @* <dt>
+                        @Html.DisplayNameFor(model => model.ResidentialStreetAddress)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ResidentialStreetAddress)
+                    </dd>*@
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ResidentialAddress1)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ResidentialAddress1)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ResidentialAddress2)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ResidentialAddress2)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ResidentialAddress3)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ResidentialAddress3)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ResidentialAddressCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ResidentialAddressCode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.TelephoneNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TelephoneNumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CellphoneNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CellphoneNumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FaxNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.FaxNumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.NameOfBusinessOperator)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.NameOfBusinessOperator)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OperatorIdentityOrPassportNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.OperatorIdentityOrPassportNumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OperatorResidentialAddress1)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.OperatorResidentialAddress1)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OperatorResidentialAddress2)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.OperatorResidentialAddress2)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OperatorResidentialAddress3)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.OperatorResidentialAddress3)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.OperatorResidentialAddressCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.OperatorResidentialAddressCode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.NameOfEmployer)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.NameOfEmployer)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerResidentialAddress1)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerResidentialAddress1)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerResidentialAddress2)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerResidentialAddress2)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerResidentialAddress3)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerResidentialAddress3)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerResidentialAddressCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerResidentialAddressCode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IsActive)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IsDeleted)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IsDeleted)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IsLocked)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IsLocked)
+                    </dd>
+                </dl>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Delete" class="btn btn-default" />
+                        |
+                        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-primary" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

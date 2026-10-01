@@ -1,0 +1,192 @@
+﻿
+@model C8.TradeLicense.Models.LicenseApplicationDetails
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.DataAccessLayer
+@using PagedList.Mvc;
+<script type="text/javascript">
+
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=SearchCriteria]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=SearchCriteria]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+
+</script>
+@{
+    ViewBag.Title = "Deleted Licenses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+
+    var db = new TradeLicenseDbContext();
+}
+
+<style>
+    .btn-outline-info {
+        border: 1px solid white;
+        background-color: white;
+        color: black;
+    }
+</style>
+@using (Html.BeginForm("Deleted", "License", FormMethod.Get))
+{
+
+<div class="alert alert-info">
+    <h4 style="font-family:Arial;color:white" align="center">Select a search option below.</h4>
+
+    @Html.RadioButton("SearchCriteria", "BusinessName")&nbsp;Business Name
+    @Html.RadioButton("SearchCriteria", "ClientName")&nbsp;Customer Name
+    @Html.RadioButton("SearchCriteria", "ReferenceNo")&nbsp;License Number
+    @Html.RadioButton("SearchCriteria", "Region")&nbsp;Region
+
+    @Html.TextBox("inputSearch", Model.CurrentFilter as string, new { @class = "myText" })
+    <input type="submit" value="Search" class="btn btn-outline-info" id="btnSearch" />
+    <a href="@Url.Action("Abandoned")">
+        <i class="glyphicon glyphicon-refresh" style="color:white" title="Refresh"></i>
+    </a>
+</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert-danger">
+        <a class="close" data-dismiss="alert">×</a>
+        @TempData["Error"].ToString()
+    </div>
+}
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Deleted Applications - <span class="badge">@Model.DeletedLicenseCount </span></h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                @if (@Model.DeletedLicensePageList.Count() > 0)
+                {
+
+                <table class="table">
+                    <tr>
+                        <th>License Number</th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegionDetails.RegionName)                  
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.BusinessDetails.ProposedTradeName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CustomerDetails.Fullname)                      
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LicenseDetails.LicenseType.LicenseTypeName)                    
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LicenseDetails.ApplicationDateTime)                  
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LicenseDetails.migratedLicense)                      
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LicenseDetails.Status.StatusName)            
+                        </th>
+           
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model.DeletedLicensePageList)
+
+                    { 
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LicenseNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Region.RegionName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Business.ProposedTradeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Client.Fullname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LicenseType.LicenseTypeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApplicationDateTime)
+                                </td>
+                                <td align="center">
+                                    @if (item.migratedLicense == false)
+                                    {
+                                        @Html.DisplayName("No")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("Yes")
+                                    }
+
+                                </td>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.Status.StatusName)
+                                </th>
+               
+
+                                <td>
+                                    @{
+                                        License License = db.Licenses.Find(item.LicenseId);
+                         
+                                        <a href="@Url.Action("Details", new { id = item.LicenseId,Screen ="Deleted" })">
+                                            <i class="glyphicon glyphicon-list" title="View Details"></i>
+                                            <span class="sr-only">Details</span>
+                                        </a>
+                                        <a href="@Url.Action("LicenseDocUploads", new { licenseId = item.LicenseId ,Screen ="Deleted"})">
+                                            <i class="glyphicon glyphicon-briefcase" title="View Documents"></i>
+                                            <span class="sr-only">Documents</span>
+                                        </a>
+                                 
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+
+                </table>
+
+
+                <div align="center">
+
+               Page @(Model.DeletedLicensePageList.PageCount < Model.DeletedLicensePageList.PageNumber ? 0 : Model.DeletedLicensePageList.PageNumber) of @Model.DeletedLicensePageList.PageCount
+                    @Html.PagedListPager(Model.DeletedLicensePageList, page => Url.Action("Deleted",
+                  new { page, selectedSearch = ViewBag.selecetedSearch, currentFilter = Model.CurrentFilter }))
+
+
+                
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

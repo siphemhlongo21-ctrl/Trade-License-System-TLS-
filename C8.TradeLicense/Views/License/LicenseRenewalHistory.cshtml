@@ -1,0 +1,377 @@
+﻿@model PagedList.IPagedList<C8.TradeLicense.Models.RenewalHistory>
+@using C8.TradeLicense.Models
+@using C8.TradeLicense.DataAccessLayer
+@using PagedList.Mvc;
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ("@ViewBag.showTable" == "1")
+        {
+            debugger;
+            document.getElementById("accordion").hidden = false;
+
+        }
+    })
+    $(function () {
+
+        $('#btnSearch').click(function () {
+            var inp = $("#inputSearch").val();
+            var criteria = $("input[name=selectedSearch]:checked").val();
+            $(document).trigger("clear-alert-id.errormsg");
+
+            if (criteria == null) {
+                alert("Please choose a search criteria!");
+
+            } else {
+                if (inp.length <= 0) {
+                    alert("Please enter a value to search for!");
+
+                }
+            }
+
+        });
+
+        $('#SelectionSearch-form').submit(function (e) {
+            if (!$('#inputSearch').val()) {
+                e.preventDefault(); // Prevents Form POST when textbox is empty
+            } else
+                if ($("input[name=selectedSearch]:checked").val() == null) {
+                    e.preventDefault(); // Prevents Form POST when search criteria is not selected
+                }
+        });
+    });
+    
+</script>
+@{
+    ViewBag.Title = "Application Tracker";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+    var db = new TradeLicenseDbContext();
+    var DepartmentContact = (IEnumerable<DepartmentContact>)ViewData["DepartmentContactdata"];
+    var InspectionResponse = (IEnumerable<InspectionResponse>)ViewData["InspectionResponsedata"];
+}
+
+<style>
+    .btn-outline-info {
+        border: 1px solid white;
+        background-color: white;
+        color: black;
+    }
+</style>
+@using (Html.BeginForm("LicenseRenewalHistory", "License", FormMethod.Get))
+{
+
+<div class="alert alert-info">
+    <h4 style="font-family:Arial;color:white" align="center">View Renewal History by Selecting a search option below.</h4>
+    @*License Status : @Html.DropDownList("StatusId", "All License Status") <br/>*@
+    @Html.RadioButton("selectedSearch", "BusinessName")&nbsp;Business Name
+    @Html.RadioButton("selectedSearch", "Customer")&nbsp;Customer Name
+    @Html.RadioButton("selectedSearch", "ReferenceNo")&nbsp;License Number
+ 
+    @Html.TextBox("inputSearch", ViewBag.CurrentFilter as string, new { @class = "myText" })
+    <input type="submit" value="Search" class="btn btn-outline-info" id="btnSearch" />
+    <a href="@Url.Action("LicenseRenewalHistory")">
+        <i class="glyphicon glyphicon-refresh" style="color:white" title="Refresh"></i>
+    </a>
+</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert-danger">
+        <a class="close" data-dismiss="alert">×</a>
+        @TempData["Error"].ToString()
+    </div>
+}
+<div class="panel-group" id="accordion" hidden="hidden">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"> Number Of Times License was Renewed - <span class="badge">@ViewBag.LicenseCount</span></h3>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                @if (@Model.Count() > 0)
+                {
+
+                    <table class="table">
+                        <tr>
+                            <th>License Number</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().License.Region.RegionName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.First().License.Business.ProposedTradeName)
+                            </th>
+                            <th>
+                                @Html.DisplayName("Old Renewal Date")
+                            </th>
+                          
+                            <th>
+                                @Html.DisplayName("New Renewal Date")
+                            </th>
+                            <th>
+
+                                @Html.DisplayName("Date Renewed")
+                            </th>
+                           
+                         
+                         </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.LicenseNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.Region.RegionName)
+                                </td>
+                          
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.License.Business.ProposedTradeName)
+                                </td>
+                                <td>
+
+                                   
+                                    @Html.DisplayName(DateTime.Parse(item.OldRenewalDateTime.ToString()).ToString("dd/MM/yyyy"))
+                                </td>
+                                <td>
+
+
+                                    @Html.DisplayName(DateTime.Parse(item.NewRenewalDateTime.ToString()).ToString("dd/MM/yyyy"))
+                                </td>
+                   
+                                <td>
+                                 
+
+
+                                  
+                                        @Html.DisplayName(item.CreatedDateTime.Value.ToString("dd/MM/yyyy"))
+                                   
+                                    
+
+
+
+                                    
+                                </td>
+                               
+                        
+
+                                @*   <td>
+                                        @Html.DisplayFor(modelItem => item.LicenseIssueDateTime)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NotificationUpdatedDateTime)
+                                    </td>*@
+
+
+                                <td>
+                                    @{
+                            License License = db.Licenses.Find(item.LicenseId);
+                            @*var statuspendingInspection = db.Status.Where(s => s.StatusKey == "LicensePending").Select(s => s.StatusId).FirstOrDefault();
+                            if (License.StatusId == statuspendingInspection)
+                            {
+                                <a href="@Url.Action("Departmentcirculation", new { id = item.LicenseId })">
+                                    <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+                                    <span class="sr-only">Departmentcirculation</span>
+                                </a>
+                                        <a href="@Url.Action("Delete", new { id = item.LicenseId })">
+                                            <i class="glyphicon glyphicon-remove" title="Cancel Application"></i>
+                                        </a>
+                                        <span class="sr-only">Cancel Application</span>
+                            }*@
+                            
+                                        @* @Html.ActionLink("Edit", "Edit", new { id = item.LicenseId }) |*@
+                                        @*@Html.ActionLink("Details", "Details", new { id = item.LicenseId }) |*@
+                                        @* @Html.ActionLink("Delete", "Delete", new { id = item.LicenseId })*@
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+
+                    </table>
+
+
+                    <div align="center">
+
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Html.PagedListPager(Model, page => Url.Action("LicenseRenewalHistory",
+     new { page, selectedSearch = ViewBag.selecetedSearch, Filter_Value = ViewBag.CurrentFilter }))
+
+
+
+                        @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                                                @Html.PagedListPager(Model, Page_No => Url.Action("Index",
+                            new { Page_No, Sorting_Order = ViewBag.CurrentSortOrder, Filter_Value = ViewBag.FilterValue }))*@
+
+                        @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                            @Html.PagedListPager( Model, page => Url.Action("Index", new { page, currentFilter=ViewBag.CurrentFilter}) )*@
+
+                        @*@if (Model.HasPreviousPage)
+                            {
+                                <a href="@Url.Action("Index", new { page = 1 })">
+                                    <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                                </a>
+                                @Html.Raw(" ")
+                                ;
+                                <a href="@Url.Action("Index", new { page = Model.PageNumber - 1 })">
+                                    <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                                @Html.Raw(" ")
+                                ;
+                                <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                            }
+
+                            @if (Model.HasNextPage)
+                            {
+                                <a href="@Url.Action("Index", new { page = Model.PageNumber + 1 })">
+                                    <i class="glyphicon glyphicon-forward" title="Next"></i>
+                                </a>
+                                @Html.Raw(" ")
+                                ;
+                                <a href="@Url.Action("Index", new { page = Model.PageCount })">
+                                    <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                                </a>
+
+                            }
+                            else
+                            {
+                                <i class="glyphicon glyphicon-forward" title="Next"></i>
+                                @Html.Raw(" ")
+                                <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                            }*@
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@*<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                Pending Inspection
+                <span class="badge">@pendingLinceseInspection.Count()</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+        <div class="panel-body">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Business.ProposedTradeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Client.Fullname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().LicenseType.LicenseTypeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().ApplicationDateTime)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Status.StatusName)
+                    </th>*@
+@*    <th>
+        @Html.DisplayNameFor(model => model.LicenseIssueDateTime)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.NotificationUpdatedDateTime)
+    </th>*@
+@*<th></th>
+    </tr>
+
+    @foreach (var item in @pendingLinceseInspection)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Business.ProposedTradeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.Fullname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LicenseType.LicenseTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDateTime)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.Status.StatusName)
+            </th>*@
+@*   <td>
+        @Html.DisplayFor(modelItem => item.LicenseIssueDateTime)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NotificationUpdatedDateTime)
+    </td>*@
+@*<td>*@
+@* <a href="@Url.Action("Edit", new { id = item.LicenseId })">
+        <i class="glyphicon glyphicon-pencil" title="Edit"></i>
+        <span class="sr-only">Edit</span>
+    </a>*@
+@*<a href="@Url.Action("Details", new { id = item.LicenseId })">
+        <i class="glyphicon glyphicon-list" title="View Details"></i>
+        <span class="sr-only">Details</span>
+    </a>*@
+@*  <a href="@Url.Action("Delete", new { id = item.LicenseId })">
+        <i class="glyphicon glyphicon-remove" title="Delete"></i>
+    </a>*@
+@*<span class="sr-only">Delete</span>*@
+@*                             @Html.ActionLink("Edit", "Edit", new { id = item.LicenseId }) |
+    @Html.ActionLink("Details", "Details", new { id = item.LicenseId }) |
+    @Html.ActionLink("Delete", "Delete", new { id = item.LicenseId })*@
+@*</td>
+                            </tr>
+                        }
+
+                    </table>
+                    <div align="center">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @if (Model.HasPreviousPage)
+                        {
+                            <a href="@Url.Action("Index", new { page = 1 })">
+                                <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                            </a>
+                            @Html.Raw(" ");
+                            <a href="@Url.Action("Index", new { page = Model.PageNumber - 1 })">
+                                <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <i class="glyphicon glyphicon-fast-backward" title="Go to first Page"></i>
+                            @Html.Raw(" ");
+                            <i class="glyphicon glyphicon-backward" title="Previous"></i>
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <a href="@Url.Action("Index", new { page = Model.PageNumber + 1 })">
+                                <i class="glyphicon glyphicon-forward" title="Next"></i>
+                            </a>
+                            @Html.Raw(" ");
+                            <a href="@Url.Action("Index", new { page = Model.PageCount })">
+                                <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                            </a>
+
+                        }
+                        else
+                        {
+                            <i class="glyphicon glyphicon-forward" title="Next"></i>
+                            @Html.Raw(" ")
+                            <i class="glyphicon glyphicon-fast-forward" title="Go to last Page"></i>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+@*<button id="NewBrowserBtn">New Browser</button>*@

@@ -1,0 +1,232 @@
+﻿@model C8.TradeLicense.Models.MigratedLicense
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>MigratedLicense</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedByUser.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedByUser.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemCondition.ItemConditionName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemCondition.ItemConditionName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemSubCategory.ItemSubCategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemSubCategory.ItemSubCategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemType.ItemTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemType.ItemTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseType.LicenseTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseType.LicenseTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MigratedBusiness.ProposedTradeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MigratedBusiness.ProposedTradeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MigratedClient.IdentityOrPassportNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MigratedClient.IdentityOrPassportNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedByUser.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedByUser.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Region.RegionName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Region.RegionName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status.StatusName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status.StatusName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseIssueYear)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseIssueYear)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseIssueDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseIssueDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NotificationUpdatedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NotificationUpdatedDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseExpiryDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseExpiryDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseClosureDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseClosureDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseCollectedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseCollectedDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseRenewalDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicenseRenewalDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ConditionReason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ConditionReason)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ConditionComment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ConditionComment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsDeleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsDeleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsLocked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsLocked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedDateTime)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
