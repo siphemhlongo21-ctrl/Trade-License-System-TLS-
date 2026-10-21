@@ -778,6 +778,9 @@
             </mxGeometry>
           </mxCell>
         </UserObject>
+        <mxCell id="ZrmWGJ4DddsUOY86ACah-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontSize=18;" value="Chief Inspector/Dept Manager" vertex="1">
+          <mxGeometry height="30" width="280" x="150" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
