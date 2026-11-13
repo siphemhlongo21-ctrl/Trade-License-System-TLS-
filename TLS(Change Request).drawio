@@ -1508,17 +1508,17 @@
         </UserObject>
         <UserObject label="Bug 8163: Login page Username and Password labels missing on phone" mermaidId="n:A" mermaidBaseStyle="html=1;rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Bug 8163: Login page Username and Password labels missing on phone" id="0HMiFP7yoJDEcUEk-tB8-2">
           <mxCell parent="0HMiFP7yoJDEcUEk-tB8-1" style="html=1;rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" vertex="1">
-            <mxGeometry height="129" width="171" x="102" y="30" as="geometry" />
+            <mxGeometry height="129" width="171" x="430" y="20" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="Symptom: at 440px the labels disappear after Chrome autofills the saved credentials" mermaidId="n:B" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Symptom: at 440px the labels disappear after Chrome autofills the saved credentials" id="0HMiFP7yoJDEcUEk-tB8-3">
           <mxCell parent="0HMiFP7yoJDEcUEk-tB8-1" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" vertex="1">
-            <mxGeometry height="150" width="152" x="112" y="199" as="geometry" />
+            <mxGeometry height="150" width="152" x="439.5" y="250" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="Inspection: _login.cshtml has Layout = null, so tls-responsive.css is not loaded. Fields use the Propeller floating-label pattern" mermaidId="n:C" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Inspection: _login.cshtml has Layout = null, so tls-responsive.css is not loaded. Fields use the Propeller floating-label pattern" id="0HMiFP7yoJDEcUEk-tB8-4">
           <mxCell parent="0HMiFP7yoJDEcUEk-tB8-1" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" vertex="1">
-            <mxGeometry height="234" width="152" x="112" y="389" as="geometry" />
+            <mxGeometry height="234" width="152" x="439.5" y="550" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="Root cause: autofill fires no focus or blur event, so the label stays in the field and the autofilled background covers it" mermaidId="n:D" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Root cause: autofill fires no focus or blur event, so the label stays in the field and the autofilled background covers it" id="0HMiFP7yoJDEcUEk-tB8-5">
@@ -1528,7 +1528,7 @@
         </UserObject>
         <UserObject label="Fix in Views/Account/Login.cshtml: CSS floats the label on autofill and a script adds the completed class when the field has a value" mermaidId="n:E" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Fix in Views/Account/Login.cshtml: CSS floats the label on autofill and a script adds the completed class when the field has a value" id="0HMiFP7yoJDEcUEk-tB8-6">
           <mxCell parent="0HMiFP7yoJDEcUEk-tB8-1" style="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" vertex="1">
-            <mxGeometry height="213" width="152" x="112" y="916" as="geometry" />
+            <mxGeometry height="213" width="238" x="112" y="916" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="Test at 440px, empty fields and desktop width" mermaidId="n:F" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Test at 440px, empty fields and desktop width" id="0HMiFP7yoJDEcUEk-tB8-7">
@@ -1538,12 +1538,12 @@
         </UserObject>
         <UserObject label="All checks pass?" mermaidId="n:G" mermaidBaseStyle="rhombus;html=1;strokeWidth=2;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="All checks pass?" id="0HMiFP7yoJDEcUEk-tB8-8">
           <mxCell parent="0HMiFP7yoJDEcUEk-tB8-1" style="rhombus;html=1;strokeWidth=2;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" vertex="1">
-            <mxGeometry height="208" width="208" x="84" y="1295" as="geometry" />
+            <mxGeometry height="208" width="208" x="321" y="1350" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="Commit on FR_8109, push, mark 8163 Done" mermaidId="n:H" mermaidBaseStyle="html=1;rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;" mermaidBaseValue="Commit on FR_8109, push, mark 8163 Done" id="0HMiFP7yoJDEcUEk-tB8-9">
           <mxCell parent="0HMiFP7yoJDEcUEk-tB8-1" style="html=1;rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=#ffffff;strokeColor=#28253D;fontColor=#28253D;fontFamily=Recursive;fontSize=14;shadow=1;shadowColor=#000000;shadowOffsetX=4;shadowOffsetY=4;shadowBlur=0;shadowOpacity=6;labelWidth=120;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DRecursive;" vertex="1">
-            <mxGeometry height="87" width="171" x="102" y="1604" as="geometry" />
+            <mxGeometry height="87" width="171" x="339" y="1701" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="" mermaidId="e:A-&gt;B#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#000000;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeWidth=2;targetPerimeterSpacing=4;" mermaidBaseValue="" id="0HMiFP7yoJDEcUEk-tB8-10">
@@ -1586,10 +1586,11 @@
         </UserObject>
         <UserObject label="" mermaidId="e:F-&gt;G#0" mermaidBaseStyle="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#000000;exitX=0.5;exitY=0.99;entryX=0.35;entryY=0;strokeWidth=2;targetPerimeterSpacing=4;" mermaidBaseValue="" id="0HMiFP7yoJDEcUEk-tB8-15">
           <mxCell edge="1" parent="0HMiFP7yoJDEcUEk-tB8-1" source="0HMiFP7yoJDEcUEk-tB8-7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;startArrow=none;endArrow=block;endSize=8;jumpStyle=arc;jumpSize=12;strokeColor=#000000;exitX=0.5;exitY=0.99;entryX=0.35;entryY=0;strokeWidth=2;targetPerimeterSpacing=4;" target="0HMiFP7yoJDEcUEk-tB8-8">
-            <mxGeometry relative="1" as="geometry">
+            <mxGeometry relative="1" x="0.0024" as="geometry">
               <Array as="points">
                 <mxPoint x="106" y="1275" />
-                <mxPoint x="156" y="1275" />
+                <mxPoint x="120" y="1275" />
+                <mxPoint x="120" y="1374" />
               </Array>
             </mxGeometry>
           </mxCell>
