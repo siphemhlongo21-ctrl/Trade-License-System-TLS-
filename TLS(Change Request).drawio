@@ -614,8 +614,8 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="iljN4N5k9QAkhE5hZhpc" name="Page-3">
-    <mxGraphModel dx="1907" dy="976" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+  <diagram id="iljN4N5k9QAkhE5hZhpc" name="Simplified:Chief Inspector &amp; Dept Manager to perform CRUD Operations in Conditions">
+    <mxGraphModel dx="1776" dy="1072" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -784,8 +784,8 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="bC_bZDUwLt1KbUrottmD" name="Page-4">
-    <mxGraphModel dx="1873" dy="2058" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+  <diagram id="bC_bZDUwLt1KbUrottmD" name="Updated:Chief Inspector &amp; Dept Manager to perform CRUD Operations in Conditions">
+    <mxGraphModel dx="1873" dy="2231" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -970,7 +970,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="oyFK1VllmFCYNatt0YQQ" name="Responsive UI Adjustment">
-    <mxGraphModel dx="2641" dy="1595" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="4682" dy="2827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
